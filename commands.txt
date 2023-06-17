@@ -1,0 +1,5 @@
+gcc -Wall -g -c physics.c -o physics.o 
+gcc -Wall -g -c oscillation.c -o oscillation.o
+ar ruv physics.a physics.o oscillation.o
+ranlib physics.a
+gcc -o main main.c physics.a
