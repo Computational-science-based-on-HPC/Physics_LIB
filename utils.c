@@ -3,7 +3,7 @@
 //
 
 #include "utils.h"
-
+#include "math.h"
 int
 _valid_osc(double max_amplitude, double length, double mass, double gravity, double k, double time_limit,
            double step_size,
@@ -31,4 +31,36 @@ int
 _round(double x)
 {
     return (int) (x + 0.5);
+}
+
+
+double
+_dx(double dx)
+{
+    return dx;
+}
+
+double
+_dy(double dy)
+{
+    return dy;
+}
+
+double
+_f1(double x, double y, double dx,double tx,double ty,double k,double m,double b,double r)
+{
+    double L = sqrt(pow(x - tx, 2) + pow(y - ty, 2));
+    double s = (x - tx) / L;
+    return -(double )k / m * r * s - (float)b / m * dx;
+
+}
+double
+_f2(double x, double y, double dy,double tx,double ty,double k,double m,double b,double r,double g)
+{
+    {
+        double L = sqrt(pow(x - tx, 2) + pow(y - ty, 2));
+        double c = (y - ty) / L;
+
+        return g - (float)k / m * r * c - (float)b / m * dy;
+    }
 }

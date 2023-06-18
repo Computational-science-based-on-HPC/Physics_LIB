@@ -38,3 +38,15 @@ damped_os_parallel_v2(double max_amplitude, double length, double mass, double g
     return _simulate_damped_os_parallel_mpi(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
                                       time_limit, step_size, damping_coefficent, number_of_files);
 }
+int
+elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
+                 double Yo,
+                 double Vo,
+                 double time_limit, double step_size, double damping_coefficent, int number_of_files)
+{
+    return
+            _simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
+    double Yo,
+    double Vo,
+    double time_limit, double step_size, double damping_coefficent, int number_of_files);
+}

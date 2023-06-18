@@ -75,3 +75,50 @@ _simulate_damped_os_serial(double max_amplitude, double length, double mass, dou
     }
     return 0;
 }
+
+
+int
+_simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
+                           double Yo,
+                           double Vo,
+                           double time_limit, double step_size, double damping_coefficent, int number_of_files)
+{
+    double t=0;
+    double x1=Xo; // init position of mass in x
+    double x2=Yo; // init position of mass in y
+    double x3=Vo;   // init velocity
+    double x4=0;   // init velocity
+    for(int i=0; i<time_limit; ++i)
+    {
+        t+=step_size;
+        double k11=_dx(x3);
+        double k12=_dy(x4);
+        double k13=_f1(x1, x2, x3, 0, 0, k, mass, damping_coefficent, r);
+        double k14=_f2(x1, x2, x4, 0, 0, k, mass, damping_coefficent, r, gravity);
+
+        double k21=_dx(x3 + step_size/2*k13);
+        double k22=_dy(x4 + step_size/2*k14);
+        double k23=_f1(x1 + step_size/2*k11, x2 + step_size/2*k12, x3 + step_size/2*k13, 0, 0, k, mass,
+                       damping_coefficent, r);
+        double k24=_f2(x1 + step_size/2*k11, x2 + step_size/2*k12, x4 + step_size/2*k14, 0, 0, k, mass,
+                       damping_coefficent, r, gravity);
+
+        double k31=_dx(x3 + step_size/2*k23);
+        double k32=_dy(x4 + step_size/2*k24);
+        double k33=_f1(x1 + step_size/2*k21, x2 + step_size/2*k22, x3 + step_size/2*k23, 0, 0, k, mass,
+                       damping_coefficent, r);
+        double k34=_f2(x1 + step_size/2*k21, x2 + step_size/2*k22, x4 + step_size/2*k24, 0, 0, k, mass,
+                       damping_coefficent, r, gravity);
+
+        double k41=_dy(x3 + step_size/2*k33);
+        double k42=_dy(x4 + step_size/2*k34);
+        double k43=_f1(x1 + step_size*k31, x2 + step_size*k32, x3 + step_size*k33, 0, 0, k, mass,
+                       damping_coefficent, r);
+        double k44=_f2(x1 + step_size*k31, x2 + step_size*k32, x4 + step_size*k34, 0, 0, k, mass,
+                       damping_coefficent, r, gravity);
+        x1+=step_size/6.0*(k11 + 2*k21 + 2*k31 + k41);
+        x2+=step_size/6.0*(k12 + 2*k22 + 2*k32 + k42);
+        x3+=step_size/6.0*(k13 + 2*k23 + 2*k33 + k43);
+        x4+=step_size/6.0*(k14 + 2*k24 + 2*k34 + k44);
+    }
+}
