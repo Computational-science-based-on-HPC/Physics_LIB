@@ -6,7 +6,7 @@
 #define PHYSICS_UTILS_H
 
 extern int
-_valid_osc(double max_amplitude, double length, double mass, double gravity, double k, double time_limit,
+_valid_osc(double x, double y, double length, double mass, double gravity, double k, double time_limit,
            double step_size,
            double damping_coefficent, int number_of_files, double Fo);
 
@@ -23,10 +23,10 @@ double
 _dy(double dy);
 
 double
-_f1(double x, double y, double dx,double tx,double ty,double k,double m,double b,double r);
+_f1(double x, double y, double dx, double tx, double ty, double k, double m, double b, double r);
 
 double
-_f2(double x, double y, double dy,double tx,double ty,double k,double m,double b,double r,double g);
+_f2(double x, double y, double dy, double tx, double ty, double k, double m, double b, double r, double g);
 
 
 #endif //PHYSICS_UTILS_H
