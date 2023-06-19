@@ -1,6 +1,7 @@
 #include "physics.h"
 #include "oscserial.h"
 #include "oscpara.h"
+#include "thermopara.h"
 
 int
 damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao, double Vo,
@@ -51,4 +52,12 @@ elastic_pendulum(double r, double length, double mass, double gravity, double k,
                                        Yo,
                                        Vo,
                                        time_limit, step_size, damping_coefficent, number_of_files);
+}
+
+int 
+heat_equation_1D_V1_MPI(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
+    struct TimeParam time_param = {time_step, time_limit};
+    struct SpaceParam space_param = {length, diffusivity, space_step};
+    
+    return _simulate_heat_transfer_1D_MPI(time_param, space_param, precision);
 }
