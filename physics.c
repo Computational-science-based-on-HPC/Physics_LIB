@@ -55,9 +55,99 @@ elastic_pendulum(double r, double length, double mass, double gravity, double k,
 }
 
 int 
-heat_equation_1D_V1_MPI(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
+heat_equation_1D_P1_MPI(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
     struct TimeParam time_param = {time_step, time_limit};
     struct SpaceParam space_param = {length, diffusivity, space_step};
     
     return _simulate_heat_transfer_1D_MPI(time_param, space_param, precision);
+}
+
+int
+heat_equation_1D_P1_OPENMP(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
+    struct TimeParam time_param = {time_step, time_limit};
+    struct SpaceParam space_param = {length, diffusivity, space_step};
+    
+    return _simulate_heat_transfer_1D_OPENMP(time_param, space_param, precision);
+}
+
+int
+heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
+    struct TimeParam time_param = {time_step, time_limit};
+    struct SpaceParam space_param = {length, diffusivity, space_step};
+    
+    return _simulate_heat_transfer_1D_OPENMP_V2(time_param, space_param, precision);
+}
+
+int
+heat_equation_1D_P1__MPI_OPENMP(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
+    struct TimeParam time_param = {time_step, time_limit};
+    struct SpaceParam space_param = {length, diffusivity, space_step};
+    
+    return _simulate_heat_transfer_1D_MPI_OPENMP(time_param, space_param, precision);
+}
+
+int
+heat_equation_2D_P1_MPI(double time_step, double time_limit, 
+                    double length, double diffusivity, double spaceX_step, double width, double spaceY_step,
+                    double tempUp, double tempDown, double tempLeft, double tempRight, int precision){
+
+    struct TimeParam time_param = {time_step, time_limit};
+    struct SpaceParam2D space_param = {length, diffusivity, spaceX_step, width, spaceY_step};
+    struct TempParam temp_param = {tempUp, tempDown, tempLeft, tempRight};
+    
+    return _simulate_heat_transfer_2D_MPI(time_param, space_param, temp_param, precision);
+}
+
+int
+heat_equation_2D_P1_OPENMP(double time_step, double time_limit, 
+                    double length, double diffusivity, double spaceX_step, double width, double spaceY_step,
+                    double tempUp, double tempDown, double tempLeft, double tempRight, int precision){
+
+    struct TimeParam time_param = {time_step, time_limit};
+    struct SpaceParam2D space_param = {length, diffusivity, spaceX_step, width, spaceY_step};
+    struct TempParam temp_param = {tempUp, tempDown, tempLeft, tempRight};
+    
+    return _simulate_heat_transfer_2D_OPENMP(time_param, space_param, temp_param, precision);
+}
+
+int
+heat_equation_2D_P1_OPENMP_V2(double time_step, double time_limit, 
+                    double length, double diffusivity, double spaceX_step, double width, double spaceY_step,
+                    double tempUp, double tempDown, double tempLeft, double tempRight, int precision){
+
+    struct TimeParam time_param = {time_step, time_limit};
+    struct SpaceParam2D space_param = {length, diffusivity, spaceX_step, width, spaceY_step};
+    struct TempParam temp_param = {tempUp, tempDown, tempLeft, tempRight};
+    
+    return _simulate_heat_transfer_2D_OPENMP_V2(time_param, space_param, temp_param, precision);
+}
+
+int
+heat_equation_2D_P1_MPI_OPENMP(double time_step, double time_limit, 
+                    double length, double diffusivity, double spaceX_step, double width, double spaceY_step,
+                    double tempUp, double tempDown, double tempLeft, double tempRight, int precision){
+
+    struct TimeParam time_param = {time_step, time_limit};
+    struct SpaceParam2D space_param = {length, diffusivity, spaceX_step, width, spaceY_step};
+    struct TempParam temp_param = {tempUp, tempDown, tempLeft, tempRight};
+    
+    return _simulate_heat_transfer_2D_MPI_OPENMP(time_param, space_param, temp_param, precision);
+}
+
+int heat_equation_1D_serial(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
+    struct TimeParam time_param = {time_step, time_limit};
+    struct SpaceParam space_param = {length, diffusivity, space_step};
+    
+    return _simulate_heat_transfer_1D_serial(time_param, space_param, precision);
+}
+
+int heat_equation_2D_serial(double time_step, double time_limit, 
+                    double length, double diffusivity, double spaceX_step, double width, double spaceY_step,
+                    double tempUp, double tempDown, double tempLeft, double tempRight, int precision){
+
+    struct TimeParam time_param = {time_step, time_limit};
+    struct SpaceParam2D space_param = {length, diffusivity, spaceX_step, width, spaceY_step};
+    struct TempParam temp_param = {tempUp, tempDown, tempLeft, tempRight};
+    
+    return _simulate_heat_transfer_2D_serial(time_param, space_param, temp_param, precision);
 }
