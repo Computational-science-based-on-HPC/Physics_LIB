@@ -7,7 +7,7 @@
 #include "math.h"
 #include "time.h"
 
-#ifdef __linux__
+#ifdef MPI_INCLUDE
 #include "mpi.h"
 #include "omp.h"
 #endif
