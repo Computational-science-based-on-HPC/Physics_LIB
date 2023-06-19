@@ -62,6 +62,7 @@ heat_equation_1D_V1_MPI(double time_step, double time_limit, double length, doub
 {
     struct TimeParam time_param={time_step, time_limit};
     struct SpaceParam space_param={length, diffusivity, space_step};
+}
 
 int 
 heat_equation_1D_P1_MPI(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
