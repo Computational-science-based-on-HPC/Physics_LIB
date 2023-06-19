@@ -5,7 +5,7 @@
 #ifndef PHYSICS_UTILS_H
 #define PHYSICS_UTILS_H
 
-extern int
+int
 _valid_osc(double x, double y, double length, double mass, double gravity, double k, double time_limit,
            double step_size,
            double damping_coefficent, int number_of_files, double Fo);
