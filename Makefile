@@ -1,20 +1,23 @@
-# in SecondLib/Makefile
-CC=gcc
-CFLAGS= -Wall -g -c
-## add your other stuff for make
-all: physics.o
-physics.o: physics.c oscserial.h oscpara.h
-	$(CC) $(CFLAGS) -c physics.c -o physics.o
+CC = mpicc
+AR = ar
+CFLAGS = -Wall -Wextra -Iinclude -lm
+LDFLAGS = -L. -lmylib -lmpi
 
-oscserial.o: oscserial.c oscserial.h
-	$(CC) $(CFLAGS) -c oscserial.c -o oscserial.o
+SRCS = src/physics.c src/oscserial.c src/oscpara.c src/utils.c src/thermoserial.c src/thermopara.c src/thermoutils.c
+OBJS = $(SRCS:.c=.o)
 
-oscpara.o: oscpara.c oscpara.h
-	$(CC) $(CFLAGS) -c oscpara.c -o oscpara.o
+LIB_NAME = myphysicslib.a
 
-libphysics.a: physics.o
-	ar ruv libphysics.a physics.o
-	ranlib physics.a
-clean:
-	rm -f *.o *.a
 .PHONY: all clean
+
+all: $(LIB_NAME)
+%.o: %.c
+    $(CC) $(CFLAGS) -c $< -o $@
+    
+$(LIB_NAME): $(OBJS)
+    $(AR) rcs $(LIB_NAME) $(OBJS)
+
+
+clean:
+    rm -f $(OBJS) $(LIB_NAME)
+

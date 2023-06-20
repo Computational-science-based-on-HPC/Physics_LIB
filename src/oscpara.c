@@ -19,7 +19,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
                                          double Vo, double FI,
                                          double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
-    int validation = _valid_osc(max_amplitude, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
+    int validation = _valid_osc(max_amplitude, 0,length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
     {
@@ -275,7 +275,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     int _it_number_all;
     double t;
     short int _is_zero = 0;
-    int validation = _valid_osc(max_amplitude, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
+    int validation = _valid_osc(max_amplitude,0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
     {
@@ -365,7 +365,7 @@ _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, doub
                                        double Vo, double FI,
                                        double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
-    int validation = _valid_osc(max_amplitude, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
+    int validation = _valid_osc(max_amplitude, 0,length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
     {
