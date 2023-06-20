@@ -8,10 +8,10 @@
 #define THREADS 8
 #define M_PI 3.14159265358979323846264338327
 
-// #ifdef __linux__
+#ifdef __linux__
 #include "mpi.h"
 #include "omp.h"
-// #endif
+#endif
 
 double _get_value_1D_mpi(struct TimeParam* time, struct SpaceParam* space, double x, double t, int precision)
 {
