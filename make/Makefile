@@ -1,20 +1,20 @@
-# need to re-check
 # in SecondLib/Makefile
 CC=gcc
-CFLAGS= -Wall -Wextra -std=c11
-BUILD_DIR = ../build
-LIBRARY_NAME = myphysics
-OBJ = $(BUILD_DIR)/library_source.o
-LIBRARY = $(BUILD_DIR)/lib$(LIBRARY_NAME).a
-
+CFLAGS= -Wall -g -c
 ## add your other stuff for make
-all:  $(LIBRARY)
-$(OBJ): $(SRC) ../include/physics.h ../include/oscserial.h ../include/oscpara.h
-	mkdir -p $(BUILD_DIR)
-	$(CC) $(CFLAGS) -g -c $< -o $@
-$(LIBRARY): $(OBJ)
-	ar rcs $@ $<
-clean:
-	rm -rf $(BUILD_DIR)
-.PHONY: all clean
+all: physics.o
+physics.o: physics.c oscserial.h oscpara.h
+	$(CC) $(CFLAGS) -c physics.c -o physics.o
 
+oscserial.o: oscserial.c oscserial.h
+	$(CC) $(CFLAGS) -c oscserial.c -o oscserial.o
+
+oscpara.o: oscpara.c oscpara.h
+	$(CC) $(CFLAGS) -c oscpara.c -o oscpara.o
+
+libphysics.a: physics.o
+	ar ruv libphysics.a physics.o
+	ranlib physics.a
+clean:
+	rm -f *.o *.a
+.PHONY: all clean
