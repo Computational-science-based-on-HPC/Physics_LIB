@@ -155,7 +155,7 @@ double _get_value_1D_mpi(double time_step, double space_step, double x, double t
 // }
 
 
-int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
+int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double length, double space_step, int precision){
     MPI_Init(NULL, NULL);
     FILE *fptr1;
     FILE *fptr2;
@@ -173,8 +173,8 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
 
     if(my_rank == 0){
-        numTimePoint= (ll)(time_limit / time_step);
-        numSpacePoint= (ll)(length / space_step);
+        numTimePoint= _cal_num_time(time_step, time_limit);
+        numSpacePoint= _cal_num_space(length, space_step);
 
         printf("The value of numTimePoint is: %lld\n", numTimePoint);
         printf("The value of numSpacePoint is: %lld\n", numSpacePoint);
@@ -185,21 +185,9 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
         numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
     }
 
-    // ll numTimePoint= time_step / time_limit;
-    // ll numSpacePoint= length / space_step;
-
-    // printf("The value of numTimePoint is: %lld\n", numTimePoint);
-    // printf("The value of numSpacePoint is: %lld\n", numSpacePoint);
-    // printf("The value of time_step is: %f\n", time_step);
-    // printf("The value of length is: %f\n", length);
-
-    // ll numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
-    // ll numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
-
     MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&numSpacePoint, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&length, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&diffusivity, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&space_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&time_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&time_limit, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
