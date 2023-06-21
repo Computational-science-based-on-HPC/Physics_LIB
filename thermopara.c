@@ -330,6 +330,7 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
                                 double length, double space_step_x,
                                 double width, double space_step_y,
                                 int precision){
+     MPI_Init(NULL, NULL);
      FILE *fptr1;
      FILE *fptr2;
      FILE *fptr3;
