@@ -171,12 +171,13 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
 
-    ll numTimePoint= _cal_num_time(time_step, time_limit);
-
-    ll numSpacePoint= _cal_num_space(length, space_step);
+    ll numTimePoint= time_step / time_limit;
+    ll numSpacePoint= length / space_step;
 
     printf("The value of numTimePoint is: %lld\n", numTimePoint);
     printf("The value of numSpacePoint is: %lld\n", numSpacePoint);
+    printf("The value of time_step is: %lld\n", time_step);
+    printf("The value of length is: %lld\n", length);
 
     ll numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
     ll numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
