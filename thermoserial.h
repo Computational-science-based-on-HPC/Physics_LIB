@@ -9,11 +9,11 @@
                          double x, double t,
                          int precision);
 
-// extern double
-// _get_value_2D(struct TimeParam time, 
-//                         struct SpaceParam2D space, 
-//                         int x, int y, int t, 
-//                         int precision);
+ extern double
+ _get_value_2D(double time_step,
+               double length, double space_step_x, double width, double space_step_y,
+               int x, int y, int t,
+               int precision);
 
  extern int
  _simulate_heat_transfer_1D_serial(double time_step, double time_limit,

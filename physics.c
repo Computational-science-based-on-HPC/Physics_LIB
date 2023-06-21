@@ -202,8 +202,8 @@ heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit,
 
 
     
-     return _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
-                     double length, double spaceX_step,
-                     double width, double spaceY_step,
-                     int precision);
+     return _simulate_heat_transfer_2D_serial(time_step, time_limit,
+                     length, spaceX_step,
+                     width, spaceY_step,
+                     precision);
  }
