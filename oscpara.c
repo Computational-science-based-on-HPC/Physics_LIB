@@ -6,11 +6,8 @@
 #include "stdio.h"
 #include "math.h"
 #include "time.h"
-
-#ifdef MPI_INCLUDE
 #include "mpi.h"
 #include "omp.h"
-#endif
 #define NUM_THREADS 3
 
 const char *FILES[] = {"displacement.txt", "velocity.txt", "acceleration.txt"};
@@ -19,7 +16,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
                                          double Vo, double FI,
                                          double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
-    int validation = _valid_osc(max_amplitude, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
+    int validation = _valid_osc(max_amplitude,0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
     {
@@ -275,7 +272,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     int _it_number_all;
     double t;
     short int _is_zero = 0;
-    int validation = _valid_osc(max_amplitude, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
+    int validation = _valid_osc(max_amplitude,0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
     {
@@ -313,11 +310,11 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
         }
         _it_number = _it_number_all - _sent_it_number;
     }
-    if (world_rank > 0 && world_size > 1)
-        MPI_Recv(&_it_number, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
     MPI_Bcast(&number_of_files, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&coefficient_calc, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    if (world_rank > 0 && world_size > 1)
+        MPI_Recv(&_it_number, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
     else
     {
         _it_number_proc = (_it_number_all / (world_size - 1)) + 1;
@@ -365,7 +362,7 @@ _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, doub
                                        double Vo, double FI,
                                        double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
-    int validation = _valid_osc(max_amplitude, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
+    int validation = _valid_osc(max_amplitude,0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
     {
