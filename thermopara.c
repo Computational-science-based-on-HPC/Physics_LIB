@@ -234,7 +234,7 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
 
         MPI_Recv(&startIndex, 1, MPI_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
 
-        printf("The value of startIndex is: %lf\n", startIndex);
+        printf("The value of startIndex is: %lld\n", startIndex);
 
         i = startIndex;
         ll endIndex = startIndex + size;
