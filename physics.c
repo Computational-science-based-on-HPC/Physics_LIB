@@ -161,8 +161,8 @@ heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit,
 
     
      return _simulate_heat_transfer_2D_MPI(time_step, time_limit,
-                       length, space_step_x,
-                       width, space_step_y,
+                       length, spaceX_step,
+                       width, spaceY_step,
                        precision);
  }
 
@@ -173,8 +173,8 @@ heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit,
 
     
      return _simulate_heat_transfer_2D_OPENMP(time_step, time_limit,
-                      length, space_step_x,
-                      width, space_step_y,
+                      length, spaceX_step,
+                      width, spaceY_step,
                       precision);
  }
 
@@ -184,8 +184,8 @@ heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit,
                      int precision){
     
      return _simulate_heat_transfer_2D_OPENMP_V2(time_step, time_limit,
-                     length, space_step_x,
-                     width, space_step_y,
+                     length, spaceX_step,
+                     width, spaceY_step,
                      precision);
  }
 
