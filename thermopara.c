@@ -502,13 +502,11 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
      FILE *fptr;
      fptr = fopen("2D_OPENMP_V2.txt", "w");
 
-     ll numTimePoint;
-     ll numSpacePointX;
-     ll numSpacePointY;
 
-     numTimePoint= _cal_num_time(time_step, time_limit);
-     numSpacePointX= _cal_num_space(length, space_step_x);
-     numSpacePointY= _cal_num_space(width, space_step_y);
+
+     ll numTimePoint= _cal_num_time(time_step, time_limit);
+     ll numSpacePointX= _cal_num_space(length, space_step_x);
+     ll numSpacePointY= _cal_num_space(width, space_step_y);
      for (ll t = 0; t < numTimePoint; ++t) {
          for (ll y = 1; y < numSpacePointY; ++y) {
              for (ll x = 1; x < numSpacePointX; ++x) {
