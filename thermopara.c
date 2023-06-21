@@ -165,22 +165,36 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
     fptr3 = fopen("3_1D_MPI.txt", "w");
     int my_rank;     // rank of process
     int processesNo; // number of process
+    ll numTimePointPerProcess, numTimePointRemProcess, numTimePoint, numSpacePoint;
 
     int checkRem;
     MPI_Status status;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
 
-    ll numTimePoint= time_step / time_limit;
-    ll numSpacePoint= length / space_step;
+    if(my_rank == 0){
+        numTimePoint= (ll)(time_limit / time_step);
+        numSpacePoint= (ll)(length / space_step);
 
-    printf("The value of numTimePoint is: %lld\n", numTimePoint);
-    printf("The value of numSpacePoint is: %lld\n", numSpacePoint);
-    printf("The value of time_step is: %lld\n", time_step);
-    printf("The value of length is: %lld\n", length);
+        printf("The value of numTimePoint is: %lld\n", numTimePoint);
+        printf("The value of numSpacePoint is: %lld\n", numSpacePoint);
+        printf("The value of time_step is: %f\n", time_step);
+        printf("The value of length is: %f\n", length);
 
-    ll numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
-    ll numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
+        numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
+        numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
+    }
+
+    // ll numTimePoint= time_step / time_limit;
+    // ll numSpacePoint= length / space_step;
+
+    // printf("The value of numTimePoint is: %lld\n", numTimePoint);
+    // printf("The value of numSpacePoint is: %lld\n", numSpacePoint);
+    // printf("The value of time_step is: %f\n", time_step);
+    // printf("The value of length is: %f\n", length);
+
+    // ll numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
+    // ll numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
 
     MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&numSpacePoint, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);

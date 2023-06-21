@@ -44,8 +44,7 @@ _get_value_1D_mpi(double time_step,
 
 extern int
 _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, 
-                        double length, double diffusivity, 
-                        double space_step, 
+                        double length, double diffusivity, double space_step, 
                         int precision);
 
 // extern int

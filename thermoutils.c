@@ -3,9 +3,9 @@
 
 
 ll _cal_num_time(double time_step, double time_limit){
-    // ll time = (time_step / time_limit);
+    // ll time = (time_limit / time_step);
     // numTimePoint = &time;
-    return (ll)(time_step / time_limit);
+    return (ll)(time_limit / time_step);
 }
 
 ll _cal_num_space(double length, double space_step){
