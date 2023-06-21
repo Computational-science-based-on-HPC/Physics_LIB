@@ -66,28 +66,21 @@ heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit,
                             double length, double space_step, 
                             int precision);
 
-// extern int
-// heat_equation_1D_P1__MPI_OPENMP(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision);
+ extern int
+ heat_equation_2D_P1_MPI(double time_step, double time_limit,
+                     double length, double spaceX_step, double width, double spaceY_step,
+                     int precision);
 
-// extern int
-// heat_equation_2D_P1_MPI(double time_step, double time_limit, 
-//                     double length, double diffusivity, double spaceX_step, double width, double spaceY_step,
-//                     double tempUp, double tempDown, double tempLeft, double tempRight, int precision);
+ extern int
+ heat_equation_2D_P1_OPENMP(double time_step, double time_limit,
+                     double length, double spaceX_step, double width, double spaceY_step,
+                     int precision);
 
-// extern int
-// heat_equation_2D_P1_OPENMP(double time_step, double time_limit, 
-//                     double length, double diffusivity, double spaceX_step, double width, double spaceY_step,
-//                     double tempUp, double tempDown, double tempLeft, double tempRight, int precision);
+ extern int
+ heat_equation_2D_P1_OPENMP_V2(double time_step, double time_limit,
+                     double length, double spaceX_step, double width, double spaceY_step,
+                     int precision);
 
-// extern int
-// heat_equation_2D_P1_OPENMP_V2(double time_step, double time_limit, 
-//                     double length, double diffusivity, double spaceX_step, double width, double spaceY_step,
-//                     double tempUp, double tempDown, double tempLeft, double tempRight, int precision);
-
-// extern int
-// heat_equation_2D_P1_MPI_OPENMP(double time_step, double time_limit, 
-//                     double length, double diffusivity, double spaceX_step, double width, double spaceY_step,
-//                     double tempUp, double tempDown, double tempLeft, double tempRight, int precision);
 
 // extern int heat_equation_1D_serial(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision);
 
