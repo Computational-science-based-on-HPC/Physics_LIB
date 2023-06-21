@@ -495,7 +495,10 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
  }
 
  int
- _simulate_heat_transfer_2D_OPENMP_V2(struct TimeParam* time_param, struct SpaceParam2D* space_param, struct TempParam* temp_param, int precision){
+ _simulate_heat_transfer_2D_OPENMP_V2(double time_step, double time_limit,
+                                      double length, double space_step_x,
+                                      double width, double space_step_y,
+                                      int precision){
      FILE *fptr;
      fptr = fopen("2D_OPENMP_V2.txt", "w");
 
