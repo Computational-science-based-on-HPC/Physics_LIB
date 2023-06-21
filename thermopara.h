@@ -8,9 +8,9 @@
 
 extern double
 _get_value_1D_mpi(double time_step, 
-                    double space_step, 
-                    double x, double t, 
-                    int precision);
+                 double space_step,
+                 double x, double t,
+                 int precision);
 
  extern double
  _get_value_1D_openmp_V1(double time_step,
