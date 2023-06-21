@@ -6,7 +6,7 @@
 #define PHYSICS_OSCPARA_H
 
 extern int
-_simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, double mass, double gravity, double k,
+_simulate_damped_os_parallel_mpPi_omp(double max_amplitude, double length, double mass, double gravity, double k,
                                      double Ao,
                                      double Vo, double FI,
                                      double time_limit, double step_size, double damping_coefficent,
