@@ -29,24 +29,27 @@
      return sum;
  }
 
-// double _get_value_2D(struct TimeParam* time, struct SpaceParam2D* space, int x, int y, int t, int precision) {
-//     double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
-//     double x_real = x * space->delta_x;
-//     double y_real = y * space->delta_y;
-//     double t_real = t * time->delta_t;
-//     for (ll m = 1; m < precision; ++m) {
-//         for (ll n = 1; n < precision; ++n) {
-//             exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
-//             spaceXTerm = sin((double) m * M_PI * x_real / space->length);
-//             spaceYTerm = sin((double) n * M_PI * y_real / space->width);
-//             // Find Amn constant and multiply it with the sum
-//             coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
-//             sum += coeff * exponential * spaceXTerm * spaceYTerm;
-//         }
-//     }
-//     sum *= 200 / (M_PI * M_PI);
-//     return sum;
-// }
+ double _get_value_2D(double time_step,
+                      double length, double space_step_x, double width, double space_step_y,
+                      int x, int y, int t,
+                      int precision) {
+     double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
+     double x_real = x * space_step_x;
+     double y_real = y * space_step_y;
+     double t_real = t * time_step;
+     for (ll m = 1; m < precision; ++m) {
+         for (ll n = 1; n < precision; ++n) {
+             exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
+             spaceXTerm = sin((double) m * M_PI * x_real / length);
+             spaceYTerm = sin((double) n * M_PI * y_real / width);
+             // Find Amn constant and multiply it with the sum
+             coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
+             sum += coeff * exponential * spaceXTerm * spaceYTerm;
+         }
+     }
+     sum *= 200 / (M_PI * M_PI);
+     return sum;
+ }
 
  int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
                                        double length, double space_step,
@@ -70,28 +73,27 @@
 
  }
 
-// int _simulate_heat_transfer_2D_serial(struct TimeParam* time_param, struct SpaceParam2D* space_param, struct TempParam* temp_param, int precision){
-//     FILE *fptr;
-//     fptr = fopen("2D_serial_V1.txt", "w");
-    
-//     ll numTimePoint;
-//     ll numSpacePointX;
-//     ll numSpacePointY;
+ int _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
+                                       double length, double space_step_x,
+                                       double width, double space_step_y,
+                                       int precision){
+     FILE *fptr;
+     fptr = fopen("2D_serial_V1.txt", "w");
 
-//     _cal_num_time(time_param, &numTimePoint);
-//     _cal_num_space_2D(time_param, space_param, &numSpacePointX, &numSpacePointY);
-    
-//     for (ll t = 0; t < numTimePoint; ++t) {
-//         for (ll y = 1; y < numSpacePointY; ++y) {
-//             for (ll x = 1; x < numSpacePointX; ++x) {
-//                 fprintf(fptr, "%f ", _get_value_2D(time_param, space_param, x, y, t, precision));
-//             }
-//             fprintf(fptr, "\n");
-//         }
-//         fprintf(fptr, "\n\n");
-//     }
+     ll numTimePoint= _cal_num_time(time_step, time_limit);
+     ll numSpacePointX= _cal_num_space(length, space_step_x);
+     ll numSpacePointY= _cal_num_space(width, space_step_y);
 
-//     fclose(fptr);
-//     return 0;
-// }
+     for (ll t = 0; t < numTimePoint; ++t) {
+         for (ll y = 1; y < numSpacePointY; ++y) {
+             for (ll x = 1; x < numSpacePointX; ++x) {
+                 fprintf(fptr, "%f ", _get_value_2D(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
+             }
+             fprintf(fptr, "\n");
+         }
+         fprintf(fptr, "\n\n");
+     }
 
+     fclose(fptr);
+     return 0;
+ }

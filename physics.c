@@ -196,13 +196,14 @@ heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit,
      return _simulate_heat_transfer_1D_serial(time_step, time_limit, length, space_step, precision);
  }
 
-// int heat_equation_2D_serial(double time_step, double time_limit, 
-//                     double length, double diffusivity, double spaceX_step, double width, double spaceY_step,
-//                     double tempUp, double tempDown, double tempLeft, double tempRight, int precision){
+ int heat_equation_2D_serial(double time_step, double time_limit,
+                     double length, double spaceX_step, double width, double spaceY_step,
+                     int precision){
 
-//     struct TimeParam time_param = {time_step, time_limit};
-//     struct SpaceParam2D space_param = {length, diffusivity, spaceX_step, width, spaceY_step};
-//     struct TempParam temp_param = {tempUp, tempDown, tempLeft, tempRight};
+
     
-//     return _simulate_heat_transfer_2D_serial(time_param, space_param, temp_param, precision);
-// }
+     return _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
+                     double length, double spaceX_step,
+                     double width, double spaceY_step,
+                     int precision);
+ }

@@ -20,11 +20,11 @@
                          double length, double space_step,
                          int precision);
 
-// extern int
-// _simulate_heat_transfer_2D_serial(struct TimeParam time_param, 
-//                         struct SpaceParam2D space_param,
-//                         struct TempParam temp_param, 
-//                         int precision);
+ extern int
+ _simulate_heat_transfer_2D_serialdouble time_step, double time_limit,
+                        double length, double space_step_x,
+                        double width, double space_step_y,
+                        int precision);
 
 
 #endif //PHYSICS_THERMOSERIAL_H

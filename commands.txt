@@ -7,6 +7,5 @@ mpicc -Wall -g -c thermopara.c -o thermopara.o
 gcc -Wall -g -c thermoserial.c -o thermoserial.o
 ar ruv physics.a physics.o thermopara.o thermoserial.o thermoutils.o oscserial.o utils.o
 ranlib physics.a
-gcc -o main main.c physics.a -lm
 mpicc -o main main.c physics.a -lm -fopenmp
 mpiexec -n 4 ./main
