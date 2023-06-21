@@ -4,11 +4,12 @@
 #define PHYSICS_THERMOUTILS_H
 #define ll long long
 
-extern void
-_cal_num_time(double time_step, double time_limit, ll* numTimePoint);
+extern ll
+_cal_num_time(double time_step, double time_limit);
 
-extern void
-_cal_num_space(double length, double space_step, ll* numSpacePoint);
+extern ll
+_cal_num_space(double length, double space_step);
+
 
 // extern void
 // _cal_num_space_2D(struct TimeParam* time_param, struct SpaceParam2D* space_param, ll* numSpacePointX, ll* numSpacePointY);
