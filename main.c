@@ -9,6 +9,6 @@ int main(){
 //    heat_equation_2D_P1_MPI(0.1, 5,2, 0.1, 2, 0.1,50);
 //    heat_equation_2D_P1_OPENMP(0.1, 5,2, 0.1, 2, 0.1,50);
 //    heat_equation_2D_P1_OPENMP_V2(0.1, 5,2, 0.1, 2, 0.1,50);//bug
-    heat_equation_1D_serial(0.1, 0.5, 10, 0.05,50);
+    heat_equation_1D_serial(0.01, 0.5, 10, 0.05,50);
 
 }
