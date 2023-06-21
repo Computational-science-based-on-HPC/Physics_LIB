@@ -1,10 +1,11 @@
-gcc -Wall -g -c physics.c -o physics.o
-gcc -Wall -g -c oscillation.c -o oscillation.o
+gcc -Wall -g -c physics.c -o physics.o 
 gcc -Wall -g -c oscserial.c -o oscserial.o
 mpicc -Wall -g -c oscpara.c -o oscpara.o
 gcc -Wall -g -c thermoutils.c -o thermoutils.o
+gcc -Wall -g -c utils.c -o utils.o
 mpicc -Wall -g -c thermopara.c -o thermopara.o
 gcc -Wall -g -c thermoserial.c -o thermoserial.o
-ar ruv physics.a physics.o oscillation.o
+ar ruv physics.a physics.o thermopara.o thermoserial.o thermoutils.o oscserial.o utils.o
 ranlib physics.a
-mpicc -o main main.c physics.a
+mpicc -o main main.c physics.a -lm
+mpiexec -n 4 ./main

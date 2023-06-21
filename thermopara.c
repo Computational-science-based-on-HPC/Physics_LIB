@@ -177,6 +177,9 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
     ll numSpacePoint;
     _cal_num_space(length, space_step, &numSpacePoint);
 
+    printf("The value of numTimePoint is: %lld\n", numTimePoint);
+    printf("The value of numSpacePoint is: %lld\n", numSpacePoint);
+
     ll numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
     ll numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
 
