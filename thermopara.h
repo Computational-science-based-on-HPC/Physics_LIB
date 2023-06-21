@@ -47,20 +47,16 @@ _simulate_heat_transfer_1D_MPI(double time_step, double time_limit,
                         double length, double space_step, 
                         int precision);
 
-// extern int
-// _simulate_heat_transfer_1D_OPENMP(struct TimeParam time_param, 
-//                         struct SpaceParam space_param, 
-//                         int precision);
+extern int
+_simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, 
+                        double length, double space_step, 
+                        int precision);
 
-// extern int
-// _simulate_heat_transfer_1D_OPENMP_V2(struct TimeParam time_param, 
-//                         struct SpaceParam space_param, 
-//                         int precision);
+extern int
+_simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, 
+                        double length, double space_step, 
+                        int precision);
 
-// extern int
-// _simulate_heat_transfer_1D_MPI_OPENMP(struct TimeParam time_param, 
-//                         struct SpaceParam space_param, 
-//                         int precision);
 
 // extern int
 // _simulate_heat_transfer_2D_MPI(struct TimeParam time_param, 

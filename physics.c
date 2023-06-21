@@ -134,29 +134,25 @@ heat_equation_1D_P1_MPI(double time_step, double time_limit,
                                     precision);
 }
 
-// int
-// heat_equation_1D_P1_OPENMP(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
-//     struct TimeParam time_param = {time_step, time_limit};
-//     struct SpaceParam space_param = {length, diffusivity, space_step};
+int
+heat_equation_1D_P1_OPENMP(double time_step, double time_limit, 
+                                    double length, double space_step, 
+                                    int precision){
     
-//     return _simulate_heat_transfer_1D_OPENMP(time_param, space_param, precision);
-// }
+    return _simulate_heat_transfer_1D_OPENMP(time_step, time_limit, 
+                                    length, space_step, 
+                                    precision);
+}
 
-// int
-// heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
-//     struct TimeParam time_param = {time_step, time_limit};
-//     struct SpaceParam space_param = {length, diffusivity, space_step};
+int
+heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit, 
+                                    double length, double space_step, 
+                                    int precision){
     
-//     return _simulate_heat_transfer_1D_OPENMP_V2(time_param, space_param, precision);
-// }
-
-// int
-// heat_equation_1D_P1__MPI_OPENMP(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
-//     struct TimeParam time_param = {time_step, time_limit};
-//     struct SpaceParam space_param = {length, diffusivity, space_step};
-    
-//     return _simulate_heat_transfer_1D_MPI_OPENMP(time_param, space_param, precision);
-// }
+    return _simulate_heat_transfer_1D_OPENMP_V2(time_step, time_limit, 
+                                    length, space_step, 
+                                    precision);
+}
 
 // int
 // heat_equation_2D_P1_MPI(double time_step, double time_limit, 

@@ -56,11 +56,15 @@ heat_equation_1D_P1_MPI(double time_step, double time_limit,
                             double length, double space_step, 
                             int precision);
 
-// extern int
-// heat_equation_1D_P1_OPENMP(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision);
+extern int
+heat_equation_1D_P1_OPENMP(double time_step, double time_limit, 
+                            double length, double space_step, 
+                            int precision);
 
-// extern int
-// heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision);
+extern int
+heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit, 
+                            double length, double space_step, 
+                            int precision);
 
 // extern int
 // heat_equation_1D_P1__MPI_OPENMP(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision);
