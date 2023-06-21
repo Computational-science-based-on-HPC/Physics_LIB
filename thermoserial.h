@@ -21,7 +21,7 @@
                          int precision);
 
  extern int
- _simulate_heat_transfer_2D_serialdouble time_step, double time_limit,
+ _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
                         double length, double space_step_x,
                         double width, double space_step_y,
                         int precision);
