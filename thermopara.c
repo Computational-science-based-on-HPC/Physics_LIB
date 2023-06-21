@@ -156,6 +156,7 @@ double _get_value_1D_mpi(double time_step, double space_step, double x, double t
 
 
 int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double length, double diffusivity, double space_step, int precision){
+    MPI_Init(NULL, NULL);
     FILE *fptr1;
     FILE *fptr2;
     FILE *fptr3;
