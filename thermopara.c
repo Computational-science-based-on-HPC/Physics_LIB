@@ -477,7 +477,7 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
 
      numTimePoint= _cal_num_time(time_step, time_limit);
      numSpacePointX= _cal_num_space(length, space_step_x);
-     numSpacePointY= _cal_num_space(width, space_step_y)
+     numSpacePointY= _cal_num_space(width, space_step_y);
 
      for (ll t = 0; t < numTimePoint; ++t) {
          for (ll y = 1; y < numSpacePointY; ++y) {
