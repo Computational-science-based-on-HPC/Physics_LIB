@@ -287,6 +287,7 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
 }
 
 int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, double length, double space_step, int precision){
+    clock_t start_time=clock();
     FILE *fptr;
     fptr = fopen("1D_OPENMP_V1.txt", "w");
 
@@ -301,11 +302,15 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     }
 
     fclose(fptr);
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 1D_OPENMP_withFiles is: %f\n",execution_time);
     return 0;
 }
 
 int
 _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double length, double space_step, int precision){
+    clock_t start_time=clock();
     FILE *fptr;
     fptr = fopen("1D_OPENMP_V2.txt", "w");
 
@@ -320,6 +325,9 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
     }
 
     fclose(fptr);
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 1D_OPENMP_V2_withFiles is: %f\n",execution_time);
     return 0;
 
 }
@@ -521,4 +529,139 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
      return 0;
 
  }
+
+int
+_execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
+                                     double length, double space_step,
+                                     int precision){
+    MPI_Init(NULL, NULL);
+    int my_rank;     // rank of process
+    int processesNo; // number of process
+    ll numTimePointPerProcess, numTimePointRemProcess, numTimePoint, numSpacePoint;
+
+    int checkRem;
+    MPI_Status status;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
+
+    if(my_rank == 0){
+        numTimePoint= _cal_num_time(time_step, time_limit);
+        numSpacePoint= _cal_num_space(length, space_step);
+
+        // printf("The value of numTimePoint is: %lld\n", numTimePoint);
+        // printf("The value of numSpacePoint is: %lld\n", numSpacePoint);
+        // printf("The value of time_step is: %f\n", time_step);
+        // printf("The value of length is: %f\n", length);
+
+        numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
+        numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
+    }
+
+    MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&numSpacePoint, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&length, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&space_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&time_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&time_limit, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&precision, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+    if (my_rank == 0)
+    {
+        ll startIndex = 0;
+        int i;
+        for (i = 1; i < processesNo; i++)
+        {
+            int flag = 0;
+            if (numTimePointRemProcess > 0)
+            {
+                flag = 1;
+                MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                startIndex += numTimePointPerProcess + 1;
+                numTimePointRemProcess -= 1;
+            }
+            else
+            {
+                MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                startIndex += numTimePointPerProcess;
+            }
+        }
+    }
+    else
+    {
+        ll startIndex;
+        ll i;
+
+        MPI_Recv(&checkRem, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+        ll size;
+        if (checkRem > 0)
+        {
+            size = numTimePointPerProcess + 1;
+        }
+        else
+        {
+            size = numTimePointPerProcess;
+        }
+
+        MPI_Recv(&startIndex, 1, MPI_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
+
+        printf("The value of startIndex is: %lld\n", startIndex);
+
+        i = startIndex;
+        ll endIndex = startIndex + size;
+
+        for (; i < endIndex; ++i)
+        {
+            for (ll x = 0; x < numSpacePoint; ++x)
+            {
+                _get_value_1D_mpi(time_step, space_step, x, i, precision);
+            }
+
+        }
+    }
+    MPI_Finalize();
+    return 0;
+}
+int _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
+                                        double length, double space_step,
+                                        int precision){
+
+    clock_t start_time=clock();
+
+    ll numTimePoint= _cal_num_time(time_step, time_limit);
+    ll numSpacePoint= _cal_num_space(length, space_step);
+
+    for (int t = 0; t < numTimePoint; t++) {
+        for (int x = 0; x < numSpacePoint; x++) {
+            _get_value_1D_openmp_V1(time_step, space_step, x, t, precision);
+        }
+    }
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 1D_OPENMP is: %f\n",execution_time);
+    return 0;
+}
+
+int _execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
+                                           double length, double space_step,
+                                           int precision){
+
+    clock_t start_time=clock();
+
+    ll numTimePoint= _cal_num_time(time_step, time_limit);
+    ll numSpacePoint= _cal_num_space(length, space_step);
+
+    for (int t = 0; t < numTimePoint; t++) {
+        for (int x = 0; x < numSpacePoint; x++) {
+            _get_value_1D_openmp_V2(time_step, space_step, x, t, precision);
+        }
+
+    }
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 1D_OPENMP_V2 is: %f\n",execution_time);
+    return 0;
+
+}
 

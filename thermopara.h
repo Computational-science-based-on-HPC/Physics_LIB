@@ -58,7 +58,7 @@ _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit,
 extern int
 _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, 
                         double length, double space_step, 
-                        int precision);
+                        int precision);////////////
 
 
  extern int
@@ -79,6 +79,41 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
                                       double width, double space_step_y,
                                       int precision);
 
+
+
+extern int
+_execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
+                               double length, double space_step,
+                               int precision);
+
+extern int
+_execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
+                                  double length, double space_step,
+                                  int precision);
+
+extern int
+_execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
+                                     double length, double space_step,
+                                     int precision);
+
+
+//extern int
+//_simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
+//                               double length, double space_step_x,
+//                               double width, double space_step_y,
+//                               int precision);
+//
+//extern int
+//_simulate_heat_transfer_2D_OPENMP(double time_step, double time_limit,
+//                                  double length, double space_step_x,
+//                                  double width, double space_step_y,
+//                                  int precision);
+//
+//extern int
+//_simulate_heat_transfer_2D_OPENMP_V2(double time_step, double time_limit,
+//                                     double length, double space_step_x,
+//                                     double width, double space_step_y,
+//                                     int precision);
 
 
 #endif //PHYSICS_THERMOPARA_H

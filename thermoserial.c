@@ -78,26 +78,6 @@
  }
 
 
-int _execution_time_heat_transfer_1D_serial(double time_step, double time_limit,
-                                        double length, double space_step,
-                                        int precision){
-    clock_t start_time=clock();
-    ll numTimePoint= _cal_num_time(time_step, time_limit);
-
-    ll numSpacePoint= _cal_num_space(length, space_step);
-
-    for (int t = 0; t < numTimePoint; t++) {
-        for (int x = 0; x < numSpacePoint; x++) {
-             _get_value_1D(time_step, space_step, x, t, precision);
-        }
-    }
-
-    clock_t end_time=clock();
-    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-    printf("The value of execution_time 1D_serial is: %f\n",execution_time);
-    return 0;
-
-}
  int _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
                                        double length, double space_step_x,
                                        double width, double space_step_y,
@@ -126,6 +106,28 @@ int _execution_time_heat_transfer_1D_serial(double time_step, double time_limit,
      printf("The value of execution_time 2D_serial_simulation is: %f\n",execution_time);
      return 0;
  }
+
+int _execution_time_heat_transfer_1D_serial(double time_step, double time_limit,
+                                            double length, double space_step,
+                                            int precision){
+    clock_t start_time=clock();
+    ll numTimePoint= _cal_num_time(time_step, time_limit);
+
+    ll numSpacePoint= _cal_num_space(length, space_step);
+
+    for (int t = 0; t < numTimePoint; t++) {
+        for (int x = 0; x < numSpacePoint; x++) {
+            _get_value_1D(time_step, space_step, x, t, precision);
+        }
+    }
+
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 1D_serial is: %f\n",execution_time);
+    return 0;
+
+}
+
 int _execution_time_heat_transfer_2D_serial(double time_step, double time_limit,
                                         double length, double space_step_x,
                                         double width, double space_step_y,
