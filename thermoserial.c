@@ -73,6 +73,24 @@
 
  }
 
+
+int _execution_time_heat_transfer_1D_serial(double time_step, double time_limit,
+                                        double length, double space_step,
+                                        int precision){
+
+    ll numTimePoint= _cal_num_time(time_step, time_limit);
+
+    ll numSpacePoint= _cal_num_space(length, space_step);
+
+    for (int t = 0; t < numTimePoint; t++) {
+        for (int x = 0; x < numSpacePoint; x++) {
+             _get_value_1D(time_step, space_step, x, t, precision);
+        }
+    }
+
+    return 0;
+
+}
  int _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
                                        double length, double space_step_x,
                                        double width, double space_step_y,
@@ -97,3 +115,23 @@
      fclose(fptr);
      return 0;
  }
+int _execution_time_heat_transfer_2D_serial(double time_step, double time_limit,
+                                        double length, double space_step_x,
+                                        double width, double space_step_y,
+                                        int precision){
+
+    ll numTimePoint= _cal_num_time(time_step, time_limit);
+    ll numSpacePointX= _cal_num_space(length, space_step_x);
+    ll numSpacePointY= _cal_num_space(width, space_step_y);
+
+    for (ll t = 0; t < numTimePoint; ++t) {
+        for (ll y = 1; y < numSpacePointY; ++y) {
+            for (ll x = 1; x < numSpacePointX; ++x) {
+                 _get_value_2D(time_step, length, space_step_x, width, space_step_y, x, y, t, precision);
+            }
+        }
+    }
+
+    return 0;
+
+}
