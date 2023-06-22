@@ -530,8 +530,7 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
 
  }
 
-int
-_execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
+int _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
                                      double length, double space_step,
                                      int precision){
     MPI_Init(NULL, NULL);
@@ -623,45 +622,45 @@ _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
     MPI_Finalize();
     return 0;
 }
-int _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
-                                        double length, double space_step,
-                                        int precision){
-
-    clock_t start_time=clock();
-
-    ll numTimePoint= _cal_num_time(time_step, time_limit);
-    ll numSpacePoint= _cal_num_space(length, space_step);
-
-    for (int t = 0; t < numTimePoint; t++) {
-        for (int x = 0; x < numSpacePoint; x++) {
-            _get_value_1D_openmp_V1(time_step, space_step, x, t, precision);
-        }
-    }
-    clock_t end_time=clock();
-    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-    printf("The value of execution_time 1D_OPENMP is: %f\n",execution_time);
-    return 0;
-}
-
-int _execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
-                                           double length, double space_step,
-                                           int precision){
-
-    clock_t start_time=clock();
-
-    ll numTimePoint= _cal_num_time(time_step, time_limit);
-    ll numSpacePoint= _cal_num_space(length, space_step);
-
-    for (int t = 0; t < numTimePoint; t++) {
-        for (int x = 0; x < numSpacePoint; x++) {
-            _get_value_1D_openmp_V2(time_step, space_step, x, t, precision);
-        }
-
-    }
-    clock_t end_time=clock();
-    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-    printf("The value of execution_time 1D_OPENMP_V2 is: %f\n",execution_time);
-    return 0;
-
-}
+//int _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
+//                                        double length, double space_step,
+//                                        int precision){
+//
+//    clock_t start_time=clock();
+//
+//    ll numTimePoint= _cal_num_time(time_step, time_limit);
+//    ll numSpacePoint= _cal_num_space(length, space_step);
+//
+//    for (int t = 0; t < numTimePoint; t++) {
+//        for (int x = 0; x < numSpacePoint; x++) {
+//            _get_value_1D_openmp_V1(time_step, space_step, x, t, precision);
+//        }
+//    }
+//    clock_t end_time=clock();
+//    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+//    printf("The value of execution_time 1D_OPENMP is: %f\n",execution_time);
+//    return 0;
+//}
+//
+//int _execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
+//                                           double length, double space_step,
+//                                           int precision){
+//
+//    clock_t start_time=clock();
+//
+//    ll numTimePoint= _cal_num_time(time_step, time_limit);
+//    ll numSpacePoint= _cal_num_space(length, space_step);
+//
+//    for (int t = 0; t < numTimePoint; t++) {
+//        for (int x = 0; x < numSpacePoint; x++) {
+//            _get_value_1D_openmp_V2(time_step, space_step, x, t, precision);
+//        }
+//
+//    }
+//    clock_t end_time=clock();
+//    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+//    printf("The value of execution_time 1D_OPENMP_V2 is: %f\n",execution_time);
+//    return 0;
+//
+//}
 

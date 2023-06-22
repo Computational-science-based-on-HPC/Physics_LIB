@@ -218,20 +218,20 @@ int heat_equation_2D_serial(double time_step, double time_limit,
                                            length, space_step,
                                            precision);
 }
-int heat_equation_execution_time_1D_P1_OPENMP(double time_step, double time_limit,
-                                          double length, double space_step,
-                                          int precision){
-    return _execution_time_heat_transfer_1D_OPENMP(time_step, time_limit,
-                                             length, space_step,
-                                             precision);
-}
-int heat_equation_execution_time_1D_P1_OPENMP_V2(double time_step, double time_limit,
-                                             double length, double space_step,
-                                             int precision){
-    return _execution_time_heat_transfer_1D_OPENMP_V2(time_step, time_limit,
-                                                length, space_step,
-                                                precision);
-}
+//int heat_equation_execution_time_1D_P1_OPENMP(double time_step, double time_limit,
+//                                          double length, double space_step,
+//                                          int precision){
+//    return _execution_time_heat_transfer_1D_OPENMP(time_step, time_limit,
+//                                             length, space_step,
+//                                             precision);
+//}
+//int heat_equation_execution_time_1D_P1_OPENMP_V2(double time_step, double time_limit,
+//                                             double length, double space_step,
+//                                             int precision){
+//    return _execution_time_heat_transfer_1D_OPENMP_V2(time_step, time_limit,
+//                                                length, space_step,
+//                                                precision);
+//}
 
  /////////////////////
 int heat_equation_execution_time_1D_serial(double time_step, double time_limit, double length, double space_step, int precision){
