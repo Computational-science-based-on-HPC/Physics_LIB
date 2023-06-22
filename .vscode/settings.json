@@ -3,7 +3,10 @@
         "mpi.h": "c",
         "utils.h": "c",
         "oscserial.h": "c",
-        "oscpara.h": "c"
+        "oscpara.h": "c",
+        "omp.h": "c",
+        "stdio.h": "c",
+        "time.h": "c"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc"
 }
