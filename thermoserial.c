@@ -72,7 +72,7 @@
      fclose(fptr);
      clock_t end_time=clock();
      double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-     printf(fptr, "%f ",execution_time);
+     printf("The value of execution_time 1D_serial_simulation is: %f\n",execution_time);
      return 0;
 
  }
@@ -94,7 +94,7 @@ int _execution_time_heat_transfer_1D_serial(double time_step, double time_limit,
 
     clock_t end_time=clock();
     double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-    printf(fptr, "%f ",execution_time);
+    printf("The value of execution_time 1D_serial is: %f\n",execution_time);
     return 0;
 
 }
@@ -123,7 +123,7 @@ int _execution_time_heat_transfer_1D_serial(double time_step, double time_limit,
      fclose(fptr);
      clock_t end_time=clock();
      double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-     printf(fptr, "%f ",execution_time);
+     printf("The value of execution_time 2D_serial_simulation is: %f\n",execution_time);
      return 0;
  }
 int _execution_time_heat_transfer_2D_serial(double time_step, double time_limit,
@@ -146,7 +146,7 @@ int _execution_time_heat_transfer_2D_serial(double time_step, double time_limit,
 
     clock_t end_time=clock();
     double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-    printf(fptr, "%f ",execution_time);
+    printf("The value of execution_time 2D_serial is: %f\n",execution_time);
     return 0;
 
 
