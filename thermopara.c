@@ -766,7 +766,7 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
 
         }
     }
-
+    MPI_Finalize();
     return 0;
 
 }
