@@ -622,45 +622,151 @@ int _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
     MPI_Finalize();
     return 0;
 }
-//int _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
-//                                        double length, double space_step,
-//                                        int precision){
-//
-//    clock_t start_time=clock();
-//
-//    ll numTimePoint= _cal_num_time(time_step, time_limit);
-//    ll numSpacePoint= _cal_num_space(length, space_step);
-//
-//    for (int t = 0; t < numTimePoint; t++) {
-//        for (int x = 0; x < numSpacePoint; x++) {
-//            _get_value_1D_openmp_V1(time_step, space_step, x, t, precision);
-//        }
-//    }
-//    clock_t end_time=clock();
-//    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-//    printf("The value of execution_time 1D_OPENMP is: %f\n",execution_time);
-//    return 0;
-//}
-//
-//int _execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
-//                                           double length, double space_step,
-//                                           int precision){
-//
-//    clock_t start_time=clock();
-//
-//    ll numTimePoint= _cal_num_time(time_step, time_limit);
-//    ll numSpacePoint= _cal_num_space(length, space_step);
-//
-//    for (int t = 0; t < numTimePoint; t++) {
-//        for (int x = 0; x < numSpacePoint; x++) {
-//            _get_value_1D_openmp_V2(time_step, space_step, x, t, precision);
-//        }
-//
-//    }
-//    clock_t end_time=clock();
-//    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-//    printf("The value of execution_time 1D_OPENMP_V2 is: %f\n",execution_time);
-//    return 0;
-//
-//}
+int _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
+                                        double length, double space_step,
+                                        int precision){
 
+    clock_t start_time=clock();
+
+    ll numTimePoint= _cal_num_time(time_step, time_limit);
+    ll numSpacePoint= _cal_num_space(length, space_step);
+
+    for (int t = 0; t < numTimePoint; t++) {
+        for (int x = 0; x < numSpacePoint; x++) {
+            _get_value_1D_openmp_V1(time_step, space_step, x, t, precision);
+        }
+    }
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 1D_OPENMP is: %f\n",execution_time);
+    return 0;
+}
+
+int _execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
+                                           double length, double space_step,
+                                           int precision){
+
+    clock_t start_time=clock();
+
+    ll numTimePoint= _cal_num_time(time_step, time_limit);
+    ll numSpacePoint= _cal_num_space(length, space_step);
+
+    for (int t = 0; t < numTimePoint; t++) {
+        for (int x = 0; x < numSpacePoint; x++) {
+            _get_value_1D_openmp_V2(time_step, space_step, x, t, precision);
+        }
+
+    }
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 1D_OPENMP_V2 is: %f\n",execution_time);
+    return 0;
+
+}
+int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
+                                     double length, double space_step_x,
+                                     double width, double space_step_y,
+                                     int precision){
+    MPI_Init(NULL, NULL);
+
+
+    int my_rank;     // rank of process
+    int processesNo; // number of process
+
+    int checkRem;
+    MPI_Status status;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
+
+    ll numTimePoint;
+    ll numSpacePointX;
+    ll numSpacePointY;
+    ll numTimePointPerProcess;
+    ll numTimePointRemProcess;
+
+    //_cal_num_time(time_param, &numTimePoint);
+    if(my_rank == 0){
+        numTimePoint= _cal_num_time(time_step, time_limit);
+        numSpacePointX= _cal_num_space(length, space_step_x);
+        numSpacePointY= _cal_num_space(width, space_step_y);
+
+        numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
+        numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
+    }
+
+
+    MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&numSpacePointX, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&numSpacePointY, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&length, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&space_step_x, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&width, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&space_step_y, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&time_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&time_limit, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&precision, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+    if (my_rank == 0)
+    {
+        ll startIndex = 0;
+        int i;
+        for (i = 1; i < processesNo; i++)
+        {
+            int flag = 0;
+            if (numTimePointRemProcess > 0)
+            {
+                flag = 1;
+                MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                startIndex += numTimePointPerProcess + 1;
+                numTimePointRemProcess -= 1;
+            }
+            else
+            {
+                MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                startIndex += numTimePointPerProcess;
+            }
+        }
+    }
+    else
+    {
+        ll startIndex;
+        ll i;
+
+        MPI_Recv(&checkRem, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+        ll size;
+        if (checkRem > 0)
+        {
+            size = numTimePointPerProcess + 1;
+        }
+        else
+        {
+            size = numTimePointPerProcess;
+        }
+
+        MPI_Recv(&startIndex, 1, MPI_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
+
+        printf("The value of startIndex is: %lld\n", startIndex);
+
+        i = startIndex;
+        ll endIndex = startIndex + size;
+
+
+        for (; i < endIndex; ++i)
+        {
+            for (ll y = 1; y < numSpacePointY; ++y)
+            {
+                for (ll x = 1; x < numSpacePointX; ++x)
+                {
+                    _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision);
+
+                }
+            }
+
+        }
+    }
+
+    return 0;
+
+}
