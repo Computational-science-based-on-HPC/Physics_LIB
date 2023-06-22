@@ -2,8 +2,8 @@
 // Created by jghal on 6/16/2023.
 //
 
-#include "utils.h"
-#include "math.h"
+#include "../include/utils.h"
+#include <math.h>
 
 int
 _valid_osc(double x, double y, double length, double mass, double gravity, double k, double time_limit,

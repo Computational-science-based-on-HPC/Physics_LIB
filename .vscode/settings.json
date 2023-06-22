@@ -3,7 +3,16 @@
         "mpi.h": "c",
         "utils.h": "c",
         "oscserial.h": "c",
-        "oscpara.h": "c"
+        "oscpara.h": "c",
+        "stdio.h": "c",
+        "thermoutils.h": "c",
+        "thermoserial.h": "c",
+        "thermopara.h": "c",
+        "physics.h": "c",
+        "string.h": "c",
+        "time.h": "c",
+        "omp.h": "c",
+        "math.h": "c"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc"
 }

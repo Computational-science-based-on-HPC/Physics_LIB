@@ -1,23 +1,36 @@
-CC = mpicc
-AR = ar
-CFLAGS = -Wall -Wextra -Iinclude -lm
-LDFLAGS = -L. -lmylib -lmpi
+CC = gcc
+MCC = mpicc
+CFLAGS = -Wall -g -c
+LDFLAGS = -lm
 
-SRCS = src/physics.c src/oscserial.c src/oscpara.c src/utils.c src/thermoserial.c src/thermopara.c src/thermoutils.c
-OBJS = $(SRCS:.c=.o)
+all: libphysics.a
 
-LIB_NAME = myphysicslib.a
+libphysics.a: physics.o oscserial.o utils.o thermoutils.o oscpara.o thermopara.o thermoserial.o
+	ar ruv libphysics.a physics.o oscserial.o utils.o thermoutils.o oscpara.o thermopara.o thermoserial.o
+	ranlib libphysics.a
 
-.PHONY: all clean
+physics.o: physics.c oscserial.h oscpara.h
+	$(CC) $(CFLAGS) physics.c -o physics.o
 
-all: $(LIB_NAME)
-%.o: %.c
-    $(CC) $(CFLAGS) -c $< -o $@
-    
-$(LIB_NAME): $(OBJS)
-    $(AR) rcs $(LIB_NAME) $(OBJS)
+oscserial.o: oscserial.c oscserial.h
+	$(CC) $(CFLAGS) oscserial.c -o oscserial.o
 
+utils.o: utils.c utils.h
+	$(CC) $(CFLAGS) utils.c -o utils.o
+
+thermoutils.o: thermoutils.c thermoutils.h
+	$(CC) $(CFLAGS) thermoutils.c -o thermoutils.o
+
+oscpara.o: oscpara.c oscpara.h thermopara.h thermoserial.h
+	$(MCC) $(CFLAGS) oscpara.c -o oscpara.o
+
+thermopara.o: thermopara.c thermopara.h
+	$(MCC) $(CFLAGS) thermopara.c -o thermopara.o
+
+thermoserial.o: thermoserial.c thermoserial.h
+	$(MCC) $(CFLAGS) thermoserial.c -o thermoserial.o
 
 clean:
-    rm -f $(OBJS) $(LIB_NAME)
+	rm -f *.o *.a
 
+.PHONY: all clean
