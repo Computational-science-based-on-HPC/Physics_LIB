@@ -165,7 +165,13 @@ double _get_value_1D_openmp_V2(double time_step, double space_step, double x, do
 
 
 int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double length, double space_step, int precision){
-    MPI_Init(NULL, NULL);
+    // MPI_Init(NULL, NULL);
+    int initialized, finalized;
+     MPI_Initialized(&initialized);
+    if (!initialized)
+    {
+        MPI_Init(NULL, NULL);
+    }
     FILE *fptr1;
     FILE *fptr2;
     FILE *fptr3;
@@ -292,7 +298,10 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
         end_time = MPI_Wtime();
         printf("The time taken in MPI_1d With I/O is: %f\n", end_time - start_time);
     }
-    MPI_Finalize();
+    // MPI_Finalize();
+    MPI_Finalized(&finalized);
+    if (!finalized)
+        MPI_Finalize();
     return 0;
 }
 
@@ -497,7 +506,7 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
     MPI_Finalized(&finalized);
     if (!finalized)
         MPI_Finalize();
-        
+            
     return 0;
  }
 
@@ -563,7 +572,14 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
 int _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
                                      double length, double space_step,
                                      int precision){
-    MPI_Init(NULL, NULL);
+    // MPI_Init(NULL, NULL);
+    int initialized, finalized;
+     MPI_Initialized(&initialized);
+    if (!initialized)
+    {
+        MPI_Init(NULL, NULL);
+    }
+
     int my_rank;     // rank of process
     int processesNo; // number of process
     ll numTimePointPerProcess, numTimePointRemProcess, numTimePoint, numSpacePoint;
@@ -653,7 +669,11 @@ int _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
         end_time = MPI_Wtime();
         printf("The time taken in MPI_1d Without I/O is: %f\n", end_time - start_time);
     }
-    MPI_Finalize();
+    // MPI_Finalize();
+    MPI_Finalized(&finalized);
+    if (!finalized)
+        MPI_Finalize();
+        
     return 0;
 }
 int _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
