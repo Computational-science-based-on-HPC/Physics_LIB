@@ -9,7 +9,8 @@
 
 const char *FILES[] = {"displacement.txt", "velocity.txt", "acceleration.txt"};
 
-int _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
+int 
+_simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                double Vo, double FI,
                                double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
@@ -76,7 +77,8 @@ int _simulate_damped_os_serial(double max_amplitude, double length, double mass,
     return 0;
 }
 
-int _simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
+int 
+_simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                                double Yo,
                                double Vo,
                                double time_limit, double step_size, double damping_coefficent, int number_of_files)

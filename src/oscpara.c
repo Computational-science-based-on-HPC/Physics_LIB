@@ -42,17 +42,14 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     double RESULTS[3];
     double coefficient_calc;
     double CALCULATIONS[3];
+    char *dir[2076];
     int _it_number_proc;
     int _it_number;
     int _it_number_all;
     double t;
     short int _is_zero = 0;
-    FILE *p_dis;
-    char _file_name[256];
-    sprintf(_file_name, "displacement%d.txt", world_rank);
-    p_dis = fopen(_file_name, "w");
     double buff[1000];
-    if (world_rank == 0)
+    if (world_rank == 1)
     {
 
         double Wo = sqrt(k / mass);
@@ -60,7 +57,6 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
         RESULTS[3];
         coefficient_calc = -damping_coefficent / (2 * mass);
         CALCULATIONS[3];
-        number_of_files = _min_int(number_of_files, 3);
         RESULTS[0] = max_amplitude;
         RESULTS[1] = Vo;
         RESULTS[2] = Ao + gravity;
@@ -72,8 +68,8 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
             _it_number_proc = (_it_number_all / (world_size - 1)) + 1;
             for (int i = 1; i < world_size; i++)
             {
-                if (i > _it_number_all % (world_size - 1))
-                    _it_number_proc = (_it_number_all / (world_size - 1));
+                if (i > _it_number_all % (world_size))
+                    _it_number_proc = (_it_number_all / (world_size));
                 _sent_it_number += _it_number_proc;
 
                 MPI_Send(&_it_number_proc, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
@@ -89,12 +85,17 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     MPI_Bcast(&number_of_files, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&coefficient_calc, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&dir, sizeof(dir), MPI_CHAR, 0, MPI_COMM_WORLD);
 
     omp_set_dynamic(0); // Explicitly disable dynamic teams
     omp_set_num_threads(3);
     int count = 0;
+    FILE *p_dis;
+    char _file_name[2076];
+    sprintf(_file_name, "displacement_%d.txt", world_rank);
+    p_dis = fopen(_file_name, "w");
 
-    for (int it = world_rank * _it_number; it < _it_number_all; ++it)
+    for (int it = 0; it < _it_number; ++it)
     {
 
         if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
@@ -119,13 +120,14 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
         }
         if (count == 9999)
         {
+            printf("count:%d rank:%d\n", count, world_rank);
             for (int i = 0; i < count; i++)
             {
                 fprintf(p_dis, "%.6f\n", buff[i]);
             }
             count = 0;
         }
-        t = step_size * ((double)it);
+        t = step_size * (((double)it) + (world_rank * _it_number));
 
 #pragma omp parallel sections
         {
@@ -153,6 +155,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     }
     if (count > 0)
     {
+
         for (int i = 0; i < count; i++)
         {
             fprintf(p_dis, "%.6f\n", buff[i]);
@@ -160,9 +163,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     }
     MPI_Barrier(MPI_COMM_WORLD);
     fclose(p_dis);
-    MPI_Finalized(&finalized);
-    if (!finalized)
-        MPI_Finalize();
+    return 0;
 }
 int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                                double Vo, double FI,
@@ -252,7 +253,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     omp_set_num_threads(3);
     int count = 0;
 
-    for (int it = world_rank * _it_number; it < _it_number_all; ++it)
+    for (int it = 0; it < _it_number_all; ++it)
     {
 
         if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
@@ -276,7 +277,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
             break;
         }
 
-        t = step_size * ((double)it);
+        t = step_size * (((double)it) + (world_rank * _it_number));
 #pragma omp parallel sections
         {
 #pragma omp section
@@ -308,10 +309,6 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     printf("Proccess ID: %d Execution Time: %f\n", world_rank, execution_time);
 
     MPI_Barrier(MPI_COMM_WORLD);
-
-    MPI_Finalized(&finalized);
-    if (!finalized)
-        MPI_Finalize();
     return 0;
 }
 
@@ -341,8 +338,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
         MPI_Init(NULL, NULL);
     }
     MPI_Status status;
-    MPI_Offset _d_offset;
-    MPI_File fh;
+
     int world_size;
     int world_rank;
 
@@ -358,6 +354,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     int _it_number_all;
     double t;
     short int _is_zero = 0;
+    double buff[1000];
 
     if (world_rank == 0)
     {
@@ -399,8 +396,12 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     }
 
     int count = 0;
+    FILE *p_dis;
+    char _file_name[2076];
+    sprintf(_file_name, "displacement_%d.txt", world_rank);
+    p_dis = fopen(_file_name, "w");
 
-    for (int it = world_rank * _it_number; it < _it_number_all; ++it)
+    for (int it = 0; it < _it_number_all; ++it)
     {
 
         if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
@@ -423,20 +424,35 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
             puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
             break;
         }
-
-        t = step_size * ((double)it);
+        if (count == 9999)
+        {
+            printf("count:%d rank:%d\n", count, world_rank);
+            for (int i = 0; i < count; i++)
+            {
+                fprintf(p_dis, "%.6f\n", buff[i]);
+            }
+            count = 0;
+        }
+        t = step_size * (((double)it) + (world_rank * _it_number));
         CALCULATIONS[0] = cos(W * t + FI);
         CALCULATIONS[1] = sin(W * t + FI);
         CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
         RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
         RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
         RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
+        buff[count++] = RESULTS[0];
     }
+    if (count > 0)
+    {
 
-    MPI_Finalized(&finalized);
-
-    if (!finalized)
-        MPI_Finalize();
+        for (int i = 0; i < count; i++)
+        {
+            fprintf(p_dis, "%.6f\n", buff[i]);
+        }
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
+    fclose(p_dis);
+    return 0;
 }
 int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                            double Vo, double FI,
@@ -524,7 +540,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     omp_set_num_threads(NUM_THREADS);
     int count = 0;
 
-    for (int it = world_rank * _it_number; it < _it_number_all; ++it)
+    for (int it = 0; it < _it_number_all; ++it)
     {
         if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
         {
@@ -547,7 +563,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
             break;
         }
 
-        t = step_size * ((double)it);
+        t = step_size * (((double)it) + (world_rank * _it_number));
         CALCULATIONS[0] = cos(W * t + FI);
         CALCULATIONS[1] = sin(W * t + FI);
         CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
@@ -560,8 +576,4 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     printf("Proccess ID: %d Execution Time: %f\n", world_rank, execution_time);
     MPI_Barrier(MPI_COMM_WORLD);
-
-    MPI_Finalized(&finalized);
-    if (!finalized)
-        MPI_Finalize();
 }
