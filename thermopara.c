@@ -175,13 +175,17 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
     int my_rank;     // rank of process
     int processesNo; // number of process
     ll numTimePointPerProcess, numTimePointRemProcess, numTimePoint, numSpacePoint;
+    double start_time, end_time;
 
     int checkRem;
     MPI_Status status;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
+    MPI_Barrier(MPI_COMM_WORLD);
+
 
     if(my_rank == 0){
+        start_time = MPI_Wtime();
         numTimePoint= _cal_num_time(time_step, time_limit);
         numSpacePoint= _cal_num_space(length, space_step);
 
@@ -282,6 +286,12 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
     fclose(fptr1);
     fclose(fptr2);
     fclose(fptr3);
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (my_rank == 0)
+    {
+        end_time = MPI_Wtime();
+        printf("The time taken in MPI_1d With I/O is: %f\n", end_time - start_time);
+    }
     MPI_Finalize();
     return 0;
 }
