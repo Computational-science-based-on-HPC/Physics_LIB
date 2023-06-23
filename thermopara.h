@@ -113,6 +113,6 @@ extern int
  _execution_time_heat_transfer_2D_V2_OPENMP(double time_step, double time_limit,
                                       double length, double space_step_x,
                                       double width, double space_step_y,
-                                      int precision)
+                                      int precision);
 
 #endif //PHYSICS_THERMOPARA_H

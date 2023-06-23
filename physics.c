@@ -228,6 +228,7 @@ int heat_equation_execution_time_1D_P1_OPENMP(double time_step, double time_limi
 int heat_equation_execution_time_1D_P1_OPENMP_V2(double time_step, double time_limit,
                                              double length, double space_step,
                                              int precision){
+                                                
     return _execution_time_heat_transfer_1D_OPENMP_V2(time_step, time_limit,
                                                 length, space_step,
                                                 precision);
@@ -235,6 +236,7 @@ int heat_equation_execution_time_1D_P1_OPENMP_V2(double time_step, double time_l
 int heat_equation_execution_time_2D_P1_MPI(double time_step, double time_limit,
                                        double length, double spaceX_step, double width, double spaceY_step,
                                        int precision){
+
     return _execution_time_heat_transfer_2D_MPI(time_step, time_limit,
                                                 length, spaceX_step,
                                                 width, spaceY_step,
@@ -244,6 +246,7 @@ int heat_equation_execution_time_2D_P1_MPI(double time_step, double time_limit,
 int heat_equation_execution_time_2D_P1_OPENMP(double time_step, double time_limit,
                                           double length, double spaceX_step, double width, double spaceY_step,
                                           int precision){
+
     return _execution_time_heat_transfer_2D_OPENMP(time_step, time_limit,
                                              length, spaceX_step,
                                              width, spaceY_step,
@@ -253,6 +256,7 @@ int heat_equation_execution_time_2D_P1_OPENMP(double time_step, double time_limi
 int heat_equation_execution_time_2D_P1_OPENMP_V2(double time_step, double time_limit,
                                              double length, double spaceX_step, double width, double spaceY_step,
                                              int precision){
+
     return _execution_time_heat_transfer_2D_V2_OPENMP(time_step, time_limit,
                                                 length, spaceX_step,
                                                 width, spaceY_step,
