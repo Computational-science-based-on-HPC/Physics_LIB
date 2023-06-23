@@ -7,10 +7,9 @@
 #include "../include/utils.h"
 #include <time.h>
 
-const char *FILES[] = {"displacement.txt", "velocity.txt", "acceleration.txt"};
+// const char *FILES[] = {"displacement.txt", "velocity.txt", "acceleration.txt"};
 
-int 
-_simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
+int _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                double Vo, double FI,
                                double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
@@ -34,51 +33,47 @@ _simulate_damped_os_serial(double max_amplitude, double length, double mass, dou
     RESULTS[2] = Ao + gravity * exp((-damping_coefficent / (2 * mass)) * 0);
     double CALCULATIONS[3];
     number_of_files = _min_int(number_of_files, 3);
-    FILE *p_file[number_of_files];
-    for (int i = 0; i < number_of_files; ++i)
-    {
-        p_file[i] = fopen(FILES[i], "w");
-    }
+    FILE *p_file;
+    char _file_name[2076];
+    sprintf(_file_name, "damped_os_serial_displacement.txt");
+    p_file = fopen(_file_name, "w");
+    fprintf(p_file, "%lf\n", RESULTS[0]);
+
     for (double t = 0; t <= time_limit + 0.05; t += step_size)
     {
         if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
         {
-            for (int i = 0; i < number_of_files; ++i)
-            {
-                fclose(p_file[i]);
-            }
+
+            fclose(p_file);
+
             puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
             return -1;
         }
         else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
         {
-            for (int i = 0; i < number_of_files; ++i)
-            {
-                fclose(p_file[i]);
-            }
+
+            fclose(p_file);
+
             puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
             return -2;
         }
-        for (int i = 0; i < number_of_files; ++i)
-        {
-            fprintf(p_file[i], "%lf\n", RESULTS[i]);
-        }
+
         CALCULATIONS[0] = cos(W * t + FI);
         CALCULATIONS[1] = sin(W * t + FI);
         CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
         RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
         RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
         RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
+        fprintf(p_file, "%lf\n", RESULTS[0]);
     }
     for (int i = 0; i < number_of_files; ++i)
     {
-        fclose(p_file[i]);
+        fclose(p_file);
     }
     return 0;
 }
 
-int 
-_simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
+int _simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                                double Yo,
                                double Vo,
                                double time_limit, double step_size, double damping_coefficent, int number_of_files)
@@ -95,11 +90,21 @@ _simulate_elastic_pendulum(double r, double length, double mass, double gravity,
         Xo = sqrt(length * length - Yo * Yo);
         puts("Max Amplitude Is More Than The Spring Length, Xo Had Been Reset to be Equal to the Spring Length");
     }
+
     double t = 0;
     double x1 = Xo; // init position of mass in x
     double y = Yo;  // init position of mass in y
     double v = Vo;  // init velocity
     double a = 0;   // init velocity
+    FILE *p_dis_x, *p_dis_y;
+    char _file_name[2076];
+    sprintf(_file_name, "elastic_pendulum_x.txt");
+    p_dis_x = fopen(_file_name, "w");
+    sprintf(_file_name, "elastic_pendulum_y.txt");
+    p_dis_y = fopen(_file_name, "w");
+    fprintf(p_dis_x, "%.6f\n", x1);
+    fprintf(p_dis_y, "%.6f\n", y);
+
     for (int i = 0; i < time_limit; ++i)
     {
         t += step_size;
@@ -132,7 +137,11 @@ _simulate_elastic_pendulum(double r, double length, double mass, double gravity,
         y += step_size / 6.0 * (k12 + 2 * k22 + 2 * k32 + k42);
         v += step_size / 6.0 * (k13 + 2 * k23 + 2 * k33 + k43);
         a += step_size / 6.0 * (k14 + 2 * k24 + 2 * k34 + k44);
+        fprintf(p_dis_x, "%.6f\n", x1);
+        fprintf(p_dis_y, "%.6f\n", y);
     }
+    fclose(p_dis_x);
+    fclose(p_dis_y);
     return 0;
 }
 

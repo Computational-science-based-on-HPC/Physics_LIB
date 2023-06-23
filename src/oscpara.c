@@ -92,7 +92,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     int count = 0;
     FILE *p_dis;
     char _file_name[2076];
-    sprintf(_file_name, "displacement_%d.txt", world_rank);
+    sprintf(_file_name, "damped_os_parallel_v1_displacement_%d.txt", world_rank);
     p_dis = fopen(_file_name, "w");
 
     for (int it = 0; it < _it_number; ++it)
@@ -398,7 +398,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     int count = 0;
     FILE *p_dis;
     char _file_name[2076];
-    sprintf(_file_name, "displacement_%d.txt", world_rank);
+    sprintf(_file_name, "damped_os_parallel_v2_displacement_%d.txt", world_rank);
     p_dis = fopen(_file_name, "w");
 
     for (int it = 0; it < _it_number_all; ++it)
