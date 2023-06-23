@@ -692,15 +692,15 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
                                      double width, double space_step_y,
                                      int precision){
     MPI_Init(NULL, NULL);
-
-
     int my_rank;     // rank of process
     int processesNo; // number of process
 
     int checkRem;
+    double start_time, end_time;
     MPI_Status status;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
+    MPI_Barrier(MPI_COMM_WORLD);
 
     ll numTimePoint;
     ll numSpacePointX;
@@ -710,6 +710,7 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
 
     //_cal_num_time(time_param, &numTimePoint);
     if(my_rank == 0){
+        start_time = MPI_Wtime();
         numTimePoint= _cal_num_time(time_step, time_limit);
         numSpacePointX= _cal_num_space(length, space_step_x);
         numSpacePointY= _cal_num_space(width, space_step_y);
@@ -789,6 +790,12 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
             }
 
         }
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (my_rank == 0)
+    {
+        end_time = MPI_Wtime();
+        printf("The time taken in MPI_2d Without I/O is: %f\n", end_time - start_time);
     }
     MPI_Finalize();
     return 0;
