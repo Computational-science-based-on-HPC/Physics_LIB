@@ -515,29 +515,34 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
                                    double length, double space_step_x,
                                    double width, double space_step_y,
                                    int precision){
-     FILE *fptr;
-     fptr = fopen("2D_OPENMP.txt", "w");
 
-     ll numTimePoint;
-     ll numSpacePointX;
-     ll numSpacePointY;
+    clock_t start_time=clock();
+    FILE *fptr;
+    fptr = fopen("2D_OPENMP.txt", "w");
 
-     numTimePoint= _cal_num_time(time_step, time_limit);
-     numSpacePointX= _cal_num_space(length, space_step_x);
-     numSpacePointY= _cal_num_space(width, space_step_y);
+    ll numTimePoint;
+    ll numSpacePointX;
+    ll numSpacePointY;
 
-     for (ll t = 0; t < numTimePoint; ++t) {
-         for (ll y = 1; y < numSpacePointY; ++y) {
-             for (ll x = 1; x < numSpacePointX; ++x) {
-                 fprintf(fptr, "%f ", _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
-             }
-             fprintf(fptr, "\n");
-         }
-         fprintf(fptr, "\n\n");
-     }
+    numTimePoint= _cal_num_time(time_step, time_limit);
+    numSpacePointX= _cal_num_space(length, space_step_x);
+    numSpacePointY= _cal_num_space(width, space_step_y);
 
-     fclose(fptr);
-     return 0;
+    for (ll t = 0; t < numTimePoint; ++t) {
+        for (ll y = 1; y < numSpacePointY; ++y) {
+            for (ll x = 1; x < numSpacePointX; ++x) {
+                fprintf(fptr, "%f ", _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
+            }
+            fprintf(fptr, "\n");
+        }
+        fprintf(fptr, "\n\n");
+    }
+
+    fclose(fptr);
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 2D_OPENMP_withFiles is: %f\n",execution_time);
+    return 0;
 
  }
 
@@ -546,26 +551,31 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
                                       double length, double space_step_x,
                                       double width, double space_step_y,
                                       int precision){
-     FILE *fptr;
-     fptr = fopen("2D_OPENMP_V2.txt", "w");
+
+    clock_t start_time=clock();
+    FILE *fptr;
+    fptr = fopen("2D_OPENMP_V2.txt", "w");
 
 
 
-     ll numTimePoint= _cal_num_time(time_step, time_limit);
-     ll numSpacePointX= _cal_num_space(length, space_step_x);
-     ll numSpacePointY= _cal_num_space(width, space_step_y);
-     for (ll t = 0; t < numTimePoint; ++t) {
-         for (ll y = 1; y < numSpacePointY; ++y) {
-             for (ll x = 1; x < numSpacePointX; ++x) {
-                 fprintf(fptr, "%f ", _get_value_2D_openmp_v2(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
-             }
-             fprintf(fptr, "\n");
-         }
-         fprintf(fptr, "\n\n");
-     }
+    ll numTimePoint= _cal_num_time(time_step, time_limit);
+    ll numSpacePointX= _cal_num_space(length, space_step_x);
+    ll numSpacePointY= _cal_num_space(width, space_step_y);
+    for (ll t = 0; t < numTimePoint; ++t) {
+        for (ll y = 1; y < numSpacePointY; ++y) {
+            for (ll x = 1; x < numSpacePointX; ++x) {
+                fprintf(fptr, "%f ", _get_value_2D_openmp_v2(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
+            }
+            fprintf(fptr, "\n");
+        }
+        fprintf(fptr, "\n\n");
+    }
 
-     fclose(fptr);
-     return 0;
+    fclose(fptr);
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 2D_OPENMP_V2_withFiles is: %f\n",execution_time);
+    return 0;
 
  }
 
@@ -842,3 +852,57 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     return 0;
 
 }
+
+ int
+ _execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
+                                   double length, double space_step_x,
+                                   double width, double space_step_y,
+                                   int precision){
+
+    clock_t start_time=clock();
+    ll numTimePoint;
+    ll numSpacePointX;
+    ll numSpacePointY;
+
+    numTimePoint= _cal_num_time(time_step, time_limit);
+    numSpacePointX= _cal_num_space(length, space_step_x);
+    numSpacePointY= _cal_num_space(width, space_step_y);
+
+    for (ll t = 0; t < numTimePoint; ++t) {
+        for (ll y = 1; y < numSpacePointY; ++y) {
+            for (ll x = 1; x < numSpacePointX; ++x) {
+                _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision);
+            }
+        }
+    }
+
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 2D_OPENMP_without_Files is: %f\n",execution_time);
+    return 0;
+
+ }
+
+ int
+ _execution_time_heat_transfer_2D_V2_OPENMP(double time_step, double time_limit,
+                                      double length, double space_step_x,
+                                      double width, double space_step_y,
+                                      int precision){
+
+    clock_t start_time=clock();
+    ll numTimePoint= _cal_num_time(time_step, time_limit);
+    ll numSpacePointX= _cal_num_space(length, space_step_x);
+    ll numSpacePointY= _cal_num_space(width, space_step_y);
+    for (ll t = 0; t < numTimePoint; ++t) {
+        for (ll y = 1; y < numSpacePointY; ++y) {
+            for (ll x = 1; x < numSpacePointX; ++x) {
+                _get_value_2D_openmp_v2(time_step, length, space_step_x, width, space_step_y, x, y, t, precision);
+            }
+        }
+    }
+    clock_t end_time=clock();
+    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
+    printf("The value of execution_time 2D_OPENMP_V2_without Files is: %f\n",execution_time);
+    return 0;
+
+ }
