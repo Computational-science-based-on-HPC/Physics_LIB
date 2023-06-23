@@ -136,11 +136,9 @@ double _get_value_1D_openmp_V2(double time_step, double space_step, double x, do
     double y_real = y * space_step_y;
     double t_real = t * time_step;
 
-    //  #pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, y_real, t_real, precision) private(exponential, spaceXTerm, spaceYTerm, coeff)
-    omp_set_num_threads(THREADS);
-
-    for (ll m = 1; m < precision; ++m)
-    {
+     #pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, y_real, t_real, precision) private(exponential, spaceXTerm, spaceYTerm, coeff)
+     for (ll m = 1; m < precision; ++m)
+     {
          // #pragma omp parallel for schedule(static)
          for (ll n = 1; n < precision; ++n)
          {
@@ -675,7 +673,7 @@ int _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
     MPI_Finalized(&finalized);
     if (!finalized)
         MPI_Finalize();
-
+        
     return 0;
 }
 int _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
