@@ -7,7 +7,6 @@
 #include "../include/utils.h"
 #include <time.h>
 
-// const char *FILES[] = {"displacement.txt", "velocity.txt", "acceleration.txt"};
 
 int _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                double Vo, double FI,

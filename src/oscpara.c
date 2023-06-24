@@ -26,7 +26,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
         max_amplitude = length;
         puts("Max Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
-    int initialized, finalized;
+    int initialized;
     MPI_Initialized(&initialized);
     if (!initialized)
     {
@@ -54,9 +54,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
 
         double Wo = sqrt(k / mass);
         W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
-        RESULTS[3];
         coefficient_calc = -damping_coefficent / (2 * mass);
-        CALCULATIONS[3];
         RESULTS[0] = max_amplitude;
         RESULTS[1] = Vo;
         RESULTS[2] = Ao + gravity;
@@ -82,7 +80,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     {
         MPI_Recv(&_it_number, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
     }
-    MPI_Bcast(&number_of_files, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&coefficient_calc, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&dir, sizeof(dir), MPI_CHAR, 0, MPI_COMM_WORLD);
@@ -92,7 +90,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     int count = 0;
     FILE *p_dis;
     char _file_name[2076];
-    sprintf(_file_name, "damped_os_parallel_v1_displacement_%d.txt", world_rank);
+    sprintf(_file_name, "%d_%d_damped_os_parallel_v1_displacement.txt", world_rank, number_of_files);
     p_dis = fopen(_file_name, "w");
 
     for (int it = 0; it < _it_number; ++it)
@@ -183,7 +181,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
         puts("Max Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
 
-    int initialized, finalized;
+    int initialized;
     MPI_Status status;
 
     MPI_Initialized(&initialized);
@@ -205,17 +203,13 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     int _it_number_all;
     double t;
     short int _is_zero = 0;
-    double *allTimes = NULL;
 
     if (world_rank == 0)
     {
 
         double Wo = sqrt(k / mass);
         W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
-        RESULTS[3];
         coefficient_calc = -damping_coefficent / (2 * mass);
-        CALCULATIONS[3];
-        number_of_files = _min_int(number_of_files, 3);
         RESULTS[0] = max_amplitude;
         RESULTS[1] = Vo;
         RESULTS[2] = Ao + gravity;
@@ -243,7 +237,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Bcast(&number_of_files, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    // MPI_Bcast(&number_of_files, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&coefficient_calc, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
@@ -251,8 +245,6 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
 
     omp_set_dynamic(0); // Explicitly disable dynamic teams
     omp_set_num_threads(3);
-    int count = 0;
-
     for (int it = 0; it < _it_number_all; ++it)
     {
 
@@ -330,7 +322,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
         puts("Max Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
 
-    int initialized, finalized;
+    int initialized;
     MPI_Initialized(&initialized);
 
     if (!initialized)
@@ -360,10 +352,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     {
         double Wo = sqrt(k / mass);
         W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
-        RESULTS[3];
         coefficient_calc = -damping_coefficent / (2 * mass);
-        CALCULATIONS[3];
-        number_of_files = _min_int(number_of_files, 3);
         RESULTS[0] = max_amplitude;
         RESULTS[1] = Vo;
         RESULTS[2] = Ao + gravity;
@@ -386,7 +375,6 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
         _it_number = _it_number_all - _sent_it_number;
     }
 
-    MPI_Bcast(&number_of_files, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&coefficient_calc, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
@@ -398,7 +386,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     int count = 0;
     FILE *p_dis;
     char _file_name[2076];
-    sprintf(_file_name, "damped_os_parallel_v2_displacement_%d.txt", world_rank);
+    sprintf(_file_name, "%d_%damped_os_parallel_v2_displacement.txt", world_rank, number_of_files);
     p_dis = fopen(_file_name, "w");
 
     for (int it = 0; it < _it_number_all; ++it)
@@ -454,7 +442,9 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     fclose(p_dis);
     return 0;
 }
-int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
+
+int 
+_execution_time_damped_os_parallel_mpi(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                            double Vo, double FI,
                                            double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
@@ -470,7 +460,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
         max_amplitude = length;
         puts("Max Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
-    int initialized, finalized;
+    int initialized;
     MPI_Initialized(&initialized);
     if (!initialized)
     {
@@ -480,8 +470,6 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     int world_size;
     int world_rank;
     MPI_Status status;
-    MPI_Offset _d_offset;
-    MPI_File fh;
 
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
@@ -500,9 +488,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     {
         double Wo = sqrt(k / mass);
         W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
-        RESULTS[3];
         coefficient_calc = -damping_coefficent / (2 * mass);
-        CALCULATIONS[3];
         number_of_files = _min_int(number_of_files, 3);
         RESULTS[0] = max_amplitude;
         RESULTS[1] = Vo;
@@ -538,7 +524,6 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
 
     omp_set_dynamic(0); // Explicitly disable dynamic teams
     omp_set_num_threads(NUM_THREADS);
-    int count = 0;
 
     for (int it = 0; it < _it_number_all; ++it)
     {
@@ -576,4 +561,5 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     printf("Proccess ID: %d Execution Time: %f\n", world_rank, execution_time);
     MPI_Barrier(MPI_COMM_WORLD);
+    return execution_time;
 }
