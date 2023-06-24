@@ -131,5 +131,7 @@ extern int
 heat_equation_execution_time_2D_serial(double time_step, double time_limit,
                                        double length, double spaceX_step, double width, double spaceY_step,
                                        int precision);
+extern void 
+finalize();
 
 #endif // PHYSICS_PHYSICS_H

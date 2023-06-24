@@ -7,7 +7,6 @@
 #include "../include/utils.h"
 #include <time.h>
 
-
 int _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                double Vo, double FI,
                                double time_limit, double step_size, double damping_coefficent, int number_of_files)
@@ -31,10 +30,9 @@ int _simulate_damped_os_serial(double max_amplitude, double length, double mass,
     RESULTS[1] = Vo + gravity * 0;
     RESULTS[2] = Ao + gravity * exp((-damping_coefficent / (2 * mass)) * 0);
     double CALCULATIONS[3];
-    number_of_files = _min_int(number_of_files, 3);
     FILE *p_file;
     char _file_name[2076];
-    sprintf(_file_name, "damped_os_serial_displacement.txt");
+    sprintf(_file_name, "damped_os_serial_displacement_%d.txt", number_of_files);
     p_file = fopen(_file_name, "w");
     fprintf(p_file, "%lf\n", RESULTS[0]);
 
@@ -52,7 +50,6 @@ int _simulate_damped_os_serial(double max_amplitude, double length, double mass,
         {
 
             fclose(p_file);
-
             puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
             return -2;
         }
@@ -65,10 +62,7 @@ int _simulate_damped_os_serial(double max_amplitude, double length, double mass,
         RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
         fprintf(p_file, "%lf\n", RESULTS[0]);
     }
-    for (int i = 0; i < number_of_files; ++i)
-    {
-        fclose(p_file);
-    }
+    fclose(p_file);
     return 0;
 }
 
@@ -97,9 +91,9 @@ int _simulate_elastic_pendulum(double r, double length, double mass, double grav
     double a = 0;   // init velocity
     FILE *p_dis_x, *p_dis_y;
     char _file_name[2076];
-    sprintf(_file_name, "elastic_pendulum_x.txt");
+    sprintf(_file_name, "elastic_pendulum_x_%d.txt",number_of_files);
     p_dis_x = fopen(_file_name, "w");
-    sprintf(_file_name, "elastic_pendulum_y.txt");
+    sprintf(_file_name, "elastic_pendulum_y_%d.txt",number_of_files);
     p_dis_y = fopen(_file_name, "w");
     fprintf(p_dis_x, "%.6f\n", x1);
     fprintf(p_dis_y, "%.6f\n", y);

@@ -4,11 +4,12 @@
 #include "../include/thermopara.h"
 #include "../include/thermoserial.h"
 #include "../include/utils.h"
+#include <mpi.h>
 int damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao, double Vo,
                      double FI,
                      double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
-    // number_of_files = _number_of_files("damped_os_serial");
+    number_of_files = _number_of_files("damped_os_serial");
     return _simulate_damped_os_serial(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
                                       time_limit, step_size, damping_coefficent, number_of_files);
 }
@@ -17,7 +18,7 @@ int damped_os_parallel_v1(double max_amplitude, double length, double mass, doub
                           double FI,
                           double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
-    // number_of_files = _number_of_files("damped_os_parallel_v1");
+    number_of_files = _number_of_files("damped_os_parallel_v1");
     return _simulate_damped_os_parallel_mpi_omp(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
                                                 time_limit, step_size, damping_coefficent, number_of_files);
 }
@@ -26,7 +27,7 @@ int damped_os_parallel_v2(double max_amplitude, double length, double mass, doub
                           double FI,
                           double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
-    // number_of_files = _number_of_files("damped_os_parallel_v2");
+    number_of_files = _number_of_files("damped_os_parallel_v2");
     return _simulate_damped_os_parallel_mpi(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
                                             time_limit, step_size, damping_coefficent, number_of_files);
 }
@@ -36,7 +37,7 @@ int elastic_pendulum(double r, double length, double mass, double gravity, doubl
                      double Vo,
                      double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
-    // number_of_files = _number_of_files("elastic_pendulum");
+    number_of_files = _number_of_files("elastic_pendulum");
     return _simulate_elastic_pendulum(r, length, mass, gravity, k, Ao, Xo,
                                       Yo,
                                       Vo,
@@ -50,7 +51,7 @@ damped_os_parallel_execution_time_v1(double max_amplitude, double length, double
                                      double time_limit, double step_size, double damping_coefficent,
                                      int number_of_files)
 {
-    // number_of_files = _number_of_files("damped_os_parallel_execution_time_v1");
+    number_of_files = _number_of_files("damped_os_parallel_execution_time_v1");
     return _execution_time_damped_os_parallel_mpi_omp(max_amplitude, length, mass, gravity, k, Ao,
                                                       Vo, FI,
                                                       time_limit, step_size, damping_coefficent, number_of_files);
@@ -63,7 +64,7 @@ damped_os_parallel_execution_time_v2(double max_amplitude, double length, double
                                      double time_limit, double step_size, double damping_coefficent,
                                      int number_of_files)
 {
-    // number_of_files = _number_of_files("damped_os_parallel_execution_time_v2");
+    number_of_files = _number_of_files("damped_os_parallel_execution_time_v2");
     return _execution_time_damped_os_parallel_mpi_omp(max_amplitude, length, mass, gravity, k, Ao,
                                                       Vo, FI,
                                                       time_limit, step_size, damping_coefficent, number_of_files);
@@ -76,7 +77,7 @@ damped_os_serial_execution(double max_amplitude, double length, double mass, dou
                            double time_limit, double step_size, double damping_coefficent,
                            int number_of_files)
 {
-    // number_of_files = _number_of_files("damped_os_serial_execution");
+    number_of_files = _number_of_files("damped_os_serial_execution");
     return _execution_time_damped_os_serial(max_amplitude, length, mass, gravity, k,
                                             Ao,
                                             Vo, FI,
@@ -90,7 +91,7 @@ elastic_pendulum_execution(double r, double length, double mass, double gravity,
                            double Vo,
                            double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
-    // number_of_files = _number_of_files("elastic_pendulum_execution");
+    number_of_files = _number_of_files("elastic_pendulum_execution");
     return _execution_time_elastic_pendulum(r, length, mass, gravity, k, Ao, Xo,
                                             Yo,
                                             Vo,
@@ -219,23 +220,25 @@ int heat_equation_execution_time_2D_P1_MPI(double time_step, double time_limit,
 }
 
 int heat_equation_execution_time_2D_P1_OPENMP(double time_step, double time_limit,
-                                          double length, double spaceX_step, double width, double spaceY_step,
-                                          int precision){
+                                              double length, double spaceX_step, double width, double spaceY_step,
+                                              int precision)
+{
 
     return _execution_time_heat_transfer_2D_OPENMP(time_step, time_limit,
-                                             length, spaceX_step,
-                                             width, spaceY_step,
-                                             precision);
+                                                   length, spaceX_step,
+                                                   width, spaceY_step,
+                                                   precision);
 }
 
 int heat_equation_execution_time_2D_P1_OPENMP_V2(double time_step, double time_limit,
-                                             double length, double spaceX_step, double width, double spaceY_step,
-                                             int precision){
+                                                 double length, double spaceX_step, double width, double spaceY_step,
+                                                 int precision)
+{
 
     return _execution_time_heat_transfer_2D_V2_OPENMP(time_step, time_limit,
-                                                length, spaceX_step,
-                                                width, spaceY_step,
-                                                precision);
+                                                      length, spaceX_step,
+                                                      width, spaceY_step,
+                                                      precision);
 }
 
 ////////////////heat equation 1D serial execution time without i/o
@@ -254,4 +257,13 @@ int heat_equation_execution_time_2D_serial(double time_step, double time_limit,
                                                    length, spaceX_step,
                                                    width, spaceY_step,
                                                    precision);
+}
+void finalize()
+{
+    int initialized;
+    MPI_Initialized(&initialized);
+    if (!initialized)
+    {
+        MPI_Finalize();
+    }
 }
