@@ -1,12 +1,12 @@
-#include "../include/thermoserial.h"
+#include "thermoserial.h"
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include "../include/thermoutils.h"
+#include "thermoutils.h"
 
 #define  ll long long
-#define M_PI 3.14159265358979323846264338327
+// #define M_PI 3.14159265358979323846264338327
 
  double _get_value_1D(double time_step,
                       double space_step,
