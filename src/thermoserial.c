@@ -1,9 +1,9 @@
-#include "thermoserial.h"
+#include "../include/thermoserial.h"
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include "thermoutils.h"
+#include "../include/thermoutils.h"
 
 #define  ll long long
 // #define M_PI 3.14159265358979323846264338327

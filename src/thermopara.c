@@ -2,8 +2,8 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include "thermopara.h"
-#include "thermoutils.h"
+#include "../include/thermopara.h"
+#include "../include/thermoutils.h"
 #define ll long long
 #define THREADS 8
 // #define M_PI 3.14159265358979323846264338327
