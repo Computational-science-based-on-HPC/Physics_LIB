@@ -8,6 +8,7 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+
 # AWS User-specific
 .idea/**/aws.xml
 
@@ -77,6 +78,7 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 .vscode/*
 !.vscode/settings.json
+!.vscode/c_cpp_properties.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
