@@ -4,26 +4,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
-int _number_of_files(char *mainDirectoryPath)
-{
-    int subdirectoryCount = 0;
-    DIR *mainDirectory;
-    struct dirent *entry;
-    mainDirectory = opendir(mainDirectoryPath);
 
-    while ((entry = readdir(mainDirectory)) != NULL)
-    {
-
-        if (strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0)
-        {
-            subdirectoryCount++;
-        }
-    }
-    closedir(mainDirectory);
-    return subdirectoryCount;
-}
 int main(void)
 {
-
-    printf("%d\n", _number_of_files("."));
+    damped_os_parallel_v1(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
+                          -0.1,
+                          40, 1, 0.1, 3);
+    finalize();
 }

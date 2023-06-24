@@ -460,9 +460,9 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
 
         for (; i < endIndex; ++i)
         {
-            for (ll y = 1; y < numSpacePointY; ++y)
+            for (ll y = 0; y <= numSpacePointY; ++y)
             {
-                for (ll x = 1; x < numSpacePointX; ++x)
+                for (ll x = 0; x <= numSpacePointX; ++x)
                 {
                     if(my_rank == 1){
                         fprintf(fptr1, "%f ", _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision));
@@ -529,8 +529,8 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
     numSpacePointY= _cal_num_space(width, space_step_y);
 
     for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 1; y < numSpacePointY; ++y) {
-            for (ll x = 1; x < numSpacePointX; ++x) {
+        for (ll y = 0; y <= numSpacePointY; ++y) {
+            for (ll x = 0; x <= numSpacePointX; ++x) {
                 fprintf(fptr, "%f ", _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
             }
             fprintf(fptr, "\n");
@@ -562,8 +562,8 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
     ll numSpacePointX= _cal_num_space(length, space_step_x);
     ll numSpacePointY= _cal_num_space(width, space_step_y);
     for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 1; y < numSpacePointY; ++y) {
-            for (ll x = 1; x < numSpacePointX; ++x) {
+        for (ll y = 0; y <= numSpacePointY; ++y) {
+            for (ll x = 0; x <= numSpacePointX; ++x) {
                 fprintf(fptr, "%f ", _get_value_2D_openmp_v2(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
             }
             fprintf(fptr, "\n");
@@ -827,9 +827,9 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
 
         for (; i < endIndex; ++i)
         {
-            for (ll y = 1; y < numSpacePointY; ++y)
+            for (ll y = 0; y <= numSpacePointY; ++y)
             {
-                for (ll x = 1; x < numSpacePointX; ++x)
+                for (ll x = 0; x <= numSpacePointX; ++x)
                 {
                     _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision);
 
@@ -869,8 +869,8 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     numSpacePointY= _cal_num_space(width, space_step_y);
 
     for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 1; y < numSpacePointY; ++y) {
-            for (ll x = 1; x < numSpacePointX; ++x) {
+        for (ll y = 0; y <= numSpacePointY; ++y) {
+            for (ll x = 0; x <= numSpacePointX; ++x) {
                 _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision);
             }
         }
@@ -894,8 +894,8 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     ll numSpacePointX= _cal_num_space(length, space_step_x);
     ll numSpacePointY= _cal_num_space(width, space_step_y);
     for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 1; y < numSpacePointY; ++y) {
-            for (ll x = 1; x < numSpacePointX; ++x) {
+        for (ll y = 0; y <= numSpacePointY; ++y) {
+            for (ll x = 0; x <= numSpacePointX; ++x) {
                 _get_value_2D_openmp_v2(time_step, length, space_step_x, width, space_step_y, x, y, t, precision);
             }
         }

@@ -2,35 +2,40 @@ CC = gcc
 MCC = mpicc
 CFLAGS = -Wall -g -c
 LDFLAGS = -lm
+OMPFLAG = -fopenmp
+SRC_DIR = src
+OBJ_DIR = obj
+INCLUDE_DIR = include
 
+OBJS = $(addprefix $(OBJ_DIR)/, physics.o oscserial.o utils.o thermoutils.o oscpara.o thermopara.o thermoserial.o)
 all: libphysics.a
 
-libphysics.a: physics.o oscserial.o utils.o thermoutils.o oscpara.o thermopara.o thermoserial.o
-	ar ruv libphysics.a physics.o oscserial.o utils.o thermoutils.o oscpara.o thermopara.o thermoserial.o
+libphysics.a: $(OBJS)
+	ar ruv libphysics.a $(OBJS)
 	ranlib libphysics.a
 
-physics.o: physics.c oscserial.h oscpara.h
-	$(CC) $(CFLAGS) physics.c -o physics.o
+$(OBJ_DIR)/physics.o: $(SRC_DIR)/physics.c  $(HED_DIR)/physics.h
+	$(CC) $(CFLAGS)  $(SRC_DIR)/physics.c -o  $(OBJ_DIR)/physics.o
 
-oscserial.o: oscserial.c oscserial.h
-	$(CC) $(CFLAGS) oscserial.c -o oscserial.o
+$(OBJ_DIR)/oscserial.o:  $(SRC_DIR)/oscserial.c  $(HED_DIR)/oscserial.h
+	$(CC) $(CFLAGS)  $(SRC_DIR)/oscserial.c -o  $(OBJ_DIR)/oscserial.o
 
-utils.o: utils.c utils.h
-	$(CC) $(CFLAGS) utils.c -o utils.o
+$(OBJ_DIR)/utils.o:  $(SRC_DIR)/utils.c  $(HED_DIR)/utils.h
+	$(CC) $(CFLAGS)  $(SRC_DIR)/utils.c -o  $(OBJ_DIR)/utils.o
 
-thermoutils.o: thermoutils.c thermoutils.h
-	$(CC) $(CFLAGS) thermoutils.c -o thermoutils.o
+$(OBJ_DIR)/thermoutils.o:  $(SRC_DIR)/thermoutils.c  $(HED_DIR)/thermoutils.h
+	$(CC) $(CFLAGS)  $(SRC_DIR)/thermoutils.c -o  $(OBJ_DIR)/thermoutils.o
 
-oscpara.o: oscpara.c oscpara.h thermopara.h thermoserial.h
-	$(MCC) $(CFLAGS) oscpara.c -o oscpara.o
+$(OBJ_DIR)/oscpara.o:  $(SRC_DIR)/oscpara.c  $(HED_DIR)/oscpara.h
+	$(MCC) $(CFLAGS)  $(SRC_DIR)/oscpara.c -o  $(OBJ_DIR)/oscpara.o $(OMPFLAG)
 
-thermopara.o: thermopara.c thermopara.h
-	$(MCC) $(CFLAGS) thermopara.c -o thermopara.o
+$(OBJ_DIR)/thermopara.o:  $(SRC_DIR)/thermopara.c  $(HED_DIR)/thermopara.h
+	$(MCC) $(CFLAGS)  $(SRC_DIR)/thermopara.c -o  $(OBJ_DIR)/thermopara.o $(OMPFLAG)
 
-thermoserial.o: thermoserial.c thermoserial.h
-	$(MCC) $(CFLAGS) thermoserial.c -o thermoserial.o
+$(OBJ_DIR)/thermoserial.o:  $(SRC_DIR)/thermoserial.c  $(HED_DIR)/thermoserial.h
+	$(CC) $(CFLAGS)  $(SRC_DIR)/thermoserial.c -o  $(OBJ_DIR)/thermoserial.o
 
-clean:
-	rm -f *.o *.a
+# clean:
+# 	rm -f *.o
 
 .PHONY: all clean
