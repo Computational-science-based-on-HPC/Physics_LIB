@@ -157,21 +157,21 @@ int heat_equation_2D_P1_OPENMP_V2(double time_step, double time_limit,
 }
 
 ////////////////heat equation 1D serial
-int heat_equation_1D_serial(double time_step, double time_limit, double length, double space_step, int precision)
+int heat_equation_1D_serial(double time_step, double time_limit, double space_step, int precision)
 {
 
-    return _simulate_heat_transfer_1D_serial(time_step, time_limit, length, space_step, precision);
+    return _simulate_heat_transfer_1D_serial(time_step, time_limit, space_step, precision);
 }
 
 ////////////////heat equation 2D serial
 int heat_equation_2D_serial(double time_step, double time_limit,
-                            double length, double spaceX_step, double width, double spaceY_step,
+                            double spaceX_step, double spaceY_step,
                             int precision)
 {
 
     return _simulate_heat_transfer_2D_serial(time_step, time_limit,
-                                             length, spaceX_step,
-                                             width, spaceY_step,
+                                             spaceX_step,
+                                             spaceY_step,
                                              precision);
 }
 
@@ -235,20 +235,20 @@ int heat_equation_execution_time_2D_P1_OPENMP_V2(double time_step, double time_l
 }
 
 ////////////////heat equation 1D serial execution time without i/o
-int heat_equation_execution_time_1D_serial(double time_step, double time_limit, double length, double space_step, int precision)
+int heat_equation_execution_time_1D_serial(double time_step, double time_limit, double space_step, int precision)
 {
-    return _execution_time_heat_transfer_1D_serial(time_step, time_limit, length, space_step, precision);
+    return _execution_time_heat_transfer_1D_serial(time_step, time_limit, space_step, precision);
 }
 
 ////////////////heat equation 2D serial execution time without i/o
 int heat_equation_execution_time_2D_serial(double time_step, double time_limit,
-                                           double length, double spaceX_step, double width, double spaceY_step,
+                                           double spaceX_step, double spaceY_step,
                                            int precision)
 {
 
     return _execution_time_heat_transfer_2D_serial(time_step, time_limit,
-                                                   length, spaceX_step,
-                                                   width, spaceY_step,
+                                                   spaceX_step,
+                                                   spaceY_step,
                                                    precision);
 }
 void finalize()
