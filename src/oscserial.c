@@ -93,8 +93,8 @@ int _simulate_elastic_pendulum(double r, double length, double mass, double grav
     double a = 0;   // init velocity
     FILE *p_dis_x, *p_dis_y;
     char _file_name[2076];
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
+    time_t tim = time(NULL);
+    struct tm tm = *localtime(&tim);
     sprintf(_file_name, "elastic_pendulum_x_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     p_dis_x = fopen(_file_name, "w");
     sprintf(_file_name, "elastic_pendulum_y_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);

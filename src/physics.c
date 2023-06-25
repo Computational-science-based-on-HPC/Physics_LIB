@@ -93,66 +93,66 @@ elastic_pendulum_execution(double r, double length, double mass, double gravity,
 
 ////////////////heat equation 1D parallel
 int heat_equation_1D_P1_MPI(double time_step, double time_limit,
-                            double length, double space_step,
+                            double space_step,
                             int precision)
 {
 
     return _simulate_heat_transfer_1D_MPI(time_step, time_limit,
-                                          length, space_step,
+                                          space_step,
                                           precision);
 }
 
 int heat_equation_1D_P1_OPENMP(double time_step, double time_limit,
-                               double length, double space_step,
+                               double space_step,
                                int precision)
 {
 
     return _simulate_heat_transfer_1D_OPENMP(time_step, time_limit,
-                                             length, space_step,
+                                             space_step,
                                              precision);
 }
 
 int heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit,
-                                  double length, double space_step,
+                                  double space_step,
                                   int precision)
 {
 
     return _simulate_heat_transfer_1D_OPENMP_V2(time_step, time_limit,
-                                                length, space_step,
+                                                space_step,
                                                 precision);
 }
 
 ////////////////heat equation 2D parallel
 int heat_equation_2D_P1_MPI(double time_step, double time_limit,
-                            double length, double spaceX_step, double width, double spaceY_step,
+                            double spaceX_step, double spaceY_step,
                             int precision)
 {
 
     return _simulate_heat_transfer_2D_MPI(time_step, time_limit,
-                                          length, spaceX_step,
-                                          width, spaceY_step,
+                                          spaceX_step,
+                                          spaceY_step,
                                           precision);
 }
 
 int heat_equation_2D_P1_OPENMP(double time_step, double time_limit,
-                               double length, double spaceX_step, double width, double spaceY_step,
+                               double spaceX_step, double spaceY_step,
                                int precision)
 {
 
     return _simulate_heat_transfer_2D_OPENMP(time_step, time_limit,
-                                             length, spaceX_step,
-                                             width, spaceY_step,
+                                             spaceX_step,
+                                             spaceY_step,
                                              precision);
 }
 
 int heat_equation_2D_P1_OPENMP_V2(double time_step, double time_limit,
-                                  double length, double spaceX_step, double width, double spaceY_step,
+                                  double spaceX_step, double spaceY_step,
                                   int precision)
 {
 
     return _simulate_heat_transfer_2D_OPENMP_V2(time_step, time_limit,
-                                                length, spaceX_step,
-                                                width, spaceY_step,
+                                                spaceX_step,
+                                                spaceY_step,
                                                 precision);
 }
 
@@ -177,60 +177,60 @@ int heat_equation_2D_serial(double time_step, double time_limit,
 
 ////////////////heat equation 1D parallel execution time without i/o
 int heat_equation_execution_time_1D_P1_MPI(double time_step, double time_limit,
-                                           double length, double space_step,
+                                           double space_step,
                                            int precision)
 {
     return _execution_time_heat_transfer_1D_MPI(time_step, time_limit,
-                                                length, space_step,
+                                                space_step,
                                                 precision);
 }
 int heat_equation_execution_time_1D_P1_OPENMP(double time_step, double time_limit,
-                                              double length, double space_step,
+                                              double space_step,
                                               int precision)
 {
     return _execution_time_heat_transfer_1D_OPENMP(time_step, time_limit,
-                                                   length, space_step,
+                                                   space_step,
                                                    precision);
 }
 int heat_equation_execution_time_1D_P1_OPENMP_V2(double time_step, double time_limit,
-                                                 double length, double space_step,
+                                                 double space_step,
                                                  int precision)
 {
     return _execution_time_heat_transfer_1D_OPENMP_V2(time_step, time_limit,
-                                                      length, space_step,
+                                                     space_step,
                                                       precision);
 }
 
 ////////////////heat equation 2D parallel execution time without i/o
 int heat_equation_execution_time_2D_P1_MPI(double time_step, double time_limit,
-                                           double length, double spaceX_step, double width, double spaceY_step,
+                                           double spaceX_step, double spaceY_step,
                                            int precision)
 {
     return _execution_time_heat_transfer_2D_MPI(time_step, time_limit,
-                                                length, spaceX_step,
-                                                width, spaceY_step,
+                                                spaceX_step,
+                                                spaceY_step,
                                                 precision);
 }
 
 int heat_equation_execution_time_2D_P1_OPENMP(double time_step, double time_limit,
-                                              double length, double spaceX_step, double width, double spaceY_step,
+                                              double spaceX_step, double spaceY_step,
                                               int precision)
 {
 
     return _execution_time_heat_transfer_2D_OPENMP(time_step, time_limit,
-                                                   length, spaceX_step,
-                                                   width, spaceY_step,
+                                                   spaceX_step,
+                                                   spaceY_step,
                                                    precision);
 }
 
 int heat_equation_execution_time_2D_P1_OPENMP_V2(double time_step, double time_limit,
-                                                 double length, double spaceX_step, double width, double spaceY_step,
+                                                 double spaceX_step, double spaceY_step,
                                                  int precision)
 {
 
     return _execution_time_heat_transfer_2D_V2_OPENMP(time_step, time_limit,
-                                                      length, spaceX_step,
-                                                      width, spaceY_step,
+                                                      spaceX_step,
+                                                      spaceY_step,
                                                       precision);
 }
 
