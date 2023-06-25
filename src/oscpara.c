@@ -90,7 +90,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     int count = 0;
     FILE *p_dis;
     char _file_name[2076];
-    
+
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
     sprintf(_file_name, "%d_damped_os_parallel_v1_displacement_%d-%02d-%02d %02d:%02d:%02d.txt", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
@@ -240,7 +240,6 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
-    // MPI_Bcast(&number_of_files, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&coefficient_calc, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
@@ -448,8 +447,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     return 0;
 }
 
-int 
-_execution_time_damped_os_parallel_mpi(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
+int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                            double Vo, double FI,
                                            double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
@@ -568,3 +566,74 @@ _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, doub
     MPI_Barrier(MPI_COMM_WORLD);
     return execution_time;
 }
+// TODO Implement damped os in omp
+extern int
+_simulate_damped_os_parallel_omp(double max_amplitude, double length, double mass, double gravity, double k,
+                                 double Ao,
+                                 double Vo, double FI,
+                                 double time_limit, double step_size, double damping_coefficent,
+                                 int number_of_files)
+{
+    int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
+                                number_of_files, 0);
+    if (validation == 0)
+    {
+        puts("Invalid Arguments is Given");
+        return -1;
+    }
+    if (validation == -1)
+    {
+        max_amplitude = length;
+        puts("Max Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
+    }
+    double Wo = sqrt(k / mass);
+    double W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
+    double RESULTS[3];
+    RESULTS[0] = max_amplitude;
+    RESULTS[1] = Vo + gravity * 0;
+    RESULTS[2] = Ao + gravity * exp((-damping_coefficent / (2 * mass)) * 0);
+    double CALCULATIONS[3];
+    FILE *p_file;
+    char _file_name[2076];
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(_file_name, "damped_os_parallel_v3_displacement_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    p_file = fopen(_file_name, "w");
+    fprintf(p_file, "%lf\n", RESULTS[0]);
+    #pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, t_real, precision) private(exponential, spaceXTerm, coeff)
+    for (double t = 0; t <= time_limit + 0.05; t += step_size)
+    {
+        if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
+        {
+
+            fclose(p_file);
+
+            puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
+            return -1;
+        }
+        else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
+        {
+
+            fclose(p_file);
+            puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
+            return -2;
+        }
+
+        CALCULATIONS[0] = cos(W * t + FI);
+        CALCULATIONS[1] = sin(W * t + FI);
+        CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
+        RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
+        RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
+        RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
+        fprintf(p_file, "%lf\n", RESULTS[0]);
+    }
+    fclose(p_file);
+    return 0;
+}
+
+extern int
+_execution_time_damped_os_parallel_omp(double max_amplitude, double length, double mass, double gravity, double k,
+                                       double Ao,
+                                       double Vo, double FI,
+                                       double time_limit, double step_size, double damping_coefficent,
+                                       int number_of_files);
