@@ -600,7 +600,7 @@ _simulate_damped_os_parallel_omp(double max_amplitude, double length, double mas
     sprintf(_file_name, "damped_os_parallel_v3_displacement_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     p_file = fopen(_file_name, "w");
     fprintf(p_file, "%lf\n", RESULTS[0]);
-#pragma omp parallel for num_threads(THREADS) schedule(static) private(CALCULATIONS, RESULTS)
+#pragma omp parallel for num_threads(NUM_THREADS) schedule(static) private(CALCULATIONS, RESULTS)
     {
         for (double t = 0; t <= time_limit + 0.05; t += step_size)
         {
@@ -672,7 +672,7 @@ _execution_time_damped_os_parallel_omp(double max_amplitude, double length, doub
     RESULTS[1] = Vo + gravity * 0;
     RESULTS[2] = Ao + gravity * exp((-damping_coefficent / (2 * mass)) * 0);
     double CALCULATIONS[3];
-#pragma omp parallel for num_threads(THREADS) schedule(static) private(CALCULATIONS, RESULTS)
+#pragma omp parallel for num_threads(NUM_THREADS) schedule(static) private(CALCULATIONS, RESULTS)
     {
         for (double t = 0; t <= time_limit + 0.05; t += step_size)
         {
