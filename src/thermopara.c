@@ -127,41 +127,40 @@ double _get_value_1D_openmp_V2(double time_step, double space_step, double x, do
      return sum;
  }
 
- double _get_value_2D_openmp_v2(double time_step,
-                          double length, double space_step_x, double width, double space_step_y,
-                          int x, int y, int t,
-                          int precision){
-     double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
+double _get_value_2D_openmp_v2(double time_step,
+                        double length, double space_step_x, double width, double space_step_y,
+                        int x, int y, int t,
+                        int precision){
+    double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
     double x_real = x * space_step_x;
     double y_real = y * space_step_y;
     double t_real = t * time_step;
 
-     #pragma omp parallel for num_threads(THREADS) shared(sum, x_real, y_real, t_real, precision) private(exponential, spaceXTerm, spaceYTerm, coeff)
-     for (ll m = 1; m < precision; ++m)
-     {
-         // #pragma omp parallel for schedule(static)
-         for (ll n = 1; n < precision; ++n)
-         {
-             #pragma omp parallel sections
-         {
-             #pragma omp section
-             exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
-             #pragma omp section
-             spaceXTerm = sin((double)m * M_PI * x_real / length);
-             #pragma omp section
-             spaceYTerm = sin((double)n * M_PI * y_real / width);
-             #pragma omp section
-             // Find Amn constant and multiply it with the sum
-             coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
+    #pragma omp parallel num_threads(THREADS)
+    for (ll m = 1; m < precision; ++m)
+    {
+        for (ll n = 1; n < precision; ++n)
+        {
+            #pragma omp parallel sections
+            {
+                #pragma omp section
+                exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
+                #pragma omp section
+                spaceXTerm = sin((double)m * M_PI * x_real / length);
+                #pragma omp section
+                spaceYTerm = sin((double)n * M_PI * y_real / width);
+                #pragma omp section
+                // Find Amn constant and multiply it with the sum
+                coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
 
 
-         }
-             sum += coeff * exponential * spaceXTerm * spaceYTerm;
-         }
-     }
-     sum *= 200 / (M_PI * M_PI);
-     return sum;
- }
+            }
+            sum += coeff * exponential * spaceXTerm * spaceYTerm;
+        }
+    }
+    sum *= 200 / (M_PI * M_PI);
+    return sum;
+}
 
 
 int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double length, double space_step, int precision){
@@ -194,11 +193,6 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double l
         start_time = MPI_Wtime();
         numTimePoint= _cal_num_time(time_step, time_limit);
         numSpacePoint= _cal_num_space(length, space_step);
-
-        // printf("The value of numTimePoint is: %lld\n", numTimePoint);
-        // printf("The value of numSpacePoint is: %lld\n", numSpacePoint);
-        // printf("The value of time_step is: %f\n", time_step);
-        // printf("The value of length is: %f\n", length);
 
         numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
         numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
@@ -388,7 +382,6 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
     ll numTimePointPerProcess;
     ll numTimePointRemProcess;
 
-    //_cal_num_time(time_param, &numTimePoint);
     if(my_rank == 0){
         start_time = MPI_Wtime();
         numTimePoint= _cal_num_time(time_step, time_limit);
@@ -480,7 +473,6 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
                 }else if(my_rank == 3){
                     fprintf(fptr3, "\n");
                 }
-                // fprintf(fptr, "\n");
             }
             if(my_rank == 1){
                 fprintf(fptr1, "\n\n");
@@ -489,7 +481,6 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
             }else if(my_rank == 3){
                 fprintf(fptr3, "\n\n");
             }
-            // fprintf(fptr, "\n\n");
         }
     }
 
@@ -755,7 +746,6 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     ll numTimePointPerProcess;
     ll numTimePointRemProcess;
 
-    //_cal_num_time(time_param, &numTimePoint);
     if(my_rank == 0){
         start_time = MPI_Wtime();
         numTimePoint= _cal_num_time(time_step, time_limit);
