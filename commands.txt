@@ -1,6 +1,4 @@
-gcc -Wall -g -c physics.c -o physics.o 
-gcc -Wall -g -c oscillation.c -o oscillation.o
-ar ruv physics.a physics.o oscillation.o
-ranlib physics.a
-gcc -o main main.c physics.a
-mpicc main.c -o main -L../make -l:physics.a -fopenmp -lm -lc
+cd ./make
+make
+make clean
+mpicc main.c -o main -L../make -l:libphysics.a -fopenmp -lm -lc

@@ -90,7 +90,10 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     int count = 0;
     FILE *p_dis;
     char _file_name[2076];
-    sprintf(_file_name, "%d_%d_damped_os_parallel_v1_displacement.txt", world_rank, number_of_files);
+    
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(_file_name, "%d_damped_os_parallel_v1_displacement_%d-%02d-%02d %02d:%02d:%02d.txt", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     p_dis = fopen(_file_name, "w");
 
     for (int it = 0; it < _it_number; ++it)
@@ -386,7 +389,9 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     int count = 0;
     FILE *p_dis;
     char _file_name[2076];
-    sprintf(_file_name, "%d_%damped_os_parallel_v2_displacement.txt", world_rank, number_of_files);
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(_file_name, "%damped_os_parallel_v2_displacement%d-%02d-%02d %02d:%02d:%02d.txt", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     p_dis = fopen(_file_name, "w");
 
     for (int it = 0; it < _it_number_all; ++it)
