@@ -132,30 +132,30 @@ double _get_value_1D_openmp_V2(double time_step, double space_step, double x, do
                           int x, int y, int t,
                           int precision){
      double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
-    double x_real = x * space_step_x;
-    double y_real = y * space_step_y;
-    double t_real = t * time_step;
+     double x_real = x * space_step_x;
+     double y_real = y * space_step_y;
+     double t_real = t * time_step;
 
-     #pragma omp parallel for num_threads(THREADS) shared(sum, x_real, y_real, t_real, precision) private(exponential, spaceXTerm, spaceYTerm, coeff)
+#pragma omp parallel num_threads(THREADS) //shared(sum, x_real, y_real, t_real, precision) private(exponential, spaceXTerm, spaceYTerm, coeff)
      for (ll m = 1; m < precision; ++m)
      {
          // #pragma omp parallel for schedule(static)
          for (ll n = 1; n < precision; ++n)
          {
-             #pragma omp parallel sections
-         {
-             #pragma omp section
-             exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
-             #pragma omp section
-             spaceXTerm = sin((double)m * M_PI * x_real / length);
-             #pragma omp section
-             spaceYTerm = sin((double)n * M_PI * y_real / width);
-             #pragma omp section
-             // Find Amn constant and multiply it with the sum
-             coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
+           #pragma omp parallel sections
+             {
+                 #pragma omp section
+                 exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
+                 #pragma omp section
+                 spaceXTerm = sin((double)m * M_PI * x_real / length);
+                 #pragma omp section
+                 spaceYTerm = sin((double)n * M_PI * y_real / width);
+                 #pragma omp section
+                 // Find Amn constant and multiply it with the sum
+                 coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
 
 
-         }
+             }
              sum += coeff * exponential * spaceXTerm * spaceYTerm;
          }
      }
@@ -460,9 +460,9 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
 
         for (; i < endIndex; ++i)
         {
-            for (ll y = 1; y < numSpacePointY; ++y)
+            for (ll y = 0; y < numSpacePointY; ++y)
             {
-                for (ll x = 1; x < numSpacePointX; ++x)
+                for (ll x = 0; x < numSpacePointX; ++x)
                 {
                     if(my_rank == 1){
                         fprintf(fptr1, "%f ", _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision));
@@ -529,8 +529,8 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
     numSpacePointY= _cal_num_space(width, space_step_y);
 
     for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 1; y < numSpacePointY; ++y) {
-            for (ll x = 1; x < numSpacePointX; ++x) {
+        for (ll y = 0; y < numSpacePointY; ++y) {
+            for (ll x = 0; x < numSpacePointX; ++x) {
                 fprintf(fptr, "%f ", _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
             }
             fprintf(fptr, "\n");
@@ -562,8 +562,8 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
     ll numSpacePointX= _cal_num_space(length, space_step_x);
     ll numSpacePointY= _cal_num_space(width, space_step_y);
     for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 1; y < numSpacePointY; ++y) {
-            for (ll x = 1; x < numSpacePointX; ++x) {
+        for (ll y = 0; y < numSpacePointY; ++y) {
+            for (ll x = 0; x < numSpacePointX; ++x) {
                 fprintf(fptr, "%f ", _get_value_2D_openmp_v2(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
             }
             fprintf(fptr, "\n");
@@ -827,9 +827,9 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
 
         for (; i < endIndex; ++i)
         {
-            for (ll y = 1; y < numSpacePointY; ++y)
+            for (ll y = 0; y < numSpacePointY; ++y)
             {
-                for (ll x = 1; x < numSpacePointX; ++x)
+                for (ll x = 0; x < numSpacePointX; ++x)
                 {
                     _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision);
 
@@ -869,8 +869,8 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     numSpacePointY= _cal_num_space(width, space_step_y);
 
     for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 1; y < numSpacePointY; ++y) {
-            for (ll x = 1; x < numSpacePointX; ++x) {
+        for (ll y = 0; y < numSpacePointY; ++y) {
+            for (ll x = 0; x < numSpacePointX; ++x) {
                 _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision);
             }
         }
@@ -894,8 +894,8 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     ll numSpacePointX= _cal_num_space(length, space_step_x);
     ll numSpacePointY= _cal_num_space(width, space_step_y);
     for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 1; y < numSpacePointY; ++y) {
-            for (ll x = 1; x < numSpacePointX; ++x) {
+        for (ll y = 0; y < numSpacePointY; ++y) {
+            for (ll x = 0; x < numSpacePointX; ++x) {
                 _get_value_2D_openmp_v2(time_step, length, space_step_x, width, space_step_y, x, y, t, precision);
             }
         }

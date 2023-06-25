@@ -91,8 +91,8 @@
      ll numSpacePointY= _cal_num_space(width, space_step_y);
 
      for (ll t = 0; t < numTimePoint; ++t) {
-         for (ll y = 1; y < numSpacePointY; ++y) {
-             for (ll x = 1; x < numSpacePointX; ++x) {
+         for (ll y = 0; y < numSpacePointY; ++y) {
+             for (ll x = 0; x < numSpacePointX; ++x) {
                  fprintf(fptr, "%f ", _get_value_2D(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
              }
              fprintf(fptr, "\n");
@@ -139,8 +139,8 @@ int _execution_time_heat_transfer_2D_serial(double time_step, double time_limit,
     ll numSpacePointY= _cal_num_space(width, space_step_y);
 
     for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 1; y < numSpacePointY; ++y) {
-            for (ll x = 1; x < numSpacePointX; ++x) {
+        for (ll y = 0; y < numSpacePointY; ++y) {
+            for (ll x = 0; x < numSpacePointX; ++x) {
                  _get_value_2D(time_step, length, space_step_x, width, space_step_y, x, y, t, precision);
             }
         }
