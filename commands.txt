@@ -1,4 +1,5 @@
 cd ./make
 make
 make clean
-mpicc main.c -o main -L../make -l:libphysics.a -fopenmp -lm -lc
+mpicc ../examples/main.c -o main -L../make -l:libphysics.a -fopenmp -lm -lc
+mpiexec -n 1 ./main

@@ -1,3 +1,17 @@
+/**
+ * @file thermoserial.c
+ * @brief This file contains the implementation of the serial version of the heat transfer simulation in 1D and 2D.
+ *
+ * In the 1D heat equation, we make a model that thermal energy flow in a 1D object so we place the object along the x-axis.
+ * We show that an object has a fixed length and lies along an interval [0, 1] under the condition of both time and thermal energy we have some conditions that affect the temperature that is time and point of x on the object.
+ * We also have thermal diffusivity that shows the rate of the temperature to be transferred to the object(how quickly the heat moves throw the object)
+ * As, we separated variables of the thermal energy problem to calculate u(x, t) we make this function separated to the function of x-axis X(x) and function of time T(t) u(x, t) = X(t) T(t)
+ * Then, we calculate the change throw the time t to get the equation
+ * u(x,t)= ∑bn * sin(nΠx/L)
+ * bn= (2/L) ∫f(x)*sin(nΠx/L)dx
+ */
+
+
 #include "../include/thermoserial.h"
 #include <stdio.h>
 #include <string.h>
@@ -50,6 +64,17 @@
      sum *= 200 / (M_PI * M_PI);
      return sum;
  }
+/**
+* @brief This is a function that simulates the heat transfer in 1D object as wire, and write the result to a file.
+*
+* In this simulation, we simulate heat propagation in 1D object as wire and the change in its tempreture over time using fourier transform.
+*
+* @param time_step The rate of change of the time.
+* @param time_limit The time that we want to measure the temperature of the object after.
+* @param space_step The rate of change of the space.
+* @return 0 if there is no error happened interrupted the calculations, and write the output to text file named simulate_heat_transfer_1D_serial_ + current time,
+* the row represent the time, and the column represent the temperature at this point at that time.
+*/
 
  int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
                                        double space_step,
@@ -82,6 +107,18 @@
 
  }
 
+/**
+ * @brief This is a function that simulates the heat transfer in 2D object, and write the result to a file.
+ *
+ * In this simulation, we simulate heat propagation in 2D object as square or rectangle and the change in its tempreture over time using fourier transform.
+ *
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step_x The rate of change of the space in x-axis.
+ * @param space_step_y The rate of change of the space in y-axis.
+ * @return 0 if there is no error happened interrupted the calculations, and write the output to text file named simulate_heat_transfer_2D_serial_ + current time,
+ * the row represent the time, and the column represent the temperature at this point at that time.
+ */
 
  int _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
                                        double space_step_x,
