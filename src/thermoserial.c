@@ -146,7 +146,7 @@ double _get_value_2D(double time_step,
      fclose(fptr);
      clock_t end_time=clock();
      double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-     printf("The value of execution_time 1D_serial_simulation is: %f\n",execution_time);
+     printf("The value of execution_time 1D_serial_simulation_withFiles is: %f\n",execution_time);
      return 0;
 
  }
@@ -198,7 +198,7 @@ double _get_value_2D(double time_step,
      fclose(fptr);
      clock_t end_time=clock();
      double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-     printf("The value of execution_time 2D_serial_simulation is: %f\n",execution_time);
+     printf("The value of execution_time 2D_serial_simulation_withFiles is: %f\n",execution_time);
      return 0;
  }
 
