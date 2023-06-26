@@ -147,17 +147,22 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
                                  double Vo, double FI,
                                  double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
+    time_t tim = time(NULL);
+    struct tm tm = *localtime(&tim);
+    printf("Started Simulation of Damped Oscillation Serial Implementation at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial_Acceleration: %f \nInitial_Velocity: %f \nFI_Const: %f \nTime_Limit: %f \nStep_Size(dt): %f \nDamping_coefficient: %f\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent);
+    puts("===================================================================\n");
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
     {
-        puts("Invalid Arguments is Given");
+        puts("\n\nInvalid Arguments is Given");
         return -1;
     }
     if (validation == -1)
     {
         max_amplitude = length;
-        puts("Max Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
+        puts("\n\nMax Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
     double Wo = sqrt(k / mass);
     double W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
@@ -166,17 +171,19 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
     RESULTS[1] = Vo + gravity * 0;
     RESULTS[2] = Ao + gravity * exp((-damping_coefficent / (2 * mass)) * 0);
     double CALCULATIONS[3];
+    tm = *localtime(&tim);
+    printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     clock_t start_time = clock();
     for (double t = 0; t <= time_limit + 0.05; t += step_size)
     {
         if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
         {
-            puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
+            puts("\n\nSimulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
             return -1;
         }
         else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
         {
-            puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
+            puts("\n\nSimulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
             return -2;
         }
         CALCULATIONS[0] = cos(W * t + FI);
@@ -187,6 +194,8 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
         RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
     }
     clock_t end_time = clock();
+    tm = *localtime(&tim);
+    printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %lf sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, end_time - start_time);
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     return execution_time;
 }
@@ -197,23 +206,30 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
                                  double Vo,
                                  double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
+    time_t tim = time(NULL);
+    struct tm tm = *localtime(&tim);
+    printf("Started Simulation of Elastic Pendulum Oscillation Serial Implementation at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    printf("Rest Length: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nInitial Y: %f\nInitial X: %f\nTime Limit: %f \nStep_Size(dt): %f \nDamping_coefficient: %f\n", r, length, mass, gravity, k, Ao, Vo, Yo, Xo, time_limit, step_size, damping_coefficent);
+    puts("===================================================================\n");
     int validation = _valid_osc(Xo, Yo, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
     {
-        puts("Invalid Arguments is Given");
+        puts("\n\nInvalid Arguments is Given");
         return -1;
     }
     if (validation == -1)
     {
         Xo = sqrt(length * length - Yo * Yo);
-        puts("Max Amplitude Is More Than The Spring Length, Xo Had Been Reset to be Equal to the Spring Length");
+        puts("\n\nMax Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
     double t = 0;
     double x1 = Xo; // init position of mass in x
     double y = Yo;  // init position of mass in y
     double v = Vo;  // init velocity
     double a = 0;   // init velocity
+    tm = *localtime(&tim);
+    printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     clock_t start_time = clock();
     for (int i = 0; i < time_limit; ++i)
     {
@@ -249,6 +265,8 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
         a += step_size / 6.0 * (k14 + 2 * k24 + 2 * k34 + k44);
     }
     clock_t end_time = clock();
+    tm = *localtime(&tim);
+    printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %lf sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, end_time - start_time);
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     return execution_time;
 }
