@@ -81,35 +81,35 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
 
 
 
-extern int
+extern double
 _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
                                double space_step,
                                int precision);
 
-extern int
+extern double
 _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
                                   double space_step,
                                   int precision);
 
-extern int
+extern double
 _execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
                                      double space_step,
                                      int precision);
 
 
-extern int
+extern double
 _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
                                double space_step_x,
                                double space_step_y,
                                int precision);
 
-extern int
+extern double
 _execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
                                    double space_step_x,
                                    double space_step_y,
                                    int precision);
 
-extern int
+extern double
  _execution_time_heat_transfer_2D_V2_OPENMP(double time_step, double time_limit,
                                       double space_step_x,
                                       double space_step_y,

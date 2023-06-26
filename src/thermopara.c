@@ -611,7 +611,7 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
 
  }
 
-int _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
+double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
                                      double space_step,
                                      int precision){
     // MPI_Init(NULL, NULL);
@@ -707,19 +707,22 @@ int _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
         }
     }
     MPI_Barrier(MPI_COMM_WORLD);
+    double execution_time;
     if (my_rank == 0)
     {
         end_time = MPI_Wtime();
-        printf("The time taken in MPI_1d Without I/O is: %f\n", end_time - start_time);
+        execution_time = end_time - start_time;
+        printf("The time taken in MPI_1d Without I/O is: %f\n", execution_time);
     }
     // MPI_Finalize();
     MPI_Finalized(&finalized);
     if (!finalized)
         MPI_Finalize();
         
-    return 0;
+    return execution_time;
 }
-int _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
+
+double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
                                         double space_step,
                                         int precision){
 
@@ -736,10 +739,10 @@ int _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
     clock_t end_time=clock();
     double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
     printf("The value of execution_time 1D_OPENMP is: %f\n",execution_time);
-    return 0;
+    return execution_time;
 }
 
-int _execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
+double _execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit,
                                            double space_step,
                                            int precision){
 
@@ -757,10 +760,11 @@ int _execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_lim
     clock_t end_time=clock();
     double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
     printf("The value of execution_time 1D_OPENMP_V2 is: %f\n",execution_time);
-    return 0;
+    return execution_time;
 
 }
-int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
+
+double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
                                      double space_step_x,
                                      double space_step_y,
                                      int precision){
@@ -872,21 +876,23 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         }
     }
     MPI_Barrier(MPI_COMM_WORLD);
+    double execution_time;
     if (my_rank == 0)
     {
         end_time = MPI_Wtime();
-        printf("The time taken in MPI_2d Without I/O is: %f\n", end_time - start_time);
+        execution_time = end_time - start_time;
+        printf("The time taken in MPI_2d Without I/O is: %f\n", execution_time);
     }
     // MPI_Finalize();
     MPI_Finalized(&finalized);
     if (!finalized)
         MPI_Finalize();
     
-    return 0;
+    return execution_time;
 
 }
 
- int
+ double
  _execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
                                    double space_step_x,
                                    double space_step_y,
@@ -913,11 +919,11 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     clock_t end_time=clock();
     double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
     printf("The value of execution_time 2D_OPENMP_without_Files is: %f\n",execution_time);
-    return 0;
+    return execution_time;
 
  }
 
- int
+ double
  _execution_time_heat_transfer_2D_V2_OPENMP(double time_step, double time_limit,
                                       double space_step_x,
                                       double space_step_y,
@@ -938,6 +944,6 @@ int _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     clock_t end_time=clock();
     double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
     printf("The value of execution_time 2D_OPENMP_V2_without Files is: %f\n",execution_time);
-    return 0;
+    return execution_time;
 
  }
