@@ -405,7 +405,7 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
 
         for (; i < endIndex; ++i)
         {
-            for (ll x = 0; x < numSpacePoint; ++x)
+            for (ll x = 0; x <= numSpacePoint; ++x)
             {
                 if (my_rank == 1)
                 {
@@ -479,7 +479,7 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     ll numSpacePoint= _cal_num_space(length, space_step);
 
     for (int t = 0; t < numTimePoint; t++) {
-        for (int x = 0; x < numSpacePoint; x++) {
+        for (int x = 0; x <= numSpacePoint; x++) {
             fprintf(fptr, "%f ", _get_value_1D_openmp_V1(time_step, space_step, x, t, precision));
         }
         fprintf(fptr, "\n");
@@ -522,7 +522,7 @@ _simulate_heat_transfer_1D_OPENMP_V2(double time_step, double time_limit, double
     ll numSpacePoint= _cal_num_space(length, space_step);
 
     for (int t = 0; t < numTimePoint; t++) {
-        for (int x = 0; x < numSpacePoint; x++) {
+        for (int x = 0; x <= numSpacePoint; x++) {
             fprintf(fptr, "%f ", _get_value_1D_openmp_V2(time_step, space_step, x, t, precision));
         }
         fprintf(fptr, "\n");
@@ -935,7 +935,7 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
 
         for (; i < endIndex; ++i)
         {
-            for (ll x = 0; x < numSpacePoint; ++x)
+            for (ll x = 0; x <= numSpacePoint; ++x)
             {
                 _get_value_1D_mpi(time_step, space_step, x, i, precision);
             }
@@ -982,7 +982,7 @@ double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_lim
     ll numSpacePoint= _cal_num_space(length, space_step);
 
     for (int t = 0; t < numTimePoint; t++) {
-        for (int x = 0; x < numSpacePoint; x++) {
+        for (int x = 0; x <= numSpacePoint; x++) {
             _get_value_1D_openmp_V1(time_step, space_step, x, t, precision);
         }
     }
@@ -1015,7 +1015,7 @@ double _execution_time_heat_transfer_1D_OPENMP_V2(double time_step, double time_
     ll numSpacePoint= _cal_num_space(length, space_step);
 
     for (int t = 0; t < numTimePoint; t++) {
-        for (int x = 0; x < numSpacePoint; x++) {
+        for (int x = 0; x <= numSpacePoint; x++) {
             _get_value_1D_openmp_V2(time_step, space_step, x, t, precision);
         }
 
