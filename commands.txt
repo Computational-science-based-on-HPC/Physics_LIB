@@ -2,4 +2,4 @@ cd ./make
 make
 make clean
 mpicc ../examples/main.c -o main -L../make -l:libphysics.a -fopenmp -lm -lc
-mpiexec -n 1 ./main
+mpiexec -n 4 ./main
