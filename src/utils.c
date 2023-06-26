@@ -107,49 +107,49 @@ _f2(double x, double y, double dy, double tx, double ty, double k, double m, dou
 //     closedir(mainDirectory);
 //     return subdirectoryCount;
 // }
-int 
-_number_of_files(char *mainDirectoryPath)
-{
-    int subdirectoryCount = 0;
-    DIR *mainDirectory;
-    struct dirent *entry;
-    mainDirectory = opendir(mainDirectoryPath);
+// int 
+// _number_of_files(char *mainDirectoryPath)
+// {
+//     int subdirectoryCount = 0;
+//     DIR *mainDirectory;
+//     struct dirent *entry;
+//     mainDirectory = opendir(mainDirectoryPath);
 
-    while ((entry = readdir(mainDirectory)) != NULL)
-    {
+//     while ((entry = readdir(mainDirectory)) != NULL)
+//     {
 
-        if (strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0)
-        {
-            subdirectoryCount++;
-        }
-    }
-    closedir(mainDirectory);
-    return subdirectoryCount;
-}
-int 
-_directory_create(char *mainDirectoryPath)
-{
-    int subdirectoryCount = 0;
-    DIR *mainDirectory;
-    struct dirent *entry;
-    mainDirectory = opendir(mainDirectoryPath);
-    if (mainDirectory == NULL)
-    {
-        int ret = 0;
+//         if (strcmp(entry->d_name, "..") != 0 && strcmp(entry->d_name, ".") != 0)
+//         {
+//             subdirectoryCount++;
+//         }
+//     }
+//     closedir(mainDirectory);
+//     return subdirectoryCount;
+// }
+// int 
+// _directory_create(char *mainDirectoryPath)
+// {
+//     int subdirectoryCount = 0;
+//     DIR *mainDirectory;
+//     struct dirent *entry;
+//     mainDirectory = opendir(mainDirectoryPath);
+//     if (mainDirectory == NULL)
+//     {
+//         int ret = 0;
 
-        ret = mkdir(mainDirectoryPath, 0755);
+//         ret = mkdir(mainDirectoryPath, 0755);
 
-        if (ret == 0)
-        {
-            printf("Directory created successfully\n");
-            return subdirectoryCount;
-        }
-        else
-        {
-            printf("Unable to create directory %s\n", mainDirectoryPath);
-            return -1;
-        }
-    }
-    closedir(mainDirectory);
-    return 0;
-}
+//         if (ret == 0)
+//         {
+//             printf("Directory created successfully\n");
+//             return subdirectoryCount;
+//         }
+//         else
+//         {
+//             printf("Unable to create directory %s\n", mainDirectoryPath);
+//             return -1;
+//         }
+//     }
+//     closedir(mainDirectory);
+//     return 0;
+// }

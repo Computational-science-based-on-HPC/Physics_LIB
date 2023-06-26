@@ -194,9 +194,10 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
         RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
     }
     clock_t end_time = clock();
+    tim = time(NULL);
     tm = *localtime(&tim);
-    printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %lf sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, end_time - start_time);
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, execution_time);
     return execution_time;
 }
 
@@ -265,8 +266,9 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
         a += step_size / 6.0 * (k14 + 2 * k24 + 2 * k34 + k44);
     }
     clock_t end_time = clock();
+    tim = time(NULL);
     tm = *localtime(&tim);
-    printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %lf sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, end_time - start_time);
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, execution_time);
     return execution_time;
 }

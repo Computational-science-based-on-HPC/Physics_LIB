@@ -1,0 +1,46 @@
+Started Simulation of Damped Oscillation Implementation Using MPI and OpenMP at 2023-06-27 02:06:32 with Parametes:
+Amplitude: 10.000000 
+Spring Length: 14.000000 
+Mass: 1.000000 
+Gravity: 1.800000 
+Stifeness: 1.000000 
+Initial_Acceleration: -1.000000 
+Initial_Velocity: 0.000000 
+FI_Const: -0.100000 
+Time_Limit: 40000000.000000 
+Step_Size(dt): 0.010000 
+Damping_coefficient: 0.100000
+===================================================================
+
+Started Job 1 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 0.
+
+Ended Job 1 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 0 Execution Time: 0.000016 sec.
+
+Started Job 2 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 0.
+
+Ended Job 2 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 0 Execution Time: 0.000001 sec.
+
+Started Job 2 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 1.
+
+Started Job 2 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 2.
+
+Ended Job 2 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 2 Execution Time: 0.000001 sec.
+
+Started Job 2 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 3.
+
+Ended Job 2 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 3 Execution Time: 0.000001 sec.
+
+Started Job 2 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 4.
+
+Ended Job 2 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 4 Execution Time: 0.000001 sec.
+
+
+Simulation Got a NaN Value.
+ Breaking the Function...
+Files Saved.
+Simulation Ended Cause a NaN Value Occurred
+
+Ended Job 2 at: 2023-06-27 02:06:32 Processor: slinga-System-Product-Name Rank: 1 Execution Time: 0.000088 sec.
+
+
+Ended Simulation of Damped Oscillation Implementation Using MPI and OpenMP at 2023-06-27 02:06:32
