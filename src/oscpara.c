@@ -463,7 +463,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     sprintf(_file_name, "%damped_os_parallel_v2_displacement%d-%02d-%02d %02d:%02d:%02d.txt", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     p_dis = fopen(_file_name, "w");
 
-    for (int it = 0; it < _it_number_all; ++it)
+    for (int it = 0; it < _it_number; ++it)
     {
 
         if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
@@ -642,7 +642,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     printf("\nStarted Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank);
     start_time = MPI_Wtime();
 
-    for (int it = 0; it < _it_number_all; ++it)
+    for (int it = 0; it < _it_number; ++it)
     {
         t = step_size * (((double)it) + (world_rank * _it_number));
         CALCULATIONS[0] = cos(W * t + FI);
