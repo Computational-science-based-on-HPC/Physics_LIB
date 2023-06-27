@@ -20,7 +20,18 @@ libphysics<a name="TOP"></a>
   - Heat Equation is an equation where it simulates the change of heat in body isolated from outer world and isn't affected by any other heat or cooling source.
   - In this simulation, we simulate heat propagation in a 2D body as _cpu_ as square or rectangle and the change in its tempreture over time using Fourier transform.
   - This simulation is implemented as a serial and parallel program.
-
+- - - - 
+## Installation ## 
+ ``` bash
+cd ./make 
+make
+make clean
+```
+## Compilation and Run ##
+ ``` GNU
+ mpicc ../examples/main.c -o main -L../make -l:libphysics.a -fopenmp -lm -lc
+ mpiexec -n 4 ./main
+```
 - - - - 
 ## Links ## 
 - [Documentation](https://jonathanghaly.github.io/index.html)
