@@ -212,7 +212,7 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
     struct tm tm = *localtime(&tim);
     printf("Started Simulation of Damped Oscillation Serial Implementation at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial_Acceleration: %f \nInitial_Velocity: %f \nFI_Const: %f \nTime_Limit: %f \nStep_Size(dt): %f \nDamping_coefficient: %f\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent);
-    puts("===================================================================\n");
+    puts("================================================================================");
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
@@ -225,6 +225,12 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
         max_amplitude = length;
         puts("\n\nMax Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
+    printf("Memory ===========================================================================\n");
+    printmem();
+    printf("\n================================================================================\nCPUs ===========================================================================\n\n");
+    cpu_inf();
+    printf("\n=================================================================================\n\n");
+
     double Wo = sqrt(k / mass);
     double W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
     double RESULTS[3];
@@ -292,7 +298,7 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
     struct tm tm = *localtime(&tim);
     printf("Started Simulation of Elastic Pendulum Oscillation Serial Implementation at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     printf("Rest Length: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nInitial Y: %f\nInitial X: %f\nTime Limit: %f \nStep_Size(dt): %f \nDamping_coefficient: %f\n", r, length, mass, gravity, k, Ao, Vo, Yo, Xo, time_limit, step_size, damping_coefficent);
-    puts("===================================================================\n");
+    puts("================================================================================");
     int validation = _valid_osc(Xo, Yo, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
@@ -305,6 +311,12 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
         Xo = sqrt(length * length - Yo * Yo);
         puts("\n\nMax Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
+    printf("Memory ===========================================================================\n");
+    printmem();
+    printf("\n================================================================================\nCPUs ===========================================================================\n\n");
+    cpu_inf();
+    printf("\n=================================================================================\n\n");
+
     double t = 0;
     double x1 = Xo; // init position of mass in x
     double y = Yo;  // init position of mass in y
