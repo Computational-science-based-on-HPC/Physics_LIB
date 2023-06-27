@@ -316,7 +316,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     tm = *localtime(&tim);
     printf("\nStarted Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank);
     start_time = MPI_Wtime();
-    for (int it = 0; it < _it_number_all; ++it)
+    for (int it = 0; it < _it_number; ++it)
     {
         t = step_size * (((double)it) + (world_rank * _it_number));
 #pragma omp parallel sections
