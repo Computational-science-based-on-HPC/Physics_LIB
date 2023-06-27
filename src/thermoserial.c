@@ -9,20 +9,6 @@
 // #define M_PI 3.14159265358979323846264338327
 
 
-/**
-* @brief This is a function calculates the value of specific point in the space at specific time in 1D.
-*
-* In this function, we calculate the temperature of point x at time t given the rate of change of x and t, using fourier transform
-* and the number of times we sum the series depend on the number of precision provided.
-*
-* @param time_step The rate of change of the time.
-* @param space_step The rate of change of the space.
-* @param x The point we want to calculate the temperature at.
-* @param t The current time we are at.
-* @param precision The number of vectors we use in the calculations.
-* @return sum we calculated.
-*/
-
 double _get_value_1D(double time_step,
                     double space_step,
                     double x, double t,
@@ -44,23 +30,6 @@ double _get_value_1D(double time_step,
     return sum;
 }
 
-/**
-* @brief This is a function calculates the value of specific point in the space at specific time in 2D.
-*
-* In this function, we calculate the temperature of point x and y at time t given the rate of change of x, y and t, using fourier transform
-* and the number of times we sum the series depend on the number of precision provided.
-*
-* @param time_step The rate of change of the time.
-* @param length The length of the object.
-* @param space_step_x The rate of change of the space in x-axis.
-* @param width The width of the object.
-* @param space_step_y The rate of change of the space in y-axis.
-* @param x The point in x-axis we want to calculate the temperature at.
-* @param y The point in y-axis we want to calculate the temperature at.
-* @param t The current time we are at.
-* @param precision The number of vectors we use in the calculations.
-* @return sum we calculated.
-*/
 double _get_value_2D(double time_step,
                     double length, double space_step_x, double width, double space_step_y,
                     int x, int y, int t,
@@ -82,18 +51,6 @@ double _get_value_2D(double time_step,
     sum *= 200 / (M_PI * M_PI);
     return sum;
 }
-/**
-* @brief This is a function that simulates the heat transfer in 1D object as wire, and write the result to a file.
-*
-* In this simulation, we simulate heat propagation in 1D object as wire and the change in its tempreture over time using fourier transform.
-*
-* @param time_step The rate of change of the time.
-* @param time_limit The time that we want to measure the temperature of the object after.
-* @param space_step The rate of change of the space.
-* @param precision The number of vectors we use in the calculations.
-* @return 0 if there is no error happened interrupted the calculations, and write the output to text file named simulate_heat_transfer_1D_serial_ + current time,
-* the row represent the time, and the column represent the temperature at this point at that time.
-*/
 
  int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
                                        double space_step,
@@ -126,21 +83,6 @@ double _get_value_2D(double time_step,
 
  }
 
-/**
- * @brief This is a function that simulates the heat transfer in 2D object, and write the result to a file.
- *
- * In this simulation, we simulate heat propagation in 2D object as square or rectangle and the change in its tempreture over time using fourier transform.
- *
- * @param time_step The rate of change of the time.
- * @param time_limit The time that we want to measure the temperature of the object after.
- * @param space_step_x The rate of change of the space in x-axis.
- * @param space_step_y The rate of change of the space in y-axis.
- * @param precision The number of vectors we use in the calculations.
- * @return 0 if there is no error happened interrupted the calculations, and write the output to text file named simulate_heat_transfer_2D_serial_ + current time,
- * the output file contains paragraphs each one represent the time slot, each row represent the temperature at this point of the 2D object on x-axis (length), 
- * and the column represent the temperature at this point at that time on y-axis (width).
- * The number of rows in each paragraph (time slot) equals length* space_step_x, and the number of columns equals width* space_step_y.
- */
 
  int _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
                                        double space_step_x,
@@ -178,18 +120,6 @@ double _get_value_2D(double time_step,
  }
 
 
-/**
-* @brief This is a function that simulates the heat transfer in 1D object as wire, and return the execution time without I/O.
-*
-* In this simulation, we simulate heat propagation in 1D object as wire and the change in its tempreture over time using fourier transform.
-*
-* @param time_step The rate of change of the time.
-* @param time_limit The time that we want to measure the temperature of the object after.
-* @param space_step The rate of change of the space.
-* @param precision The number of vectors we use in the calculations.
-* @return execution time without I/O if there is no error happened interrupted the calculations.
-*/
-
 double _execution_time_heat_transfer_1D_serial(double time_step, double time_limit,
                                             double space_step,
                                             int precision){
@@ -213,18 +143,6 @@ double _execution_time_heat_transfer_1D_serial(double time_step, double time_lim
 }
 
 
-/**
- * @brief This is a function that simulates the heat transfer in 2D object, and return the execution time without I/O.
- *
- * In this simulation, we simulate heat propagation in 2D object as square or rectangle and the change in its tempreture over time using fourier transform.
- *
- * @param time_step The rate of change of the time.
- * @param time_limit The time that we want to measure the temperature of the object after.
- * @param space_step_x The rate of change of the space in x-axis.
- * @param space_step_y The rate of change of the space in y-axis.
- * @param precision The number of vectors we use in the calculations.
- * @return execution time without I/O if there is no error happened interrupted the calculations.
- */
 double _execution_time_heat_transfer_2D_serial(double time_step, double time_limit,
                                         double space_step_x,
                                         double space_step_y,
