@@ -2,9 +2,6 @@ libphysics<a name="TOP"></a>
 ===================
 
 - - - - 
-## Documentation ## 
-[libphysics docs](https://jonathanghaly.github.io/index.html)
-- - - - 
 ## Description ##
 **libphysics** is a physics library that simulates various physics calculations as _parallelelized_ and _seriallized_ implementations to obtain optimal performance and results.
 - - - - 
@@ -23,4 +20,8 @@ libphysics<a name="TOP"></a>
   - Heat Equation is an equation where it simulates the change of heat in body isolated from outer world and isn't affected by any other heat or cooling source.
   - In this simulation, we simulate heat propagation in a 2D body as _cpu_ as square or rectangle and the change in its tempreture over time using Fourier transform.
   - This simulation is implemented as a serial and parallel program.
-  - - - - - 
+
+- - - - 
+## Links ## 
+- [Documentation](https://jonathanghaly.github.io/index.html)
+- [GitHub](https://github.com/Computational-science-based-on-HPC/Physics_LIB)
