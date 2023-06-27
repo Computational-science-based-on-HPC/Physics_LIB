@@ -16,6 +16,12 @@
  *  This function is implemented using MPI and Openmp together, The Number of iteration are divided upon number of processes using MPI, while each processes is calculating its values Openmp used to run the calculations per process in parallel way
  * @warning don't set gravity less than 0.
  * @warning if max_amplitude is greater than the length the max_amplitude automatically set to the length value
+ * @warning mass can't be negative
+ * @warning length can't be negative
+ * @warning damping_coefficent can't be negative
+ * @warning step_size can't be negative
+ * @warning stiffness can't be negative
+ * @warning time_limit can't be negative
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
@@ -42,8 +48,14 @@ _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, double
  *  using numerical solution of stepwise precision using equation (e^(-damping_coefficent / (2 * mass)) * t)*sin(wt+fi)),
  *  where this equation calculates the displacement of mass on y-axis, this function also calculates the acceleration and velocity in each time step.
  *  This function is implemented using MPI and Openmp together, The Number of iteration are divided upon number of processes using MPI, while each processes is calculating its values Openmp used to run the calculations per process in parallel way
- *  @warning don't set gravity less than 0.
+ * @warning don't set gravity less than 0.
  * @warning if max_amplitude is greater than the length the max_amplitude automatically set to the length value
+ * @warning mass can't be negative
+ * @warning length can't be negative
+ * @warning damping_coefficent can't be negative
+ * @warning step_size can't be negative
+ * @warning stiffness can't be negative
+ * @warning time_limit can't be negative
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
@@ -72,6 +84,12 @@ _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double length, 
  *  This function is implemented using MPI, The Number of iteration are divided upon number of processes using MPI.
  * @warning don't set gravity less than 0.
  * @warning if max_amplitude is greater than the length the max_amplitude automatically set to the length value
+ * @warning mass can't be negative
+ * @warning length can't be negative
+ * @warning damping_coefficent can't be negative
+ * @warning step_size can't be negative
+ * @warning stiffness can't be negative
+ * @warning time_limit can't be negative
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
@@ -98,6 +116,12 @@ _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double mas
  *  This function is implemented using MPI, The Number of iteration are divided upon number of processes using MPI.
  * @warning don't set gravity less than 0.
  * @warning if max_amplitude is greater than the length the max_amplitude automatically set to the length value
+ * @warning mass can't be negative
+ * @warning length can't be negative
+ * @warning damping_coefficent can't be negative
+ * @warning step_size can't be negative
+ * @warning stiffness can't be negative
+ * @warning time_limit can't be negative
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
@@ -127,6 +151,12 @@ _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, doub
  *  @note tried using sections pragma ended up applying more overhead in the code so performance decreased
  * @warning don't set gravity less than 0.
  * @warning if max_amplitude is greater than the length the max_amplitude automatically set to the length value
+ * @warning mass can't be negative
+ * @warning length can't be negative
+ * @warning damping_coefficent can't be negative
+ * @warning step_size can't be negative
+ * @warning stiffness can't be negative
+ * @warning time_limit can't be negative
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
