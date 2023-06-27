@@ -249,7 +249,7 @@ _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double length, 
     char file_name[255];
     sprintf(file_name, "DOP1%d-%02d-%02d %02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour,
             tm.tm_min, tm.tm_sec);
-    stdout=freopen("my_log.txt", "w", stdout);
+    stdout=freopen(file_name, "w", stdout);
 
     int ret=0;
     if(world_rank==0)
