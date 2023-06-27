@@ -112,16 +112,6 @@ int heat_equation_1D_P1_OPENMP(double time_step, double time_limit,
                                              precision);
 }
 
-int heat_equation_1D_P1_OPENMP_V2(double time_step, double time_limit,
-                                  double space_step,
-                                  int precision)
-{
-
-    return _simulate_heat_transfer_1D_OPENMP_V2(time_step, time_limit,
-                                                space_step,
-                                                precision);
-}
-
 ////////////////heat equation 2D parallel
 int heat_equation_2D_P1_MPI(double time_step, double time_limit,
                             double spaceX_step, double spaceY_step,
@@ -143,17 +133,6 @@ int heat_equation_2D_P1_OPENMP(double time_step, double time_limit,
                                              spaceX_step,
                                              spaceY_step,
                                              precision);
-}
-
-int heat_equation_2D_P1_OPENMP_V2(double time_step, double time_limit,
-                                  double spaceX_step, double spaceY_step,
-                                  int precision)
-{
-
-    return _simulate_heat_transfer_2D_OPENMP_V2(time_step, time_limit,
-                                                spaceX_step,
-                                                spaceY_step,
-                                                precision);
 }
 
 ////////////////heat equation 1D serial
@@ -192,14 +171,6 @@ double heat_equation_execution_time_1D_P1_OPENMP(double time_step, double time_l
                                                    space_step,
                                                    precision);
 }
-double heat_equation_execution_time_1D_P1_OPENMP_V2(double time_step, double time_limit,
-                                                 double space_step,
-                                                 int precision)
-{
-    return _execution_time_heat_transfer_1D_OPENMP_V2(time_step, time_limit,
-                                                     space_step,
-                                                      precision);
-}
 
 ////////////////heat equation 2D parallel execution time without i/o
 double heat_equation_execution_time_2D_P1_MPI(double time_step, double time_limit,
@@ -221,17 +192,6 @@ double heat_equation_execution_time_2D_P1_OPENMP(double time_step, double time_l
                                                    spaceX_step,
                                                    spaceY_step,
                                                    precision);
-}
-
-double heat_equation_execution_time_2D_P1_OPENMP_V2(double time_step, double time_limit,
-                                                 double spaceX_step, double spaceY_step,
-                                                 int precision)
-{
-
-    return _execution_time_heat_transfer_2D_V2_OPENMP(time_step, time_limit,
-                                                      spaceX_step,
-                                                      spaceY_step,
-                                                      precision);
 }
 
 ////////////////heat equation 1D serial execution time without i/o
