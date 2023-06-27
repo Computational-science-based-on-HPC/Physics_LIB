@@ -162,7 +162,7 @@ damped_os_parallel_execution_time_v2(double max_amplitude, double length, double
                                      double time_limit, double step_size, double damping_coefficent,
                                      int number_of_files)
 {
-    return _execution_time_damped_os_parallel_mpi_omp(max_amplitude, length, mass, gravity, k, Ao,
+    return _execution_time_damped_os_parallel_mpi(max_amplitude, length, mass, gravity, k, Ao,
                                                       Vo, FI,
                                                       time_limit, step_size, damping_coefficent, number_of_files);
 }
