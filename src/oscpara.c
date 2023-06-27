@@ -30,7 +30,7 @@
  * @param time_limit the time when the simulation will stop
  * @param step_size how much the simulation will skip per iteration
  * @param damping_coefficent damping factor affecting on the system
- * @param number_of_files currently nulled
+ * @param number_of_files
  * @return
  */
 int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
