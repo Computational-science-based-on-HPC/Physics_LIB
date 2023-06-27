@@ -165,6 +165,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     fclose(p_dis);
     return 0;
 }
+
 int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                                double Vo, double FI,
                                                double time_limit, double step_size, double damping_coefficent, int number_of_files)
@@ -268,26 +269,26 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     for (int it = 0; it < _it_number_all; ++it)
     {
 
-        if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
-        {
-            _is_zero++;
-            if (_is_zero > 2)
-            {
-                break;
-            }
-        }
-        else
-            _is_zero = 0;
-        if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
-        {
-            puts("\n\nSimulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
-            break;
-        }
-        else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
-        {
-            puts("\n\nSimulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
-            break;
-        }
+        // if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
+        // {
+        //     _is_zero++;
+        //     if (_is_zero > 2)
+        //     {
+        //         break;
+        //     }
+        // }
+        // else
+        //     _is_zero = 0;
+        // if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
+        // {
+        //     puts("\n\nSimulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
+        //     break;
+        // }
+        // else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
+        // {
+        //     puts("\n\nSimulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
+        //     break;
+        // }
 
         t = step_size * (((double)it) + (world_rank * _it_number));
 #pragma omp parallel sections
@@ -507,7 +508,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     if (world_rank == 0)
     {
         printf("Started Simulation of Damped Oscillation Implementation Using MPI at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep_Size(dt): %f \nDamping coefficient: %f\nNumper of Processes", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent,world);
+        printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep_Size(dt): %f \nDamping coefficient: %f\nNumper of Processes", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent,world_size);
         puts("===================================================================\n");
         int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                     number_of_files, 0);
@@ -575,26 +576,26 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
 
     for (int it = 0; it < _it_number_all; ++it)
     {
-        if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
-        {
-            _is_zero++;
-            if (_is_zero > 2)
-            {
-                return 0;
-            }
-        }
-        else
-            _is_zero = 0;
-        if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
-        {
-            puts("\n\nSimulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
-            break;
-        }
-        else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
-        {
-            puts("\n\nSimulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
-            break;
-        }
+        // if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
+        // {
+        //     _is_zero++;
+        //     if (_is_zero > 2)
+        //     {
+        //         return 0;
+        //     }
+        // }
+        // else
+        //     _is_zero = 0;
+        // if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
+        // {
+        //     puts("\n\nSimulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
+        //     break;
+        // }
+        // else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
+        // {
+        //     puts("\n\nSimulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
+        //     break;
+        // }
 
         t = step_size * (((double)it) + (world_rank * _it_number));
         CALCULATIONS[0] = cos(W * t + FI);
@@ -618,7 +619,8 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     }
     return end_time - start_time;
 }
-extern double
+
+double
 _execution_time_damped_os_parallel_omp(double max_amplitude, double length, double mass, double gravity, double k,
                                                 double Ao,
                                                 double Vo, double FI,
@@ -656,14 +658,14 @@ _execution_time_damped_os_parallel_omp(double max_amplitude, double length, doub
 #pragma omp parallel for num_threads(number_of_threads) private(CALCULATIONS, RESULTS)
     for (int i = 0; i <= num_steps; i++)
     {
-        if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
-        {
-            puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
-        }
-        else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
-        {
-            puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
-        }
+        // if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
+        // {
+        //     puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
+        // }
+        // else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
+        // {
+        //     puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
+        // }
         double t = i * step_size;
         CALCULATIONS[0] = cos(W * t + FI);
         CALCULATIONS[1] = sin(W * t + FI);

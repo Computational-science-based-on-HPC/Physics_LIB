@@ -63,6 +63,7 @@ damped_os_parallel_execution_time_v2(double max_amplitude, double length, double
                                                       Vo, FI,
                                                       time_limit, step_size, damping_coefficent, number_of_files);
 }
+double
 damped_os_parallel_execution_time_v3(double max_amplitude, double length, double mass, double gravity, double k,
                                      double Ao,
                                      double Vo, double FI,

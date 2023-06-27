@@ -1,4 +1,4 @@
-Started Simulation of Damped Oscillation Serial Implementation at 2023-06-27 02:01:39 with Parametes:
+Started Simulation of Damped Oscillation Serial Implementation at 2023-06-27 02:10:09 with Parametes:
 Amplitude: 10.000000 
 Spring Length: 14.000000 
 Mass: 1.000000 
@@ -13,6 +13,6 @@ Damping_coefficient: 0.100000
 ===================================================================
 
 
-Started Calculation at: 2023-06-27 02:01:39.
+Started Calculation at: 2023-06-27 02:10:09.
 
-Ended Job Caclulation at: 2023-06-27 02:01:39 Execution Time: 148.560309 sec.
+Ended Job Caclulation at: 2023-06-27 02:12:38 Execution Time: 149.334873 sec.

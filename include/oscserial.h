@@ -4,25 +4,99 @@
 
 #ifndef PHYSICS_OSCSERIAL_H
 #define PHYSICS_OSCSERIAL_H
-
+/**
+ *  This function simulates simple harmonic motion (Simple Spring Motion) using numerical solution of stepwise precision using equation (e^(-damping_coefficent / (2 * mass)) * t)*sin(wt+fi)),
+ *  where this equation calculates the displacement of mass on y-axis, this function also calculates the acceleration and velocity in each time step.
+ *  This function is implemented using serial algorithm
+ *
+ * @param max_amplitude starting position of the mass where the simulation will start
+ * @param length the maximum length of the spring (uncompressed spring)
+ * @param mass mass of bob
+ * @param gravity
+ * @param k stiffness of the spring
+ * @param Ao initial acceleration
+ * @param Vo initial velocity
+ * @param FI FI constant which will be added to the (wt) inside the sine calculation
+ * @param time_limit the time when the simulation will stop
+ * @param step_size how much the simulation will skip per iteration
+ * @param damping_coefficent damping factor affecting on the system
+ * @param number_of_files currently nulled
+ * @return
+ */
 extern int
 _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                            double Vo, double FI,
                            double time_limit, double step_size, double damping_coefficent, int number_of_files);
+/**
+ *  This function calculates execution time of simulating simple harmonic motion (Simple Spring Motion) using numerical solution of stepwise precision using equation (e^(-damping_coefficent / (2 * mass)) * t)*sin(wt+fi)),
+ *  where this equation calculates the displacement of mass on y-axis, this function also calculates the acceleration and velocity in each time step.
+ *  This function is implemented using serial algorithm
+ *
+ * @param max_amplitude starting position of the mass where the simulation will start
+ * @param length the maximum length of the spring (uncompressed spring)
+ * @param mass mass of bob
+ * @param gravity
+ * @param k stiffness of the spring
+ * @param Ao initial acceleration
+ * @param Vo initial velocity
+ * @param FI FI constant which will be added to the (wt) inside the sine calculation
+ * @param time_limit the time when the simulation will stop
+ * @param step_size how much the simulation will skip per iteration
+ * @param damping_coefficent damping factor affecting on the system
+ * @param number_of_files currently nulled
+ * @return
+ */
 extern double
 _execution_time_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                            double Vo, double FI,
                            double time_limit, double step_size, double damping_coefficent, int number_of_files);
-
-extern int
-_simulate_forced_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
-                                  double Vo,
-                                  double time_limit, double step_size, double damping_coefficent, int number_of_files);
+/**
+ * This function simulates the motion of (elastic pendulum/2D-spring/spring pendulum) system.
+ * Using LaGrange mechanics to get the equation of motion of the whole system and solving the differential equation using Fourth order Runge-Kutta ODE to get the displacement of body suspended on spring at time t.
+ * This system's motion is chaotic motion so it can't be parallelized.
+ * This simulation prints the position of mass w.r.t X-Axis and Y-Axis.
+ *
+ * @param r rest length of spring
+ * @param length max length of spring
+ * @param mass mass of bob suspended in spring
+ * @param gravity
+ * @param k stiffness of spring
+ * @param Ao initial acceleration
+ * @param Xo initial point on X-axis where simulation starts
+ * @param Yo initial point on Y-axis where simulation starts
+ * @param Vo initial velocity
+ * @param time_limit the time when the simulation will stop
+ * @param step_size how much the simulation will skip per iteration
+ * @param damping_coefficent damping factor affecting on the system
+ * @param number_of_files
+ * @return
+ */
 extern int
 _simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                            double Yo,
                            double Vo,
                            double time_limit, double step_size, double damping_coefficent, int number_of_files);
+/**
+ * This function calculates the execution time of simulating the motion of (elastic pendulum/2D-spring/spring pendulum) system.
+ * Using LaGrange mechanics to get the equation of motion of the whole system and solving the differential equation using Fourth order Runge-Kutta ODE to get the displacement of body suspended on spring at time t.
+ * This system's motion is chaotic motion so it can't be parallelized.
+ * This simulation prints the position of mass w.r.t X-Axis and Y-Axis.
+ *
+ * @param r rest length of spring
+ * @param length max length of spring
+ * @param mass mass of bob suspended in spring
+ * @param gravity
+ * @param k stiffness of spring
+ * @param Ao initial acceleration
+ * @param Xo initial point on X-axis where simulation starts
+ * @param Yo initial point on Y-axis where simulation starts
+ * @param Vo initial velocity
+ * @param time_limit the time when the simulation will stop
+ * @param step_size how much the simulation will skip per iteration
+ * @param damping_coefficent damping factor affecting on the system
+ * @param number_of_files
+ * @return
+ */
 extern double
 _execution_time_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                            double Yo,
