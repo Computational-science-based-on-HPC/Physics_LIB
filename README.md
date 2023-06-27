@@ -22,13 +22,13 @@ libphysics<a name="TOP"></a>
   - This simulation is implemented as a serial and parallel program.
 - - - - 
 ## Installation ## 
- ``` bash
+ ``` 
 cd ./make 
 make
 make clean
 ```
 ## Compilation and Run ##
- ``` GNU
+ ``` 
  mpicc ../examples/main.c -o main -L../make -l:libphysics.a -fopenmp -lm -lc
  mpiexec -n 4 ./main
 ```
