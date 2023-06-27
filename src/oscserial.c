@@ -1,12 +1,35 @@
 //
 // Created by jghal on 6/16/2023.
 //
+/**
+ * @file oscserial.c
+ * @brief This file contains the implementation of the serial version of the oscillation simulation in 1D and 2D.
+ *
+ */
 #include <stdio.h>
 #include "../include/oscserial.h"
 #include <math.h>
 #include "../include/utils.h"
 #include <time.h>
-
+/**
+ *  @brief This function simulates simple harmonic motion (Simple Spring Motion) using numerical solution of stepwise precision using equation (e^(-damping_coefficent / (2 * mass)) * t)*sin(wt+fi)),
+ *  where this equation calculates the displacement of mass on y-axis, this function also calculates the acceleration and velocity in each time step.
+ *  This function is implemented using serial algorithm
+ *
+ * @param max_amplitude starting position of the mass where the simulation will start
+ * @param length the maximum length of the spring (uncompressed spring)
+ * @param mass mass of bob
+ * @param gravity
+ * @param k stiffness of the spring
+ * @param Ao initial acceleration
+ * @param Vo initial velocity
+ * @param FI FI constant which will be added to the (wt) inside the sine calculation
+ * @param time_limit the time when the simulation will stop
+ * @param step_size how much the simulation will skip per iteration
+ * @param damping_coefficent damping factor affecting on the system
+ * @param number_of_files currently nulled
+ * @return
+ */
 int _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                double Vo, double FI,
                                double time_limit, double step_size, double damping_coefficent, int number_of_files)
@@ -67,7 +90,27 @@ int _simulate_damped_os_serial(double max_amplitude, double length, double mass,
     fclose(p_file);
     return 0;
 }
-
+/**
+ * @brief This function simulates the motion of (elastic pendulum/2D-spring/spring pendulum) system.
+ * Using LaGrange mechanics to get the equation of motion of the whole system and solving the differential equation using Fourth order Runge-Kutta ODE to get the displacement of body suspended on spring at time t.
+ * This system's motion is chaotic motion so it can't be parallelized.
+ * This simulation prints the position of mass w.r.t X-Axis and Y-Axis.
+ *
+ * @param r rest length of spring
+ * @param length max length of spring
+ * @param mass mass of bob suspended in spring
+ * @param gravity
+ * @param k stiffness of spring
+ * @param Ao initial acceleration
+ * @param Xo initial point on X-axis where simulation starts
+ * @param Yo initial point on Y-axis where simulation starts
+ * @param Vo initial velocity
+ * @param time_limit the time when the simulation will stop
+ * @param step_size how much the simulation will skip per iteration
+ * @param damping_coefficent damping factor affecting on the system
+ * @param number_of_files
+ * @return
+ */
 int _simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                                double Yo,
                                double Vo,
@@ -141,7 +184,25 @@ int _simulate_elastic_pendulum(double r, double length, double mass, double grav
     fclose(p_dis_y);
     return 0;
 }
-
+/**
+ *  @brief This function calculates execution time of simulating simple harmonic motion (Simple Spring Motion) using numerical solution of stepwise precision using equation (e^(-damping_coefficent / (2 * mass)) * t)*sin(wt+fi)),
+ *  where this equation calculates the displacement of mass on y-axis, this function also calculates the acceleration and velocity in each time step.
+ *  This function is implemented using serial algorithm
+ *
+ * @param max_amplitude starting position of the mass where the simulation will start
+ * @param length the maximum length of the spring (uncompressed spring)
+ * @param mass mass of bob
+ * @param gravity
+ * @param k stiffness of the spring
+ * @param Ao initial acceleration
+ * @param Vo initial velocity
+ * @param FI FI constant which will be added to the (wt) inside the sine calculation
+ * @param time_limit the time when the simulation will stop
+ * @param step_size how much the simulation will skip per iteration
+ * @param damping_coefficent damping factor affecting on the system
+ * @param number_of_files currently nulled
+ * @return
+ */
 double
 _execution_time_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                  double Vo, double FI,
@@ -200,7 +261,27 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
     printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, execution_time);
     return execution_time;
 }
-
+/**
+ * @brief This function calculates the execution time of simulating the motion of (elastic pendulum/2D-spring/spring pendulum) system.
+ * Using LaGrange mechanics to get the equation of motion of the whole system and solving the differential equation using Fourth order Runge-Kutta ODE to get the displacement of body suspended on spring at time t.
+ * This system's motion is chaotic motion so it can't be parallelized.
+ * This simulation prints the position of mass w.r.t X-Axis and Y-Axis.
+ *
+ * @param r rest length of spring
+ * @param length max length of spring
+ * @param mass mass of bob suspended in spring
+ * @param gravity
+ * @param k stiffness of spring
+ * @param Ao initial acceleration
+ * @param Xo initial point on X-axis where simulation starts
+ * @param Yo initial point on Y-axis where simulation starts
+ * @param Vo initial velocity
+ * @param time_limit the time when the simulation will stop
+ * @param step_size how much the simulation will skip per iteration
+ * @param damping_coefficent damping factor affecting on the system
+ * @param number_of_files
+ * @return
+ */
 double
 _execution_time_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                                  double Yo,
