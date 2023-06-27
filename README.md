@@ -3,7 +3,7 @@ libphysics<a name="TOP"></a>
 
 - - - - 
 ## Description ##
-**libphysics** is a physics library that simulates various physics calculations as _parallelelized_ and _seriallized_ implementations to obtain optimal performance and results.
+**Physics LIB** is a physics library that simulates various physics calculations as _parallelelized_ and _seriallized_ implementations to obtain optimal performance and results.
 - - - - 
 ## Simulations ##
 ### 1- Damped spring motion ###
