@@ -86,7 +86,8 @@ _f1(double x, double y, double dx, double tx, double ty, double k, double m, dou
  */
 double
 _f2(double x, double y, double dy, double tx, double ty, double k, double m, double b, double r, double g);
+void printmemsize(char *str, unsigned long ramsize);
+int printmem();
+int cpu_inf();
 
-int _number_of_files(char *mainDirectoryPath);
-int _directory_create(char *mainDirectoryPath);
 #endif // PHYSICS_UTILS_H

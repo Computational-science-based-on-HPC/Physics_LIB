@@ -11,6 +11,24 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <string.h>
+#include <sys/sysinfo.h>
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+
+int cpu_inf()
+{
+   FILE *cpuinfo = fopen("/proc/cpuinfo", "rb");
+   char *arg = 0;
+   size_t size = 0;
+   while(getdelim(&arg, &size, 0, cpuinfo) != -1)
+   {
+      puts(arg);
+   }
+   free(arg);
+   fclose(cpuinfo);
+   return 0;
+}
 int 
 _valid_osc(double x, double y, double length, double mass, double gravity, double k, double time_limit,
                double step_size,
@@ -69,6 +87,25 @@ _f2(double x, double y, double dy, double tx, double ty, double k, double m, dou
 
         return g - (float)k / m * r * c - (float)b / m * dy;
     }
+}
+
+
+void printmemsize(char *str, unsigned long ramsize) {
+        printf("%s: %ld in bytes / %ld in KB / %ld in MB / %ld in GB\n",str, ramsize, ramsize/1024, (ramsize/1024)/1024, ((ramsize/1024)/1024)/1024);
+}
+
+int printmem() {
+        struct sysinfo info;
+        sysinfo(&info);
+        printf("\n\nuptime: %ld\n", info.uptime);
+        // print total ram size
+        printmemsize("totalram", info.totalram);
+        printmemsize("freeram", info.freeram);
+        printmemsize("sharedram", info.sharedram);
+        printmemsize("bufferram", info.bufferram);
+        printmemsize("freeswap", info.freeswap);
+        printf("current running processes: %d\n\n", info.procs);
+        return 0;
 }
 // int
 // _number_of_files(char *mainDirectoryPath)

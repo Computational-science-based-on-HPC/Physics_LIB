@@ -23,7 +23,7 @@ int main(void)
     //    heat_equation_1D_P1_MPI(0.01, 0.5, 0.05, 50);
     //    heat_equation_1D_P1_OPENMP(0.01, 0.5, 0.05, 50);
 
-       heat_equation_2D_P1_MPI(0.1, 5, 0.1, 0.1, 1000);
+    //    heat_equation_2D_P1_MPI(0.1, 5, 0.1, 0.1, 1000);
     //    heat_equation_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, 50);
 
     //    heat_equation_1D_serial(0.01, 0.5, 0.05,50);

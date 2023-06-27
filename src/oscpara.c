@@ -13,6 +13,8 @@
 #include <time.h>
 #include <mpi.h>
 #include <omp.h>
+#include <fcntl.h>
+#include <unistd.h>
 #define NUM_THREADS 3
 /**
  *  This function simulates simple harmonic motion (Simple Spring Motion) using numerical solution of stepwise precision using equation (e^(-damping_coefficent / (2 * mass)) * t)*sin(wt+fi)),
@@ -234,10 +236,11 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     int _it_number;
     int _it_number_all;
     double t;
-    short int _is_zero = 0;
     time_t tim = time(NULL);
     double start_time, end_time;
     struct tm tm = *localtime(&tim);
+    // char file_name[255];
+    // sprintf(file_name, "DOP1%d-%02d-%02d %02d:%02d:%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     int ret = 0;
     if (world_rank == 0)
     {
@@ -245,7 +248,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
         tm = *localtime(&tim);
         printf("Started Simulation of Damped Oscillation Implementation Using MPI and OpenMP at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial_Acceleration: %f \nInitial_Velocity: %f \nFI_Const: %f \nTime_Limit: %f \nStep_Size(dt): %f \nDamping_coefficient: %f\nNumber of Processes: %d\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent, world_size);
-        puts("===================================================================\n");
+        puts("================================================================================");
         int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent, number_of_files, 0);
         if (validation == 0)
         {
@@ -257,6 +260,12 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
             max_amplitude = length;
             puts("\n\nMax Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
         }
+        printf("Memory ===========================================================================\n");
+        printmem();
+        printf("\n================================================================================\nCPUs ===========================================================================\n\n");
+        cpu_inf();
+        printf("\n=================================================================================\n\n");
+
         tm = *localtime(&tim);
         start_time = MPI_Wtime();
         printf("Started Job 1 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank);
@@ -309,28 +318,6 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     start_time = MPI_Wtime();
     for (int it = 0; it < _it_number_all; ++it)
     {
-
-        // if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
-        // {
-        //     _is_zero++;
-        //     if (_is_zero > 2)
-        //     {
-        //         break;
-        //     }
-        // }
-        // else
-        //     _is_zero = 0;
-        // if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
-        // {
-        //     puts("\n\nSimulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
-        //     break;
-        // }
-        // else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
-        // {
-        //     puts("\n\nSimulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
-        //     break;
-        // }
-
         t = step_size * (((double)it) + (world_rank * _it_number));
 #pragma omp parallel sections
         {
@@ -574,7 +561,6 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     int _it_number;
     int _it_number_all;
     double t;
-    short int _is_zero = 0;
     int ret = 0;
     char processor_name[MPI_MAX_PROCESSOR_NAME];
     int name_len;
@@ -585,8 +571,13 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     if (world_rank == 0)
     {
         printf("Started Simulation of Damped Oscillation Implementation Using MPI at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep_Size(dt): %f \nDamping coefficient: %f\nNumper of Processes", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent,world_size);
-        puts("===================================================================\n");
+        printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep_Size(dt): %f \nDamping coefficient: %f\nNumper of Processes", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent, world_size);
+        puts("================================================================================");
+        printf("Memory ===========================================================================\n");
+        printmem();
+        printf("\n================================================================================\nCPUs ===========================================================================\n\n");
+        cpu_inf();
+        printf("\n=================================================================================\n\n");
         int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                     number_of_files, 0);
         if (validation == 0)
@@ -653,27 +644,6 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
 
     for (int it = 0; it < _it_number_all; ++it)
     {
-        // if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
-        // {
-        //     _is_zero++;
-        //     if (_is_zero > 2)
-        //     {
-        //         return 0;
-        //     }
-        // }
-        // else
-        //     _is_zero = 0;
-        // if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
-        // {
-        //     puts("\n\nSimulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
-        //     break;
-        // }
-        // else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
-        // {
-        //     puts("\n\nSimulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
-        //     break;
-        // }
-
         t = step_size * (((double)it) + (world_rank * _it_number));
         CALCULATIONS[0] = cos(W * t + FI);
         CALCULATIONS[1] = sin(W * t + FI);
@@ -718,16 +688,21 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
  */
 double
 _execution_time_damped_os_parallel_omp(double max_amplitude, double length, double mass, double gravity, double k,
-                                                double Ao,
-                                                double Vo, double FI,
-                                                double time_limit, double step_size, double damping_coefficent,
-                                                int number_of_files, int number_of_threads)
+                                       double Ao,
+                                       double Vo, double FI,
+                                       double time_limit, double step_size, double damping_coefficent,
+                                       int number_of_files, int number_of_threads)
 {
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
     printf("Started Simulation of Damped Oscillation Implementation Using OpenMP at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep Size(dt): %f \nDamping coefficient: %f\nNumber of Threads: %d\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent, number_of_threads);
-    puts("===================================================================\n");
+    puts("================================================================================");
+    printf("Memory ===========================================================================\n");
+    printmem();
+    printf("\n================================================================================\nCPUs ===========================================================================\n\n");
+    cpu_inf();
+    printf("\n=================================================================================\n\n");
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
@@ -754,14 +729,6 @@ _execution_time_damped_os_parallel_omp(double max_amplitude, double length, doub
 #pragma omp parallel for num_threads(number_of_threads) private(CALCULATIONS, RESULTS)
     for (int i = 0; i <= num_steps; i++)
     {
-        // if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
-        // {
-        //     puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
-        // }
-        // else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
-        // {
-        //     puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
-        // }
         double t = i * step_size;
         CALCULATIONS[0] = cos(W * t + FI);
         CALCULATIONS[1] = sin(W * t + FI);
