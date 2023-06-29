@@ -117,17 +117,7 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
         MPI_Init(NULL, NULL);
     }
     FILE *fptr1;
-    FILE *fptr2;
-    FILE *fptr3;
-    char _file_name[2076];
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    sprintf(_file_name, "simulate_heat_transfer_1D_MPI_1_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    fptr1 = fopen(_file_name, "w");
-    sprintf(_file_name, "simulate_heat_transfer_1D_MPI_2_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    fptr2 = fopen(_file_name, "w");
-    sprintf(_file_name, "simulate_heat_transfer_1D_MPI_3_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    fptr3 = fopen(_file_name, "w");
+    
     int my_rank;     // rank of process
     int processesNo; // number of process
     ll numTimePointPerProcess, numTimePointRemProcess, numTimePoint, numSpacePoint;
@@ -203,40 +193,24 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
         i = startIndex;
         ll endIndex = startIndex + size;
 
+        char _file_name[2076];
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        
+        sprintf(_file_name, "simulate_heat_transfer_1D_MPI_%d_%d-%02d-%02d %02d:%02d:%02d.txt", my_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        fptr1 = fopen(_file_name, "w");
+
         for (; i < endIndex; ++i)
         {
             for (ll x = 0; x <= numSpacePoint; ++x)
             {
-                if (my_rank == 1)
-                {
-                    fprintf(fptr1, "%f ", _get_value_1D_mpi(time_step, space_step, x, i, precision));
-                }
-                else if (my_rank == 2)
-                {
-                    fprintf(fptr2, "%f ", _get_value_1D_mpi(time_step, space_step, x, i, precision));
-                }
-                else if (my_rank == 3)
-                {
-                    fprintf(fptr3, "%f ",_get_value_1D_mpi(time_step, space_step, x, i, precision));
-                }
+                fprintf(fptr1, "%f ", _get_value_1D_mpi(time_step, space_step, x, i, precision));
             }
-            if (my_rank == 1)
-            {
-                fprintf(fptr1, "\n");
-            }
-            else if (my_rank == 2)
-            {
-                fprintf(fptr2, "\n");
-            }
-            else if (my_rank == 3)
-            {
-                fprintf(fptr3, "\n");
-            }
+            fprintf(fptr1, "\n");
         }
     }
     fclose(fptr1);
-    fclose(fptr2);
-    fclose(fptr3);
+
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_rank == 0)
     {
@@ -293,17 +267,6 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
         MPI_Init(NULL, NULL);
     }
     FILE *fptr1;
-    FILE *fptr2;
-    FILE *fptr3;
-    char _file_name[2076];
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    sprintf(_file_name, "simulate_heat_transfer_2D_MPI_1_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    fptr1 = fopen(_file_name, "w");
-    sprintf(_file_name, "simulate_heat_transfer_1D_MPI_2_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    fptr2 = fopen(_file_name, "w");
-    sprintf(_file_name, "simulate_heat_transfer_1D_MPI_3_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    fptr3 = fopen(_file_name, "w");
 
     int my_rank;     // rank of process
     int processesNo; // number of process
@@ -390,6 +353,11 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
         i = startIndex;
         ll endIndex = startIndex + size;
 
+        char _file_name[2076];
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        sprintf(_file_name, "simulate_heat_transfer_2D_MPI_%d_%d-%02d-%02d %02d:%02d:%02d.txt", my_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        fptr1 = fopen(_file_name, "w");
 
         for (; i < endIndex; ++i)
         {
@@ -397,36 +365,18 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
             {
                 for (ll x = 0; x <= numSpacePointX; ++x)
                 {
-                    if(my_rank == 1){
-                        fprintf(fptr1, "%f ", _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision));
-                    }else if(my_rank == 2){
-                        fprintf(fptr2, "%f ", _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision));
-                    }else if(my_rank == 3){
-                        fprintf(fptr3, "%f ", _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision));
-                    }
-                
+                    fprintf(fptr1, "%f ", _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision));
+            
                 }
-                if(my_rank == 1){
-                    fprintf(fptr1, "\n");
-                }else if(my_rank == 2){
-                    fprintf(fptr2, "\n");
-                }else if(my_rank == 3){
-                    fprintf(fptr3, "\n");
-                }
+                fprintf(fptr1, "\n");
+
             }
-            if(my_rank == 1){
-                fprintf(fptr1, "\n\n");
-            }else if(my_rank == 2){
-                fprintf(fptr2, "\n\n");
-            }else if(my_rank == 3){
-                fprintf(fptr3, "\n\n");
-            }
+            fprintf(fptr1, "\n\n");
         }
     }
 
     fclose(fptr1);
-    fclose(fptr2);
-    fclose(fptr3);
+    
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_rank == 0)
     {
@@ -751,7 +701,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
                                    int precision){
 
     clock_t start_time=clock();
-     double length =2.0, width =2.0;
+    double length =2.0, width =2.0;
     ll numTimePoint;
     ll numSpacePointX;
     ll numSpacePointY;
