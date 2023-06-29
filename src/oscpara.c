@@ -74,7 +74,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     double t;
     short int _is_zero = 0;
     double buff[1000];
-    if (world_rank < 1)
+    if (world_rank == 1)
     {
         double Wo = sqrt(k / mass);
         W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
@@ -84,16 +84,14 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
         RESULTS[2] = Ao + gravity;
         _it_number_all = _round(time_limit / step_size);
         int _sent_it_number = 0;
-
         if (world_size > 1)
         {
             _it_number_proc = (_it_number_all / (world_size - 1)) + 1;
             for (int i = 1; i < world_size; i++)
             {
-                if (i > _it_number_all % (world_size))
-                    _it_number_proc = (_it_number_all / (world_size));
+                if (i > _it_number_all % (world_size - 1))
+                    _it_number_proc = (_it_number_all / (world_size - 1));
                 _sent_it_number += _it_number_proc;
-
                 MPI_Send(&_it_number_proc, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
             }
         }
@@ -108,86 +106,88 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&coefficient_calc, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&dir, sizeof(dir), MPI_CHAR, 0, MPI_COMM_WORLD);
-
-    omp_set_dynamic(0); // Explicitly disable dynamic teams
-    omp_set_num_threads(3);
-    int count = 0;
-    FILE *p_dis;
-    char _file_name[2076];
-
-    time_t tim = time(NULL);
-    struct tm tm = *localtime(&tim);
-    sprintf(_file_name, "%d_damped_os_parallel_v1_displacement_%d-%02d-%02d %02d:%02d:%02d.txt", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    p_dis = fopen(_file_name, "w");
-
-    for (int it = 0; it < _it_number; ++it)
+    if (world_rank > 0 || (world_rank == 0 && _it_number > 0))
     {
+        omp_set_num_threads(3);
+        int count = 0;
+        FILE *p_dis;
+        char _file_name[2076];
 
-        if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
+        time_t tim = time(NULL);
+        struct tm tm = *localtime(&tim);
+        sprintf(_file_name, "%d_damped_os_parallel_v1_displacement_%d-%02d-%02d %02d:%02d:%02d.txt", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        p_dis = fopen(_file_name, "w");
+
+        for (int it = 0; it < _it_number; ++it)
         {
-            _is_zero++;
-            if (_is_zero > 2)
+
+            if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
             {
-                return 0;
+                _is_zero++;
+                if (_is_zero > 2)
+                {
+                    return 0;
+                }
             }
+            else
+                _is_zero = 0;
+            if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
+            {
+                puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
+                break;
+            }
+            else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
+            {
+                puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
+                break;
+            }
+            if (count == 9999)
+            {
+                printf("count:%d rank:%d\n", count, world_rank);
+                for (int i = 0; i < count; i++)
+                {
+                    fprintf(p_dis, "%.6f\n", buff[i]);
+                }
+                count = 0;
+            }
+            t = step_size * (((double)it) + (world_rank * _it_number));
+
+#pragma omp parallel sections
+            {
+#pragma omp section
+                CALCULATIONS[0] = cos(W * t + FI);
+
+#pragma omp section
+                CALCULATIONS[1] = sin(W * t + FI);
+
+#pragma omp section
+                CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
+            }
+#pragma omp parallel sections
+            {
+#pragma omp section
+                RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
+
+#pragma omp section
+                RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
+
+#pragma omp section
+                RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
+            }
+            buff[count++] = RESULTS[0];
         }
-        else
-            _is_zero = 0;
-        if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
+        if (count > 0)
         {
-            puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
-            break;
-        }
-        else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
-        {
-            puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
-            break;
-        }
-        if (count == 9999)
-        {
-            printf("count:%d rank:%d\n", count, world_rank);
+
             for (int i = 0; i < count; i++)
             {
                 fprintf(p_dis, "%.6f\n", buff[i]);
             }
-            count = 0;
         }
-        t = step_size * (((double)it) + (world_rank * _it_number));
-
-#pragma omp parallel sections
-        {
-#pragma omp section
-            CALCULATIONS[0] = cos(W * t + FI);
-
-#pragma omp section
-            CALCULATIONS[1] = sin(W * t + FI);
-
-#pragma omp section
-            CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
-        }
-#pragma omp parallel sections
-        {
-#pragma omp section
-            RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
-
-#pragma omp section
-            RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
-
-#pragma omp section
-            RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
-        }
-        buff[count++] = RESULTS[0];
-    }
-    if (count > 0)
-    {
-
-        for (int i = 0; i < count; i++)
-        {
-            fprintf(p_dis, "%.6f\n", buff[i]);
-        }
+        MPI_Barrier(MPI_COMM_WORLD);
+        fclose(p_dis);
     }
     MPI_Barrier(MPI_COMM_WORLD);
-    fclose(p_dis);
     return 0;
 }
 /**
@@ -488,66 +488,69 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     {
         MPI_Recv(&_it_number, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
     }
-
-    int count = 0;
-    FILE *p_dis;
-    char _file_name[2076];
-    time_t tim = time(NULL);
-    struct tm tm = *localtime(&tim);
-    sprintf(_file_name, "%damped_os_parallel_v2_displacement%d-%02d-%02d %02d:%02d:%02d.txt", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    p_dis = fopen(_file_name, "w");
-
-    for (int it = 0; it < _it_number; ++it)
+    if (world_rank > 0 || (world_rank == 0 && _it_number > 0))
     {
+        int count = 0;
+        FILE *p_dis;
+        char _file_name[2076];
+        time_t tim = time(NULL);
+        struct tm tm = *localtime(&tim);
+        sprintf(_file_name, "%damped_os_parallel_v2_displacement%d-%02d-%02d %02d:%02d:%02d.txt", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        p_dis = fopen(_file_name, "w");
 
-        if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
+        for (int it = 0; it < _it_number; ++it)
         {
-            _is_zero++;
-            if (_is_zero > 2)
+
+            if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
             {
+                _is_zero++;
+                if (_is_zero > 2)
+                {
+                    break;
+                }
+            }
+            else
+                _is_zero = 0;
+            if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
+            {
+                puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
                 break;
             }
+            else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
+            {
+                puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
+                break;
+            }
+            if (count == 9999)
+            {
+                printf("count:%d rank:%d\n", count, world_rank);
+                for (int i = 0; i < count; i++)
+                {
+                    fprintf(p_dis, "%.6f\n", buff[i]);
+                }
+                count = 0;
+            }
+            t = step_size * (((double)it) + (world_rank * _it_number));
+            CALCULATIONS[0] = cos(W * t + FI);
+            CALCULATIONS[1] = sin(W * t + FI);
+            CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
+            RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
+            RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
+            RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
+            buff[count++] = RESULTS[0];
         }
-        else
-            _is_zero = 0;
-        if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
+        if (count > 0)
         {
-            puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
-            break;
-        }
-        else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
-        {
-            puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
-            break;
-        }
-        if (count == 9999)
-        {
-            printf("count:%d rank:%d\n", count, world_rank);
+
             for (int i = 0; i < count; i++)
             {
                 fprintf(p_dis, "%.6f\n", buff[i]);
             }
-            count = 0;
         }
-        t = step_size * (((double)it) + (world_rank * _it_number));
-        CALCULATIONS[0] = cos(W * t + FI);
-        CALCULATIONS[1] = sin(W * t + FI);
-        CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
-        RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
-        RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
-        RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
-        buff[count++] = RESULTS[0];
-    }
-    if (count > 0)
-    {
-
-        for (int i = 0; i < count; i++)
-        {
-            fprintf(p_dis, "%.6f\n", buff[i]);
-        }
+        MPI_Barrier(MPI_COMM_WORLD);
+        fclose(p_dis);
     }
     MPI_Barrier(MPI_COMM_WORLD);
-    fclose(p_dis);
     return 0;
 }
 /**
