@@ -21,6 +21,34 @@ Physics LIB<a name="TOP"></a>
   - In this simulation, we simulate heat propagation in a 2D body as _cpu_ as square or rectangle and the change in its tempreture over time using Fourier transform.
   - This simulation is implemented as a serial and parallel program.
 - - - - 
+# Dynamic Library #
+## Installation ## 
+ ```  
+make
+make install
+make clean
+```
+To include in environment path:
+```
+sudo ldconfig
+echo $LD_LIBRARY_PATH
+```
+If couldn't find the library location listed then create new environment variable:
+```
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATHD
+```
+Now it been added to environment variables to be sure:
+```
+echo $LD_LIBRARY_PATH
+```
+Make sure it been listed.
+## Compilation and Run ##
+ ``` 
+mpicc -o myprogram main.c -L/usr/local/lib/ -lphysics -fopenmp
+mpiexec -n 4 ./myprogram
+```
+- - - - 
+# Static Library #
 ## Installation ## 
  ``` 
 cd ./make 
