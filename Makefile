@@ -7,13 +7,13 @@ SRC_DIR = src
 OBJ_DIR = build
 INCLUDE_DIR = include
 
-OBJS = $(addprefix $(OBJ_DIR)/, physics.o oscserial.o utils.o thermoutils.o oscpara.o thermopara.o thermoserial.o)
+OBJS = physics.o oscserial.o utils.o thermoutils.o oscpara.o thermopara.o thermoserial.o
 TARGET = libphysics.so
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) -shared -o $(TARGET)  $(OBJS) $(LDFLAGS)
+	$(CC) -shared -o $(TARGET)  $(addprefix $(OBJ_DIR)/,$(OBJS)) $(LDFLAGS)
 
 $(OBJ_DIR)/physics.o: $(SRC_DIR)/physics.c $(INCLUDE_DIR)/physics.h
 	$(MCC) $(CFLAGS)  $(SRC_DIR)/physics.c -o  $(OBJ_DIR)/physics.o
