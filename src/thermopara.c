@@ -260,13 +260,14 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
                                 int precision){
     // MPI_Init(NULL, NULL);
     int initialized, finalized;
-     double length =2.0, width =2.0;
-     MPI_Initialized(&initialized);
+    double length =2.0, width =2.0;
+    MPI_Initialized(&initialized);
     if (!initialized)
     {
         MPI_Init(NULL, NULL);
     }
     FILE *fptr1;
+    FILE *logFile;
 
     int my_rank;     // rank of process
     int processesNo; // number of process
@@ -276,23 +277,56 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     MPI_Status status;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
+
+    char processor_name[MPI_MAX_PROCESSOR_NAME];
+    int name_len;
+    MPI_Get_processor_name(processor_name, &name_len);
+
     MPI_Barrier(MPI_COMM_WORLD);
      
-
-    ll numTimePoint;
-    ll numSpacePointX;
-    ll numSpacePointY;
-    ll numTimePointPerProcess;
-    ll numTimePointRemProcess;
+    ll numTimePoint, numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
+    char _log_file_name[2076];
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(_log_file_name, "simulate_heat_transfer_2D_MPI_%d_%d-%02d-%02d %02d:%02d:%02d.log", my_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    logFile = fopen(_log_file_name, "w");
 
     if(my_rank == 0){
+        t = time(NULL);
+        tm = *localtime(&t);
+        fprintf(logFile, "Started Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        fprintf(logFile, "Number of processes: %d\n", processesNo);
+        fprintf(logFile, "Time step: %f\n", time_step);
+        fprintf(logFile, "Time limit: %f\n", time_limit);
+        fprintf(logFile, "Space step x: %f\n", space_step_x);
+        fprintf(logFile, "Space step y: %f\n", space_step_y);
+        fprintf(logFile, "Precision: %d\n", precision);
+        fprintf(logFile, "Length: %f\n", length);
+        fprintf(logFile, "Width: %f\n", width);
+        
         start_time = MPI_Wtime();
         numTimePoint= _cal_num_time(time_step, time_limit);
         numSpacePointX= _cal_num_space(length, space_step_x);
         numSpacePointY= _cal_num_space(width, space_step_y);
 
+        fprintf(logFile, "Number of time points: %lld\n", numTimePoint);
+        fprintf(logFile, "Number of space points x: %lld\n", numSpacePointX);
+        fprintf(logFile, "Number of space points y: %lld\n", numSpacePointY);
+
         numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
-        numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
+        numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for remaining process
+
+        fprintf(logFile, "Number of time points per process: %lld\n", numTimePointPerProcess);
+        fprintf(logFile, "Number of time points for remaining process: %lld\n", numTimePointRemProcess);
+        fprintf("Memory ===========================================================================\n");
+        printmem(logFile);
+        fprintf(logFile, "\n================================================================================\nCPUs ===========================================================================\n\n");
+        cpu_inf(logFile);
+        fprintf(logFile, "\n=================================================================================\n\n");
+
+        fprintf(logFile, "Started Job 1 at: %f Processor: %s Rank: %d.\n", start_time, processor_name, my_rank);
+
+
     }
 
 
@@ -329,6 +363,10 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
                 startIndex += numTimePointPerProcess;
             }
         }
+        end_time = MPI_Wtime();
+        tim = time(NULL);
+        tm = *localtime(&tim);
+        printf("\nEnded Job 1 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank, end_time - start_time);
     }
     else
     {
@@ -359,6 +397,9 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
         sprintf(_file_name, "simulate_heat_transfer_2D_MPI_%d_%d-%02d-%02d %02d:%02d:%02d.txt", my_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         fptr1 = fopen(_file_name, "w");
 
+        fprintf(logFile, "Started Job 2 at: %02d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank);
+        double start_time_processes = MPI_Wtime();
+
         for (; i < endIndex; ++i)
         {
             for (ll y = 0; y <= numSpacePointY; ++y)
@@ -373,21 +414,31 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
             }
             fprintf(fptr1, "\n\n");
         }
+
+        double end_time_processes = MPI_Wtime();
+        fprintf(logFile, "Finished Job 2 at: %02d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank, end_time_processes - start_time_processes);
+
     }
 
     fclose(fptr1);
-    
+
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_rank == 0)
     {
         end_time = MPI_Wtime();
         printf("The time taken in MPI_2d With I/O is: %f\n", end_time - start_time);
+        tim = time(NULL);
+        tm = *localtime(&tim);
+        fprintf(logFile, "Finished Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        fprintf(logFile, "The time taken in MPI_2d With I/O is: %f\n", end_time - start_time);
+        fclose(logFile);
     }
     // MPI_Finalize();
     MPI_Finalized(&finalized);
     if (!finalized)
         MPI_Finalize();
-            
+
+    
     return 0;
  }
 
