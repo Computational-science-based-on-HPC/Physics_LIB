@@ -21,7 +21,7 @@
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
- * @param gravity
+ * @param gravity gravity of the system
  * @param k stiffness of the spring
  * @param Ao initial acceleration
  * @param Vo initial velocity
@@ -29,7 +29,7 @@
  * @param time_limit the time when the simulation will stop
  * @param step_size how much the simulation will skip per iteration
  * @param damping_coefficent damping factor affecting on the system
- * @param number_of_files currently nulled
+ * @param number_of_files will be removed in next update
  * @return
  *
  * @line
@@ -60,7 +60,7 @@ damped_os_serial(double max_amplitude, double length, double mass, double gravit
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
- * @param gravity
+ * @param gravity gravity of the system
  * @param k stiffness of the spring
  * @param Ao initial acceleration
  * @param Vo initial velocity
@@ -68,7 +68,7 @@ damped_os_serial(double max_amplitude, double length, double mass, double gravit
  * @param time_limit the time when the simulation will stop
  * @param step_size how much the simulation will skip per iteration
  * @param damping_coefficent damping factor affecting on the system
- * @param number_of_files
+ * @param number_of_files will be removed in next update
  * @return
  * @line
  *
@@ -98,7 +98,7 @@ damped_os_parallel_v1(double max_amplitude, double length, double mass, double g
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
- * @param gravity
+ * @param gravity gravity of the system
  * @param k stiffness of the spring
  * @param Ao initial acceleration
  * @param Vo initial velocity
@@ -106,7 +106,7 @@ damped_os_parallel_v1(double max_amplitude, double length, double mass, double g
  * @param time_limit the time when the simulation will stop
  * @param step_size how much the simulation will skip per iteration
  * @param damping_coefficent damping factor affecting on the system
- * @param number_of_files currently nulled
+ * @param number_of_files will be removed in next update
  * @return
  * @line
  *
@@ -136,7 +136,7 @@ damped_os_parallel_v2(double max_amplitude, double length, double mass, double g
  * @param r rest length of spring
  * @param length max length of spring
  * @param mass mass of bob suspended in spring
- * @param gravity
+ * @param gravity gravity of the system
  * @param k stiffness of spring
  * @param Ao initial acceleration
  * @param Xo initial point on X-axis where simulation starts
@@ -145,7 +145,7 @@ damped_os_parallel_v2(double max_amplitude, double length, double mass, double g
  * @param time_limit the time when the simulation will stop
  * @param step_size how much the simulation will skip per iteration
  * @param damping_coefficent damping factor affecting on the system
- * @param number_of_files
+ * @param number_of_files will be removed in next update
  * @return
  * @line
  *
@@ -174,7 +174,7 @@ elastic_pendulum(double r, double length, double mass, double gravity, double k,
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
- * @param gravity
+ * @param gravity gravity of the system
  * @param k stiffness of the spring
  * @param Ao initial acceleration
  * @param Vo initial velocity
@@ -182,7 +182,7 @@ elastic_pendulum(double r, double length, double mass, double gravity, double k,
  * @param time_limit the time when the simulation will stop
  * @param step_size how much the simulation will skip per iteration
  * @param damping_coefficent damping factor affecting on the system
- * @param number_of_files currently nulled
+ * @param number_of_files will be removed in next update
  * @return
  * @line
  *
@@ -212,7 +212,7 @@ damped_os_parallel_execution_time_v1(double max_amplitude, double length, double
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
- * @param gravity
+ * @param gravity gravity of the system
  * @param k stiffness of the spring
  * @param Ao initial acceleration
  * @param Vo initial velocity
@@ -220,7 +220,7 @@ damped_os_parallel_execution_time_v1(double max_amplitude, double length, double
  * @param time_limit the time when the simulation will stop
  * @param step_size how much the simulation will skip per iteration
  * @param damping_coefficent damping factor affecting on the system
- * @param number_of_files currently nulled
+ * @param number_of_files will be removed in next update
  * @return
  * @line
  *
@@ -252,7 +252,7 @@ damped_os_parallel_execution_time_v2(double max_amplitude, double length, double
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
- * @param gravity
+ * @param gravity gravity of the system
  * @param k stiffness of the spring
  * @param Ao initial acceleration
  * @param Vo initial velocity
@@ -260,7 +260,7 @@ damped_os_parallel_execution_time_v2(double max_amplitude, double length, double
  * @param time_limit the time when the simulation will stop
  * @param step_size how much the simulation will skip per iteration
  * @param damping_coefficent damping factor affecting on the system
- * @param number_of_files currently nulled
+ * @param number_of_files will be removed in next update
  * @param num_of_threads number of threads needed to execute the code
  * @return
  * @line
@@ -292,7 +292,7 @@ damped_os_parallel_execution_time_v3(double max_amplitude, double length, double
  * @param max_amplitude starting position of the mass where the simulation will start
  * @param length the maximum length of the spring (uncompressed spring)
  * @param mass mass of bob
- * @param gravity
+ * @param gravity gravity of the system
  * @param k stiffness of the spring
  * @param Ao initial acceleration
  * @param Vo initial velocity
@@ -300,7 +300,7 @@ damped_os_parallel_execution_time_v3(double max_amplitude, double length, double
  * @param time_limit the time when the simulation will stop
  * @param step_size how much the simulation will skip per iteration
  * @param damping_coefficent damping factor affecting on the system
- * @param number_of_files currently nulled
+ * @param number_of_files will be removed in next update
  * @return
  * @line
  *
@@ -330,7 +330,7 @@ damped_os_serial_execution(double max_amplitude, double length, double mass, dou
  * @param r rest length of spring
  * @param length max length of spring
  * @param mass mass of bob suspended in spring
- * @param gravity
+ * @param gravity gravity of the system
  * @param k stiffness of spring
  * @param Ao initial acceleration
  * @param Xo initial point on X-axis where simulation starts
@@ -339,7 +339,7 @@ damped_os_serial_execution(double max_amplitude, double length, double mass, dou
  * @param time_limit the time when the simulation will stop
  * @param step_size how much the simulation will skip per iteration
  * @param damping_coefficent damping factor affecting on the system
- * @param number_of_files
+ * @param number_of_files will be removed in next update
  * @return
  * @line
  *
@@ -430,10 +430,11 @@ heat_equation_execution_time_2D_serial(double time_step, double time_limit,
 /**
  * @brief finalize the MPI and de-allocate the resources.
  * @warning This function must be called after using any collection of MPI based functions
+ *
  * @line
  *
  * Example:
- *  @code{.c}
+ * @code{.c}
  * #include "physics.h"
  *
  * int main(void) {
