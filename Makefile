@@ -41,7 +41,7 @@ install: $(TARGET)
 	cp $(INCLUDE_DIR)/*.h /usr/local/include
 
 clean:
-	rm -f $(OBJ_DIR)*.o $(TARGET)
+	rm -f $(OBJ_DIR)/*.o $(TARGET)
 
 .PHONY: all clean install
 
