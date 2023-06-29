@@ -654,6 +654,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     }
 
     end_time = MPI_Wtime();
+    // send execution times to rank 0 to get maximum
     tim = time(NULL);
     tm = *localtime(&tim);
     printf("\nEnded Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank, end_time - start_time);

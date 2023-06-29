@@ -1,27 +1,27 @@
-Started Simulation of Damped Oscillation Implementation Using OpenMP at 2023-06-27 19:10:03 with Parametes:
+Started Simulation of Damped Oscillation Serial Implementation at 2023-06-28 13:28:11 with Parameters:
 Amplitude: 10.000000
 Spring Length: 14.000000
 Mass: 1.000000
 Gravity: 1.800000
-Stifeness: 1.000000
-Initial Acceleration: -1.000000
-Initial Velocity: 0.000000
-FI Const: -0.100000
-Time Limit: 128.000000
-Step Size(dt): 0.010000
-Damping coefficient: 0.100000
-Number of Threads: 4
+Stiffness: 1.000000
+Initial_Acceleration: -1.000000
+Initial_Velocity: 0.000000
+FI_Const: -0.100000
+Time_Limit: 268435456.000000
+Step_Size(dt): 0.010000
+Damping_coefficient: 0.100000
 ================================================================================
+
 Memory ===========================================================================
 
 
-uptime: 39920
+uptime: 105808
 totalram: 6186020864 in bytes / 6041036 in KB / 5899 in MB / 5 in GB
-freeram: 4158902272 in bytes / 4061428 in KB / 3966 in MB / 3 in GB
-sharedram: 3227648 in bytes / 3152 in KB / 3 in MB / 0 in GB
-bufferram: 47644672 in bytes / 46528 in KB / 45 in MB / 0 in GB
+freeram: 4137738240 in bytes / 4040760 in KB / 3946 in MB / 3 in GB
+sharedram: 3264512 in bytes / 3188 in KB / 3 in MB / 0 in GB
+bufferram: 54964224 in bytes / 53676 in KB / 52 in MB / 0 in GB
 freeswap: 1024454656 in bytes / 1000444 in KB / 976 in MB / 0 in GB
-current running processes: 441
+current running processes: 438
 
 
 ================================================================================
@@ -34,7 +34,7 @@ model           : 42
 model name      : Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
 stepping        : 7
 microcode       : 0x1b
-cpu MHz         : 1596.838
+cpu MHz         : 2088.650
 cache size      : 3072 KB
 physical id     : 0
 siblings        : 4
@@ -48,7 +48,7 @@ cpuid level     : 13
 wp              : yes
 flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ht tm pbe syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm pcid sse4_1 sse4_2 popcnt tsc_deadline_timer xsave avx lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid xsaveopt dtherm arat pln pts
 vmx flags       : vnmi preemption_timer invvpid ept_x_only flexpriority tsc_offset vtpr mtf vapic ept vpid unrestricted_guest
-bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit mmio_unknown
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds  swapgs itlb_multihit mmio_unknown
 bogomips        : 6187.34
 clflush size    : 64
 cache_alignment : 64
@@ -62,7 +62,7 @@ model           : 42
 model name      : Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
 stepping        : 7
 microcode       : 0x1b
-cpu MHz         : 1596.629
+cpu MHz         : 3093.044
 cache size      : 3072 KB
 physical id     : 0
 siblings        : 4
@@ -90,7 +90,7 @@ model           : 42
 model name      : Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
 stepping        : 7
 microcode       : 0x1b
-cpu MHz         : 1596.395
+cpu MHz         : 1706.397
 cache size      : 3072 KB
 physical id     : 0
 siblings        : 4
@@ -118,7 +118,7 @@ model           : 42
 model name      : Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
 stepping        : 7
 microcode       : 0x1b
-cpu MHz         : 1599.680
+cpu MHz         : 3097.303
 cache size      : 3072 KB
 physical id     : 0
 siblings        : 4
@@ -144,9 +144,6 @@ power management:
 =================================================================================
 
 
-Started Calculation at: 2023-06-27 19:10:03.
+Started Calculation at: 2023-06-28 13:28:11.
 
-Ended Calculation at: 2023-06-27 19:10:03 Execution Time: 0.001057 sec.
-
-
-Ended Simulation of Damped Oscillation Implementation Using OpenMP at 2023-06-27 19:10:03
+Ended Job Caclulation at: 2023-06-28 14:29:35 Execution Time: 3684.491335 sec.

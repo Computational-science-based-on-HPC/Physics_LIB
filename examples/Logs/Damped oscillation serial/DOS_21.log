@@ -1,25 +1,25 @@
-Started Simulation of Damped Oscillation Implementation Using OpenMP at 2023-06-27 19:10:03 with Parametes:
+Started Simulation of Damped Oscillation Serial Implementation at 2023-06-28 12:35:31 with Parameters:
 Amplitude: 10.000000
 Spring Length: 14.000000
 Mass: 1.000000
 Gravity: 1.800000
-Stifeness: 1.000000
-Initial Acceleration: -1.000000
-Initial Velocity: 0.000000
-FI Const: -0.100000
-Time Limit: 128.000000
-Step Size(dt): 0.010000
-Damping coefficient: 0.100000
-Number of Threads: 4
+Stiffness: 1.000000
+Initial_Acceleration: -1.000000
+Initial_Velocity: 0.000000
+FI_Const: -0.100000
+Time_Limit: 2097152.000000
+Step_Size(dt): 0.010000
+Damping_coefficient: 0.100000
 ================================================================================
+
 Memory ===========================================================================
 
 
-uptime: 39920
+uptime: 102648
 totalram: 6186020864 in bytes / 6041036 in KB / 5899 in MB / 5 in GB
-freeram: 4158902272 in bytes / 4061428 in KB / 3966 in MB / 3 in GB
-sharedram: 3227648 in bytes / 3152 in KB / 3 in MB / 0 in GB
-bufferram: 47644672 in bytes / 46528 in KB / 45 in MB / 0 in GB
+freeram: 4139585536 in bytes / 4042564 in KB / 3947 in MB / 3 in GB
+sharedram: 3264512 in bytes / 3188 in KB / 3 in MB / 0 in GB
+bufferram: 54636544 in bytes / 53356 in KB / 52 in MB / 0 in GB
 freeswap: 1024454656 in bytes / 1000444 in KB / 976 in MB / 0 in GB
 current running processes: 441
 
@@ -34,7 +34,7 @@ model           : 42
 model name      : Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
 stepping        : 7
 microcode       : 0x1b
-cpu MHz         : 1596.838
+cpu MHz         : 2291.131
 cache size      : 3072 KB
 physical id     : 0
 siblings        : 4
@@ -62,7 +62,7 @@ model           : 42
 model name      : Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
 stepping        : 7
 microcode       : 0x1b
-cpu MHz         : 1596.629
+cpu MHz         : 1958.764
 cache size      : 3072 KB
 physical id     : 0
 siblings        : 4
@@ -90,7 +90,7 @@ model           : 42
 model name      : Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
 stepping        : 7
 microcode       : 0x1b
-cpu MHz         : 1596.395
+cpu MHz         : 2156.799
 cache size      : 3072 KB
 physical id     : 0
 siblings        : 4
@@ -118,7 +118,7 @@ model           : 42
 model name      : Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
 stepping        : 7
 microcode       : 0x1b
-cpu MHz         : 1599.680
+cpu MHz         : 2181.148
 cache size      : 3072 KB
 physical id     : 0
 siblings        : 4
@@ -144,9 +144,6 @@ power management:
 =================================================================================
 
 
-Started Calculation at: 2023-06-27 19:10:03.
+Started Calculation at: 2023-06-28 12:35:31.
 
-Ended Calculation at: 2023-06-27 19:10:03 Execution Time: 0.001057 sec.
-
-
-Ended Simulation of Damped Oscillation Implementation Using OpenMP at 2023-06-27 19:10:03
+Ended Job Caclulation at: 2023-06-28 12:35:44 Execution Time: 13.118180 sec.
