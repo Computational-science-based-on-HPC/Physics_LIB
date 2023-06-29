@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <sys/sysinfo.h>
 
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <string.h>
+
 #define ll long long
 
 ll _cal_num_time(double time_step, double time_limit){
