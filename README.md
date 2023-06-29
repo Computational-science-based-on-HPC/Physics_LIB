@@ -25,7 +25,7 @@ Physics LIB<a name="TOP"></a>
 ## Installation ## 
  ```  
 make
-make install
+sudo make install
 make clean
 ```
 To include in environment path:
