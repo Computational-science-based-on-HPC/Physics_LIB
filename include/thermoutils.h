@@ -1,6 +1,7 @@
 #ifndef PHYSICS_THERMOUTILS_H
 #define PHYSICS_THERMOUTILS_H
 #define ll long long
+#include <stdio.h>
 
 extern ll
 _cal_num_time(double time_step, double time_limit);

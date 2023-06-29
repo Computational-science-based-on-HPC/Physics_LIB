@@ -12,7 +12,9 @@
         "string.h": "c",
         "time.h": "c",
         "omp.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "unistd.h": "c",
+        "fcntl.h": "c"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc"
 }

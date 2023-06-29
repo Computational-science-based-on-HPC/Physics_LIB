@@ -208,11 +208,27 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
                                  double Vo, double FI,
                                  double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
+    FILE *file;
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
+    char _file_name[255];
+    sprintf(_file_name, "Logs/Damped oscillation serial/DOS_%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    file = fopen(_file_name, "w"); // Open the file in write mode
+    if (file != NULL)
+    {
+        freopen(_file_name, "w", stdout);
+    }
     printf("Started Simulation of Damped Oscillation Serial Implementation at %d-%02d-%02d %02d:%02d:%02d with Parameters:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStiffness: %f \nInitial_Acceleration: %f \nInitial_Velocity: %f \nFI_Const: %f \nTime_Limit: %f \nStep_Size(dt): %f \nDamping_coefficient: %f\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent);
+    printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep_Size(dt): %f \nDamping coefficient: %f\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent);
+    puts("\n================================================================================");
+    printf("Memory ===========================================================================\n");
     puts("================================================================================");
+    printmemstream();
+    printf("\n================================================================================\nCPUs ===========================================================================\n");
+    puts("================================================================================\n\n");
+    cpu_inf_stream();
+    printf("\n================================================================================\nExecution Times===========================================================================\n");
+    puts("================================================================================\n\n");
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
@@ -225,12 +241,6 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
         max_amplitude = length;
         puts("\n\nMax Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
-    printf("\nMemory ===========================================================================\n");
-    printmem();
-    printf("\n================================================================================\nCPUs ===========================================================================\n\n");
-    cpu_inf();
-    printf("\n=================================================================================\n\n");
-
     double Wo = sqrt(k / mass);
     double W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
     double RESULTS[3];
@@ -243,16 +253,6 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
     clock_t start_time = clock();
     for (double t = 0; t <= time_limit + 0.05; t += step_size)
     {
-//        if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
-//        {
-//            puts("\n\nSimulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
-//            return -1;
-//        }
-//        else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
-//        {
-//            puts("\n\nSimulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
-//            return -2;
-//        }
         CALCULATIONS[0] = cos(W * t + FI);
         CALCULATIONS[1] = sin(W * t + FI);
         CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
@@ -265,6 +265,8 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
     tm = *localtime(&tim);
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, execution_time);
+    puts("\n================================================================================\n");
+    printf("Ended Simulation of Damped Oscillation Implementation at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     return execution_time;
 }
 /**
@@ -296,9 +298,25 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
 {
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
+    FILE *file;
+    char _file_name[255];
+    sprintf(_file_name, "Logs/Elastic Pendulum/EP_%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    file = fopen(_file_name, "w"); // Open the file in write mode
+    if (file != NULL)
+    {
+        freopen(_file_name, "w", stdout);
+    }
     printf("Started Simulation of Elastic Pendulum Oscillation Serial Implementation at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     printf("Rest Length: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nInitial Y: %f\nInitial X: %f\nTime Limit: %f \nStep_Size(dt): %f \nDamping_coefficient: %f\n", r, length, mass, gravity, k, Ao, Vo, Yo, Xo, time_limit, step_size, damping_coefficent);
+    puts("\n================================================================================");
+    printf("Memory ===========================================================================\n");
     puts("================================================================================");
+    printmemstream();
+    printf("\n================================================================================\nCPUs ===========================================================================\n");
+    puts("================================================================================\n\n");
+    cpu_inf_stream();
+    printf("\n================================================================================\nExecution Times===========================================================================\n");
+    puts("================================================================================\n\n");
     int validation = _valid_osc(Xo, Yo, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
@@ -311,12 +329,6 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
         Xo = sqrt(length * length - Yo * Yo);
         puts("\n\nMax Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
-    printf("Memory ===========================================================================\n");
-    printmem();
-    printf("\n================================================================================\nCPUs ===========================================================================\n\n");
-    cpu_inf();
-    printf("\n=================================================================================\n\n");
-
     double t = 0;
     double x1 = Xo; // init position of mass in x
     double y = Yo;  // init position of mass in y
@@ -363,5 +375,7 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
     tm = *localtime(&tim);
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, execution_time);
+    puts("\n================================================================================\n");
+    printf("Ended Simulation of Elastic Pendulum Implementation at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     return execution_time;
 }

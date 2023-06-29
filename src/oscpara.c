@@ -237,18 +237,33 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     int _it_number_all;
     double t;
     time_t tim = time(NULL);
+    time_t proc_tim = time(NULL);
     double start_time, end_time;
     struct tm tm = *localtime(&tim);
-    // char file_name[255];
-    // sprintf(file_name, "DOP1%d-%02d-%02d %02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    FILE *file;
     int ret = 0;
     if (world_rank == 0)
     {
+        char _file_name[255];
+        sprintf(_file_name, "Logs/Damped oscillation mpi 1/DOP1_%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        file = fopen(_file_name, "w"); // Open the file in write mode
+        if (file != NULL)
+        {
+            freopen(_file_name, "w", stdout);
+        }
         tim = time(NULL);
         tm = *localtime(&tim);
         printf("Started Simulation of Damped Oscillation Implementation Using MPI and OpenMP at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial_Acceleration: %f \nInitial_Velocity: %f \nFI_Const: %f \nTime_Limit: %f \nStep_Size(dt): %f \nDamping_coefficient: %f\nNumber of Processes: %d\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent, world_size);
+        printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep_Size(dt): %f \nDamping coefficient: %f\nNumper of Processes: %d\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent, world_size);
+        puts("\n================================================================================");
+        printf("Memory ===========================================================================\n");
         puts("================================================================================");
+        printmemstream();
+        printf("\n================================================================================\nCPUs ===========================================================================\n");
+        puts("================================================================================\n\n");
+        cpu_inf_stream();
+        printf("\n================================================================================\nExecution Times===========================================================================\n");
+        puts("================================================================================\n\n");
         int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent, number_of_files, 0);
         if (validation == 0)
         {
@@ -260,12 +275,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
             max_amplitude = length;
             puts("\n\nMax Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
         }
-        printf("Memory ===========================================================================\n");
-        printmem();
-        printf("\n================================================================================\nCPUs ===========================================================================\n\n");
-        cpu_inf();
-        printf("\n=================================================================================\n\n");
-
+        tim = time(NULL);
         tm = *localtime(&tim);
         start_time = MPI_Wtime();
         printf("Started Job 1 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank);
@@ -275,9 +285,9 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
         RESULTS[0] = max_amplitude;
         RESULTS[1] = Vo;
         RESULTS[2] = Ao + gravity;
+
         _it_number_all = _round(time_limit / step_size);
         int _sent_it_number = 0;
-
         if (world_size > 1)
         {
             _it_number_proc = (_it_number_all / (world_size - 1)) + 1;
@@ -301,60 +311,84 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     {
         MPI_Recv(&_it_number, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
     }
-
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&coefficient_calc, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&ret, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
     if (ret != 0)
     {
         return ret;
     }
-    omp_set_dynamic(0); // Explicitly disable dynamic teams
-    omp_set_num_threads(3);
-    tim = time(NULL);
-    tm = *localtime(&tim);
-    printf("\nStarted Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank);
-    start_time = MPI_Wtime();
-    for (int it = 0; it < _it_number; ++it)
-    {
-        t = step_size * (((double)it) + (world_rank * _it_number));
-#pragma omp parallel sections
-        {
-#pragma omp section
-            CALCULATIONS[0] = cos(W * t + FI);
-
-#pragma omp section
-            CALCULATIONS[1] = sin(W * t + FI);
-
-#pragma omp section
-            CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
-        }
-
-#pragma omp parallel sections
-        {
-#pragma omp section
-            RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
-
-#pragma omp section
-            RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
-
-#pragma omp section
-            RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
-        }
-    }
-    end_time = MPI_Wtime();
-    tim = time(NULL);
-    tm = *localtime(&tim);
-    printf("\nEnded Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank, end_time - start_time);
-
-    MPI_Barrier(MPI_COMM_WORLD);
     if (world_rank == 0)
     {
         tim = time(NULL);
+        proc_tim = time(NULL);
         tm = *localtime(&tim);
-        printf("\n\nEnded Simulation of Damped Oscillation Implementation Using MPI and OpenMP at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        for (int i = 0; i < world_size; ++i)
+        {
+            if (i > 0 || (i == 0 && _it_number > 0))
+                printf("\nStarted Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, i);
+        }
     }
+    if (world_rank > 0 || (world_rank == 0 && _it_number > 0))
+    {
+        omp_set_num_threads(NUM_THREADS);
+        start_time = MPI_Wtime();
+        for (int it = 0; it < _it_number; ++it)
+        {
+            t = step_size * (((double)it) + (world_rank * _it_number));
+#pragma omp parallel sections
+            {
+#pragma omp section
+                CALCULATIONS[0] = cos(W * t + FI);
+
+#pragma omp section
+                CALCULATIONS[1] = sin(W * t + FI);
+
+#pragma omp section
+                CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
+            }
+
+#pragma omp parallel sections
+            {
+#pragma omp section
+                RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
+
+#pragma omp section
+                RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
+
+#pragma omp section
+                RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
+            }
+        }
+        end_time = MPI_Wtime();
+        double execution = end_time - start_time;
+        MPI_Send(&execution, 1, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
+    }
+    if (world_rank == 0)
+    {
+        if (_it_number > 0)
+        {
+            tim = time(NULL);
+            tm = *localtime(&tim);
+            printf("\nEnded Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank, end_time - start_time);
+        }
+        double execution_recv;
+        for (int i = 1; i < world_size; i++)
+        {
+            MPI_Recv(&execution_recv, 1, MPI_DOUBLE, i, 2, MPI_COMM_WORLD, &status);
+            time_t proc_tim_add = proc_tim + execution_recv;
+            struct tm updatedTmStruct = *localtime(&proc_tim_add);
+            printf("\nEnded Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", updatedTmStruct.tm_year + 1900, updatedTmStruct.tm_mon + 1, updatedTmStruct.tm_mday, updatedTmStruct.tm_hour, updatedTmStruct.tm_min, updatedTmStruct.tm_sec, processor_name, i, execution_recv);
+        }
+        tim = time(NULL);
+        tm = *localtime(&tim);
+        puts("\n================================================================================\n");
+        printf("Ended Simulation of Damped Oscillation Implementation Using MPI at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        fclose(file);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
     return 0;
 }
 /**
@@ -566,18 +600,30 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     int name_len;
     MPI_Get_processor_name(processor_name, &name_len);
     time_t tim = time(NULL);
+    time_t proc_tim = time(NULL);
     double start_time, end_time;
     struct tm tm = *localtime(&tim);
+    FILE *file;
     if (world_rank == 0)
     {
+        char _file_name[255];
+        sprintf(_file_name, "Logs/Damped oscillation mpi 2/DOP2_%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        file = fopen(_file_name, "w"); // Open the file in write mode
+        if (file != NULL)
+        {
+            freopen(_file_name, "w", stdout);
+        }
         printf("Started Simulation of Damped Oscillation Implementation Using MPI at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep_Size(dt): %f \nDamping coefficient: %f\nNumper of Processes", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent, world_size);
-        puts("================================================================================");
+        printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep_Size(dt): %f \nDamping coefficient: %f\nNumper of Processes: %d\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent, world_size);
+        puts("\n================================================================================");
         printf("Memory ===========================================================================\n");
-        printmem();
-        printf("\n================================================================================\nCPUs ===========================================================================\n\n");
-        cpu_inf();
-        printf("\n=================================================================================\n\n");
+        puts("================================================================================");
+        printmemstream();
+        printf("\n================================================================================\nCPUs ===========================================================================\n");
+        puts("================================================================================\n\n");
+        cpu_inf_stream();
+        printf("\n================================================================================\nExecution Times===========================================================================\n");
+        puts("================================================================================\n\n");
         int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                     number_of_files, 0);
         if (validation == 0)
@@ -598,7 +644,6 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
         double Wo = sqrt(k / mass);
         W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
         coefficient_calc = -damping_coefficent / (2 * mass);
-        number_of_files = _min_int(number_of_files, 3);
         RESULTS[0] = max_amplitude;
         RESULTS[1] = Vo;
         RESULTS[2] = Ao + gravity;
@@ -637,34 +682,57 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     {
         return ret;
     }
-    tim = time(NULL);
-    tm = *localtime(&tim);
-    printf("\nStarted Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank);
-    start_time = MPI_Wtime();
-
-    for (int it = 0; it < _it_number; ++it)
-    {
-        t = step_size * (((double)it) + (world_rank * _it_number));
-        CALCULATIONS[0] = cos(W * t + FI);
-        CALCULATIONS[1] = sin(W * t + FI);
-        CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
-        RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
-        RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
-        RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
-    }
-
-    end_time = MPI_Wtime();
-    // send execution times to rank 0 to get maximum
-    tim = time(NULL);
-    tm = *localtime(&tim);
-    printf("\nEnded Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank, end_time - start_time);
-    MPI_Barrier(MPI_COMM_WORLD);
     if (world_rank == 0)
     {
         tim = time(NULL);
+        proc_tim = time(NULL);
         tm = *localtime(&tim);
-        printf("\n\nEnded Simulation of Damped Oscillation Implementation Using MPI at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        for (int i = 0; i < world_size; ++i)
+        {
+            if (i > 0 || (i == 0 && _it_number > 0))
+                printf("\nStarted Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, i);
+        }
     }
+    if (world_rank > 0 || (world_rank == 0 && _it_number > 0))
+    {
+        start_time = MPI_Wtime();
+        for (int it = 0; it < _it_number; ++it)
+        {
+            t = step_size * (((double)it) + (world_rank * _it_number));
+            CALCULATIONS[0] = cos(W * t + FI);
+            CALCULATIONS[1] = sin(W * t + FI);
+            CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
+            RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
+            RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
+            RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
+        }
+        end_time = MPI_Wtime();
+        double execution = end_time - start_time;
+        MPI_Send(&execution, 1, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
+    }
+    if (world_rank == 0)
+    {
+        if (_it_number > 0)
+        {
+            tim = time(NULL);
+            tm = *localtime(&tim);
+            printf("\nEnded Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, world_rank, end_time - start_time);
+        }
+        double execution_recv;
+        for (int i = 1; i < world_size; i++)
+        {
+            MPI_Recv(&execution_recv, 1, MPI_DOUBLE, i, 2, MPI_COMM_WORLD, &status);
+            time_t proc_tim_add = proc_tim + execution_recv;
+            struct tm updatedTmStruct = *localtime(&proc_tim_add);
+            printf("\nEnded Job 2 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", updatedTmStruct.tm_year + 1900, updatedTmStruct.tm_mon + 1, updatedTmStruct.tm_mday, updatedTmStruct.tm_hour, updatedTmStruct.tm_min, updatedTmStruct.tm_sec, processor_name, i, execution_recv);
+        }
+        tim = time(NULL);
+        tm = *localtime(&tim);
+        puts("\n================================================================================\n");
+        printf("Ended Simulation of Damped Oscillation Implementation Using MPI at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        fclose(file);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
     return end_time - start_time;
 }
 /**
@@ -694,16 +762,28 @@ _execution_time_damped_os_parallel_omp(double max_amplitude, double length, doub
                                        double time_limit, double step_size, double damping_coefficent,
                                        int number_of_files, int number_of_threads)
 {
+    FILE *file;
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
+    char _file_name[255];
+    sprintf(_file_name, "Logs/Damped oscillation omp/DOP3_%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    file = fopen(_file_name, "w"); // Open the file in write mode
+    if (file != NULL)
+    {
+        freopen(_file_name, "w", stdout);
+    }
     printf("Started Simulation of Damped Oscillation Implementation Using OpenMP at %d-%02d-%02d %02d:%02d:%02d with Parametes:\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep Size(dt): %f \nDamping coefficient: %f\nNumber of Threads: %d\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent, number_of_threads);
-    puts("================================================================================");
+    printf("Amplitude: %f \nSpring Length: %f \nMass: %f \nGravity: %f \nStifeness: %f \nInitial Acceleration: %f \nInitial Velocity: %f \nFI Const: %f \nTime Limit: %f \nStep_Size(dt): %f \nDamping coefficient: %f\nNumper of Threads: %d\n", max_amplitude, length, mass, gravity, k, Ao, Vo, FI, time_limit, step_size, damping_coefficent, number_of_threads);
+    puts("\n================================================================================");
     printf("Memory ===========================================================================\n");
-    printmem();
-    printf("\n================================================================================\nCPUs ===========================================================================\n\n");
-    cpu_inf();
-    printf("\n=================================================================================\n\n");
+    puts("================================================================================");
+    printmemstream();
+    printf("\n================================================================================\nCPUs ===========================================================================\n");
+    puts("================================================================================\n\n");
+    cpu_inf_stream();
+    printf("\n================================================================================\nExecution Times===========================================================================\n");
+    puts("================================================================================\n\n");
+
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
@@ -744,6 +824,7 @@ _execution_time_damped_os_parallel_omp(double max_amplitude, double length, doub
     printf("\nEnded Calculation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, end_time - start_time);
     tim = time(NULL);
     tm = *localtime(&tim);
-    printf("\n\nEnded Simulation of Damped Oscillation Implementation Using OpenMP at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    puts("\n================================================================================\n");
+    printf("Ended Simulation of Damped Oscillation Implementation Using MPI at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     return end_time - start_time;
 }

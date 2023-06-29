@@ -16,21 +16,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int cpu_inf()
+int cpu_inf_stream()
 {
-   FILE *cpuinfo = fopen("/proc/cpuinfo", "rb");
-   char *arg = 0;
-   size_t size = 0;
-   while(getdelim(&arg, &size, 0, cpuinfo) != -1)
-   {
-      puts(arg);
-   }
-   free(arg);
-   fclose(cpuinfo);
-   return 0;
+    FILE *cpuinfo = fopen("/proc/cpuinfo", "rb");
+    char *arg = 0;
+    size_t size = 0;
+    while (getdelim(&arg, &size, 0, cpuinfo) != -1)
+    {
+        puts(arg);
+    }
+    free(arg);
+    fclose(cpuinfo);
+    return 0;
 }
-int 
-_valid_osc(double x, double y, double length, double mass, double gravity, double k, double time_limit,
+int _valid_osc(double x, double y, double length, double mass, double gravity, double k, double time_limit,
                double step_size,
                double damping_coefficent, int number_of_files, double Fo)
 {
@@ -46,14 +45,12 @@ _valid_osc(double x, double y, double length, double mass, double gravity, doubl
     return 1;
 }
 
-int 
-_min_int(int x, int y)
+int _min_int(int x, int y)
 {
     return x > y ? y : x;
 }
 
-int 
-_round(double x)
+int _round(double x)
 {
     return (int)(x + 0.5);
 }
@@ -89,23 +86,24 @@ _f2(double x, double y, double dy, double tx, double ty, double k, double m, dou
     }
 }
 
-
-void printmemsize(char *str, unsigned long ramsize) {
-        printf("%s: %ld in bytes / %ld in KB / %ld in MB / %ld in GB\n",str, ramsize, ramsize/1024, (ramsize/1024)/1024, ((ramsize/1024)/1024)/1024);
+void printmemsizestream(char *str, unsigned long ramsize)
+{
+    printf("%s: %ld in bytes / %ld in KB / %ld in MB / %ld in GB\n", str, ramsize, ramsize / 1024, (ramsize / 1024) / 1024, ((ramsize / 1024) / 1024) / 1024);
 }
 
-int printmem() {
-        struct sysinfo info;
-        sysinfo(&info);
-        printf("\n\nuptime: %ld\n", info.uptime);
-        // print total ram size
-        printmemsize("totalram", info.totalram);
-        printmemsize("freeram", info.freeram);
-        printmemsize("sharedram", info.sharedram);
-        printmemsize("bufferram", info.bufferram);
-        printmemsize("freeswap", info.freeswap);
-        printf("current running processes: %d\n\n", info.procs);
-        return 0;
+int printmemstream()
+{
+    struct sysinfo info;
+    sysinfo(&info);
+    printf("\n\nuptime: %ld\n", info.uptime);
+    // print total ram size
+    printmemsizestream("totalram", info.totalram);
+    printmemsizestream("freeram", info.freeram);
+    printmemsizestream("sharedram", info.sharedram);
+    printmemsizestream("bufferram", info.bufferram);
+    printmemsizestream("freeswap", info.freeswap);
+    printf("current running processes: %d\n\n", info.procs);
+    return 0;
 }
 // int
 // _number_of_files(char *mainDirectoryPath)
@@ -144,7 +142,7 @@ int printmem() {
 //     closedir(mainDirectory);
 //     return subdirectoryCount;
 // }
-// int 
+// int
 // _number_of_files(char *mainDirectoryPath)
 // {
 //     int subdirectoryCount = 0;
@@ -163,7 +161,7 @@ int printmem() {
 //     closedir(mainDirectory);
 //     return subdirectoryCount;
 // }
-// int 
+// int
 // _directory_create(char *mainDirectoryPath)
 // {
 //     int subdirectoryCount = 0;

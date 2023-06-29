@@ -8,6 +8,7 @@
  */
 #ifndef PHYSICS_UTILS_H
 #define PHYSICS_UTILS_H
+
 /**
  * @brief Validate on input entered to oscillation.
  *
@@ -86,18 +87,18 @@ _f1(double x, double y, double dx, double tx, double ty, double k, double m, dou
  */
 double
 _f2(double x, double y, double dy, double tx, double ty, double k, double m, double b, double r, double g);
-void printmemsize(char *str, unsigned long ramsize);
+void printmemsizestream(char *str, unsigned long ramsize);
 /**
  * @brief this function prints memory details for the computer
  * 
  * @return int 
  */
-int printmem();
+int printmemstream();
 /**
  * @brief this function prints the cpu info for the computer
  * 
  * @return int 
  */
-int cpu_inf();
+int cpu_inf_stream();
 
 #endif // PHYSICS_UTILS_H

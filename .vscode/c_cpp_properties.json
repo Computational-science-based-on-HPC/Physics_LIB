@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/lib64/mpi/gcc/mpich/include"
+                "/usr/include/x86_64-linux-gnu/mpich"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

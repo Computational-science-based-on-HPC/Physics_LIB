@@ -13,7 +13,6 @@
 #include "omp.h"
 // #endif
 
-
 double _get_value_1D_mpi(double time_step, double space_step, double x, double t, int precision)
 {
     double sum = 0.0, exponential, spaceXTerm, coeff;
@@ -32,13 +31,13 @@ double _get_value_1D_mpi(double time_step, double space_step, double x, double t
     return sum;
 }
 
-
-double _get_value_1D_openmp(double time_step, double space_step, double x, double t, int precision){
+double _get_value_1D_openmp(double time_step, double space_step, double x, double t, int precision)
+{
     double sum = 0.0, exponential, spaceXTerm, coeff;
     double x_real = x * space_step;
     double t_real = t * time_step;
 
-    #pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, t_real, precision) private(exponential, spaceXTerm, coeff)
+#pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, t_real, precision) private(exponential, spaceXTerm, coeff)
     for (int k = 0; k < precision; k++)
     {
         exponential = exp(-3 * pow(2 * (k + 1), 2) * (M_PI * M_PI * t_real) / 4);
@@ -51,73 +50,73 @@ double _get_value_1D_openmp(double time_step, double space_step, double x, doubl
     return sum;
 }
 
- double _get_value_2D_mpi(double time_step,
-                          double length, double space_step_x, double width, double space_step_y,
-                          int x, int y, int t,
-                          int precision){
-     double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
-     double x_real = x * space_step_x;
-     double y_real = y * space_step_y;
-     double t_real = t * time_step;
+double _get_value_2D_mpi(double time_step,
+                         double length, double space_step_x, double width, double space_step_y,
+                         int x, int y, int t,
+                         int precision)
+{
+    double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
+    double x_real = x * space_step_x;
+    double y_real = y * space_step_y;
+    double t_real = t * time_step;
 
-     for (ll m = 1; m < precision; ++m)
-     {
-         for (ll n = 1; n < precision; ++n)
-         {
-             exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
-             spaceXTerm = sin((double)m * M_PI * x_real / length);
-             spaceYTerm = sin((double)n * M_PI * y_real / width);
-             // Find Amn constant and multiply it with the sum
-             coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
-             sum += coeff * exponential * spaceXTerm * spaceYTerm;
-         }
-     }
+    for (ll m = 1; m < precision; ++m)
+    {
+        for (ll n = 1; n < precision; ++n)
+        {
+            exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
+            spaceXTerm = sin((double)m * M_PI * x_real / length);
+            spaceYTerm = sin((double)n * M_PI * y_real / width);
+            // Find Amn constant and multiply it with the sum
+            coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
+            sum += coeff * exponential * spaceXTerm * spaceYTerm;
+        }
+    }
 
-     sum *= 200 / (M_PI * M_PI);
-     return sum;
- }
+    sum *= 200 / (M_PI * M_PI);
+    return sum;
+}
 
+double _get_value_2D_openmp(double time_step,
+                            double length, double space_step_x, double width, double space_step_y,
+                            int x, int y, int t,
+                            int precision)
+{
+    double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
+    double x_real = x * space_step_x;
+    double y_real = y * space_step_y;
+    double t_real = t * time_step;
 
- double _get_value_2D_openmp(double time_step,
-                          double length, double space_step_x, double width, double space_step_y,
-                          int x, int y, int t,
-                          int precision){
-     double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
-     double x_real = x * space_step_x;
-     double y_real = y * space_step_y;
-     double t_real = t * time_step;
+#pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, y_real, t_real, precision) private(exponential, spaceXTerm, spaceYTerm, coeff)
+    for (ll m = 1; m < precision; ++m)
+    {
+#pragma omp parallel for schedule(static)
+        for (ll n = 1; n < precision; ++n)
+        {
+            exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
+            spaceXTerm = sin((double)m * M_PI * x_real / length);
+            spaceYTerm = sin((double)n * M_PI * y_real / width);
+            // Find Amn constant and multiply it with the sum
+            coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
+            sum += coeff * exponential * spaceXTerm * spaceYTerm;
+        }
+    }
+    sum *= 200 / (M_PI * M_PI);
+    return sum;
+}
 
-     #pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, y_real, t_real, precision) private(exponential, spaceXTerm, spaceYTerm, coeff)
-     for (ll m = 1; m < precision; ++m)
-     {
-         #pragma omp parallel for schedule(static)
-         for (ll n = 1; n < precision; ++n)
-         {
-             exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
-             spaceXTerm = sin((double)m * M_PI * x_real / length);
-             spaceYTerm = sin((double)n * M_PI * y_real / width);
-             // Find Amn constant and multiply it with the sum
-             coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
-             sum += coeff * exponential * spaceXTerm * spaceYTerm;
-         }
-     }
-     sum *= 200 / (M_PI * M_PI);
-     return sum;
- }
-
-
-
-int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double space_step, int precision){
+int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double space_step, int precision)
+{
     // MPI_Init(NULL, NULL);
     int initialized, finalized;
-    double length =10.0;
-     MPI_Initialized(&initialized);
+    double length = 10.0;
+    MPI_Initialized(&initialized);
     if (!initialized)
     {
         MPI_Init(NULL, NULL);
     }
     FILE *fptr1;
-    
+
     int my_rank;     // rank of process
     int processesNo; // number of process
     ll numTimePointPerProcess, numTimePointRemProcess, numTimePoint, numSpacePoint;
@@ -129,11 +128,11 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
     MPI_Barrier(MPI_COMM_WORLD);
 
-
-    if(my_rank == 0){
+    if (my_rank == 0)
+    {
         start_time = MPI_Wtime();
-        numTimePoint= _cal_num_time(time_step, time_limit);
-        numSpacePoint= _cal_num_space(length, space_step);
+        numTimePoint = _cal_num_time(time_step, time_limit);
+        numSpacePoint = _cal_num_space(length, space_step);
 
         numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
         numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
@@ -196,7 +195,7 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
         char _file_name[2076];
         time_t t = time(NULL);
         struct tm tm = *localtime(&t);
-        
+
         sprintf(_file_name, "simulate_heat_transfer_1D_MPI_%d_%d-%02d-%02d %02d:%02d:%02d.txt", my_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         fptr1 = fopen(_file_name, "w");
 
@@ -224,10 +223,10 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
     return 0;
 }
 
-
-int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, double space_step, int precision){
-    clock_t start_time=clock();
-    double length =10.0;
+int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, double space_step, int precision)
+{
+    clock_t start_time = clock();
+    double length = 10.0;
     FILE *fptr;
     char _file_name[2076];
     time_t t = time(NULL);
@@ -235,32 +234,33 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     sprintf(_file_name, "simulate_heat_transfer_1D_OPENMP_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     fptr = fopen(_file_name, "w");
 
-    ll numTimePoint= _cal_num_time(time_step, time_limit);
-    ll numSpacePoint= _cal_num_space(length, space_step);
+    ll numTimePoint = _cal_num_time(time_step, time_limit);
+    ll numSpacePoint = _cal_num_space(length, space_step);
 
-    for (int t = 0; t < numTimePoint; t++) {
-        for (int x = 0; x <= numSpacePoint; x++) {
+    for (int t = 0; t < numTimePoint; t++)
+    {
+        for (int x = 0; x <= numSpacePoint; x++)
+        {
             fprintf(fptr, "%f ", _get_value_1D_openmp(time_step, space_step, x, t, precision));
         }
         fprintf(fptr, "\n");
     }
 
     fclose(fptr);
-    clock_t end_time=clock();
-    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-    printf("The value of execution_time 1D_OPENMP_withFiles is: %f\n",execution_time);
+    clock_t end_time = clock();
+    double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("The value of execution_time 1D_OPENMP_withFiles is: %f\n", execution_time);
     return 0;
 }
 
-
- int
- _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
-                                double space_step_x,
-                                double space_step_y,
-                                int precision){
+int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
+                                   double space_step_x,
+                                   double space_step_y,
+                                   int precision)
+{
     // MPI_Init(NULL, NULL);
     int initialized, finalized;
-    double length =2.0, width =2.0;
+    double length = 2.0, width = 2.0;
     MPI_Initialized(&initialized);
     if (!initialized)
     {
@@ -283,7 +283,7 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     MPI_Get_processor_name(processor_name, &name_len);
 
     MPI_Barrier(MPI_COMM_WORLD);
-     
+
     ll numTimePoint, numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
     char _log_file_name[2076];
     time_t t = time(NULL);
@@ -291,7 +291,8 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     sprintf(_log_file_name, "simulate_heat_transfer_2D_MPI_%d_%d-%02d-%02d %02d:%02d:%02d.log", my_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     logFile = fopen(_log_file_name, "w");
 
-    if(my_rank == 0){
+    if (my_rank == 0)
+    {
         t = time(NULL);
         tm = *localtime(&t);
         fprintf(logFile, "Started Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
@@ -303,11 +304,11 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
         fprintf(logFile, "Precision: %d\n", precision);
         fprintf(logFile, "Length: %f\n", length);
         fprintf(logFile, "Width: %f\n", width);
-        
+
         start_time = MPI_Wtime();
-        numTimePoint= _cal_num_time(time_step, time_limit);
-        numSpacePointX= _cal_num_space(length, space_step_x);
-        numSpacePointY= _cal_num_space(width, space_step_y);
+        numTimePoint = _cal_num_time(time_step, time_limit);
+        numSpacePointX = _cal_num_space(length, space_step_x);
+        numSpacePointY = _cal_num_space(width, space_step_y);
 
         fprintf(logFile, "Number of time points: %lld\n", numTimePoint);
         fprintf(logFile, "Number of space points x: %lld\n", numSpacePointX);
@@ -318,17 +319,14 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
 
         fprintf(logFile, "Number of time points per process: %lld\n", numTimePointPerProcess);
         fprintf(logFile, "Number of time points for remaining process: %lld\n", numTimePointRemProcess);
-        fprintf("Memory ===========================================================================\n");
+        fprintf(logFile, "Memory ===========================================================================\n");
         printmem(logFile);
         fprintf(logFile, "\n================================================================================\nCPUs ===========================================================================\n\n");
         cpu_inf(logFile);
         fprintf(logFile, "\n=================================================================================\n\n");
 
         fprintf(logFile, "Started Job 1 at: %f Processor: %s Rank: %d.\n", start_time, processor_name, my_rank);
-
-
     }
-
 
     MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&numSpacePointX, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
@@ -364,8 +362,8 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
             }
         }
         end_time = MPI_Wtime();
-        tim = time(NULL);
-        tm = *localtime(&tim);
+        t = time(NULL);
+        tm = *localtime(&t);
         printf("\nEnded Job 1 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank, end_time - start_time);
     }
     else
@@ -407,17 +405,14 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
                 for (ll x = 0; x <= numSpacePointX; ++x)
                 {
                     fprintf(fptr1, "%f ", _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision));
-            
                 }
                 fprintf(fptr1, "\n");
-
             }
             fprintf(fptr1, "\n\n");
         }
 
         double end_time_processes = MPI_Wtime();
         fprintf(logFile, "Finished Job 2 at: %02d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank, end_time_processes - start_time_processes);
-
     }
 
     fclose(fptr1);
@@ -427,8 +422,8 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     {
         end_time = MPI_Wtime();
         printf("The time taken in MPI_2d With I/O is: %f\n", end_time - start_time);
-        tim = time(NULL);
-        tm = *localtime(&tim);
+        t = time(NULL);
+        tm = *localtime(&t);
         fprintf(logFile, "Finished Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         fprintf(logFile, "The time taken in MPI_2d With I/O is: %f\n", end_time - start_time);
         fclose(logFile);
@@ -438,37 +433,38 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     if (!finalized)
         MPI_Finalize();
 
-    
     return 0;
- }
+}
 
+int _simulate_heat_transfer_2D_OPENMP(double time_step, double time_limit,
+                                      double space_step_x,
+                                      double space_step_y,
+                                      int precision)
+{
 
- int
- _simulate_heat_transfer_2D_OPENMP(double time_step, double time_limit,
-                                   double space_step_x,
-                                   double space_step_y,
-                                   int precision){
-
-    clock_t start_time=clock();
-    double length =2.0, width =2.0;
+    clock_t start_time = clock();
+    double length = 2.0, width = 2.0;
     FILE *fptr;
-     char _file_name[2076];
-     time_t t = time(NULL);
-     struct tm tm = *localtime(&t);
-     sprintf(_file_name, "simulate_heat_transfer_2D_OPENMP_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-     fptr = fopen(_file_name, "w");
+    char _file_name[2076];
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(_file_name, "simulate_heat_transfer_2D_OPENMP_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    fptr = fopen(_file_name, "w");
 
     ll numTimePoint;
     ll numSpacePointX;
     ll numSpacePointY;
 
-    numTimePoint= _cal_num_time(time_step, time_limit);
-    numSpacePointX= _cal_num_space(length, space_step_x);
-    numSpacePointY= _cal_num_space(width, space_step_y);
+    numTimePoint = _cal_num_time(time_step, time_limit);
+    numSpacePointX = _cal_num_space(length, space_step_x);
+    numSpacePointY = _cal_num_space(width, space_step_y);
 
-    for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 0; y <= numSpacePointY; ++y) {
-            for (ll x = 0; x <= numSpacePointX; ++x) {
+    for (ll t = 0; t < numTimePoint; ++t)
+    {
+        for (ll y = 0; y <= numSpacePointY; ++y)
+        {
+            for (ll x = 0; x <= numSpacePointX; ++x)
+            {
                 fprintf(fptr, "%f ", _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
             }
             fprintf(fptr, "\n");
@@ -477,21 +473,20 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     }
 
     fclose(fptr);
-    clock_t end_time=clock();
-    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-    printf("The value of execution_time 2D_OPENMP_withFiles is: %f\n",execution_time);
+    clock_t end_time = clock();
+    double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("The value of execution_time 2D_OPENMP_withFiles is: %f\n", execution_time);
     return 0;
-
- }
-
+}
 
 double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
-                                     double space_step,
-                                     int precision){
+                                            double space_step,
+                                            int precision)
+{
     // MPI_Init(NULL, NULL);
     int initialized, finalized;
-    double length =10.0;
-     MPI_Initialized(&initialized);
+    double length = 10.0;
+    MPI_Initialized(&initialized);
     if (!initialized)
     {
         MPI_Init(NULL, NULL);
@@ -508,10 +503,11 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
     MPI_Barrier(MPI_COMM_WORLD);
 
-    if(my_rank == 0){
+    if (my_rank == 0)
+    {
         start_time = MPI_Wtime();
-        numTimePoint= _cal_num_time(time_step, time_limit);
-        numSpacePoint= _cal_num_space(length, space_step);
+        numTimePoint = _cal_num_time(time_step, time_limit);
+        numSpacePoint = _cal_num_space(length, space_step);
 
         numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
         numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
@@ -577,7 +573,6 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
             {
                 _get_value_1D_mpi(time_step, space_step, x, i, precision);
             }
-
         }
     }
     MPI_Barrier(MPI_COMM_WORLD);
@@ -592,39 +587,42 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
     MPI_Finalized(&finalized);
     if (!finalized)
         MPI_Finalize();
-        
+
     return execution_time;
 }
 
 double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
-                                        double space_step,
-                                        int precision){
+                                               double space_step,
+                                               int precision)
+{
 
-    clock_t start_time=clock();
-    double length =10.0;
-    ll numTimePoint= _cal_num_time(time_step, time_limit);
-    ll numSpacePoint= _cal_num_space(length, space_step);
+    clock_t start_time = clock();
+    double length = 10.0;
+    ll numTimePoint = _cal_num_time(time_step, time_limit);
+    ll numSpacePoint = _cal_num_space(length, space_step);
 
-    for (int t = 0; t < numTimePoint; t++) {
-        for (int x = 0; x <= numSpacePoint; x++) {
+    for (int t = 0; t < numTimePoint; t++)
+    {
+        for (int x = 0; x <= numSpacePoint; x++)
+        {
             _get_value_1D_openmp(time_step, space_step, x, t, precision);
         }
     }
-    clock_t end_time=clock();
-    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-    printf("The value of execution_time 1D_OPENMP is: %f\n",execution_time);
+    clock_t end_time = clock();
+    double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("The value of execution_time 1D_OPENMP is: %f\n", execution_time);
     return execution_time;
 }
 
-
 double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
-                                     double space_step_x,
-                                     double space_step_y,
-                                     int precision){
-    
+                                            double space_step_x,
+                                            double space_step_y,
+                                            int precision)
+{
+
     int initialized, finalized;
-    double length =2.0, width =2.0;
-     MPI_Initialized(&initialized);
+    double length = 2.0, width = 2.0;
+    MPI_Initialized(&initialized);
     if (!initialized)
     {
         MPI_Init(NULL, NULL);
@@ -646,16 +644,16 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     ll numTimePointPerProcess;
     ll numTimePointRemProcess;
 
-    if(my_rank == 0){
+    if (my_rank == 0)
+    {
         start_time = MPI_Wtime();
-        numTimePoint= _cal_num_time(time_step, time_limit);
-        numSpacePointX= _cal_num_space(length, space_step_x);
-        numSpacePointY= _cal_num_space(width, space_step_y);
+        numTimePoint = _cal_num_time(time_step, time_limit);
+        numSpacePointX = _cal_num_space(length, space_step_x);
+        numSpacePointY = _cal_num_space(width, space_step_y);
 
         numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
         numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
     }
-
 
     MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&numSpacePointX, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
@@ -714,7 +712,6 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         i = startIndex;
         ll endIndex = startIndex + size;
 
-
         for (; i < endIndex; ++i)
         {
             for (ll y = 0; y <= numSpacePointY; ++y)
@@ -722,10 +719,8 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
                 for (ll x = 0; x <= numSpacePointX; ++x)
                 {
                     _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision);
-
                 }
             }
-
         }
     }
     MPI_Barrier(MPI_COMM_WORLD);
@@ -740,38 +735,40 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     MPI_Finalized(&finalized);
     if (!finalized)
         MPI_Finalize();
-    
-    return execution_time;
 
+    return execution_time;
 }
 
- double
- _execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
-                                   double space_step_x,
-                                   double space_step_y,
-                                   int precision){
+double
+_execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
+                                        double space_step_x,
+                                        double space_step_y,
+                                        int precision)
+{
 
-    clock_t start_time=clock();
-    double length =2.0, width =2.0;
+    clock_t start_time = clock();
+    double length = 2.0, width = 2.0;
     ll numTimePoint;
     ll numSpacePointX;
     ll numSpacePointY;
 
-    numTimePoint= _cal_num_time(time_step, time_limit);
-    numSpacePointX= _cal_num_space(length, space_step_x);
-    numSpacePointY= _cal_num_space(width, space_step_y);
+    numTimePoint = _cal_num_time(time_step, time_limit);
+    numSpacePointX = _cal_num_space(length, space_step_x);
+    numSpacePointY = _cal_num_space(width, space_step_y);
 
-    for (ll t = 0; t < numTimePoint; ++t) {
-        for (ll y = 0; y <= numSpacePointY; ++y) {
-            for (ll x = 0; x <= numSpacePointX; ++x) {
+    for (ll t = 0; t < numTimePoint; ++t)
+    {
+        for (ll y = 0; y <= numSpacePointY; ++y)
+        {
+            for (ll x = 0; x <= numSpacePointX; ++x)
+            {
                 _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision);
             }
         }
     }
 
-    clock_t end_time=clock();
-    double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-    printf("The value of execution_time 2D_OPENMP_without_Files is: %f\n",execution_time);
+    clock_t end_time = clock();
+    double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("The value of execution_time 2D_OPENMP_without_Files is: %f\n", execution_time);
     return execution_time;
-
- }
+}
