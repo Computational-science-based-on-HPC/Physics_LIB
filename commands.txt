@@ -3,3 +3,4 @@ make
 make clean
 mpicc ../examples/main.c -o main -L../make -l:libphysics.a -fopenmp -lm -lc
 mpiexec -n 4 ./main
+mpicc -o myprogram ../examples/main.c -L/usr/local/lib/ -lphysics
