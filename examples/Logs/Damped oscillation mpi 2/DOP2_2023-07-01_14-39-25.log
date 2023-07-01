@@ -1,0 +1,195 @@
+Started Simulation of Damped Oscillation Implementation Using MPI at 2023-07-01 14:39:25 with Parametes:
+Amplitude: 10.000000 
+Spring Length: 14.000000 
+Mass: 1.000000 
+Gravity: 1.800000 
+Stifeness: 1.000000 
+Initial Acceleration: -1.000000 
+Initial Velocity: 0.000000 
+FI Const: -0.100000 
+Time Limit: 4096.000000 
+Step_Size(dt): 0.010000 
+Damping coefficient: 0.100000
+Numper of Processes: 10
+
+================================================================================
+Memory ===========================================================================
+================================================================================
+
+
+uptime: 203566
+totalram: 6186029056 in bytes / 6041044 in KB / 5899 in MB / 5 in GB
+freeram: 4478689280 in bytes / 4373720 in KB / 4271 in MB / 4 in GB
+sharedram: 26390528 in bytes / 25772 in KB / 25 in MB / 0 in GB
+bufferram: 63315968 in bytes / 61832 in KB / 60 in MB / 0 in GB
+freeswap: 1024454656 in bytes / 1000444 in KB / 976 in MB / 0 in GB
+current running processes: 461
+
+
+================================================================================
+CPUs ===========================================================================
+================================================================================
+
+
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 42
+model name	: Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
+stepping	: 7
+microcode	: 0x1b
+cpu MHz		: 2047.900
+cache size	: 3072 KB
+physical id	: 0
+siblings	: 4
+core id		: 0
+cpu cores	: 2
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 13
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ht tm pbe syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm pcid sse4_1 sse4_2 popcnt tsc_deadline_timer xsave avx lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid xsaveopt dtherm arat pln pts
+vmx flags	: vnmi preemption_timer invvpid ept_x_only flexpriority tsc_offset vtpr mtf vapic ept vpid unrestricted_guest
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit mmio_unknown
+bogomips	: 6185.90
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 42
+model name	: Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
+stepping	: 7
+microcode	: 0x1b
+cpu MHz		: 2051.981
+cache size	: 3072 KB
+physical id	: 0
+siblings	: 4
+core id		: 1
+cpu cores	: 2
+apicid		: 2
+initial apicid	: 2
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 13
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ht tm pbe syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm pcid sse4_1 sse4_2 popcnt tsc_deadline_timer xsave avx lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid xsaveopt dtherm arat pln pts
+vmx flags	: vnmi preemption_timer invvpid ept_x_only flexpriority tsc_offset vtpr mtf vapic ept vpid unrestricted_guest
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit mmio_unknown
+bogomips	: 6185.90
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+processor	: 2
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 42
+model name	: Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
+stepping	: 7
+microcode	: 0x1b
+cpu MHz		: 2025.515
+cache size	: 3072 KB
+physical id	: 0
+siblings	: 4
+core id		: 0
+cpu cores	: 2
+apicid		: 1
+initial apicid	: 1
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 13
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ht tm pbe syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm pcid sse4_1 sse4_2 popcnt tsc_deadline_timer xsave avx lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid xsaveopt dtherm arat pln pts
+vmx flags	: vnmi preemption_timer invvpid ept_x_only flexpriority tsc_offset vtpr mtf vapic ept vpid unrestricted_guest
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit mmio_unknown
+bogomips	: 6185.90
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+processor	: 3
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 42
+model name	: Intel(R) Core(TM) i3-2100 CPU @ 3.10GHz
+stepping	: 7
+microcode	: 0x1b
+cpu MHz		: 2026.601
+cache size	: 3072 KB
+physical id	: 0
+siblings	: 4
+core id		: 1
+cpu cores	: 2
+apicid		: 3
+initial apicid	: 3
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 13
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ht tm pbe syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 cx16 xtpr pdcm pcid sse4_1 sse4_2 popcnt tsc_deadline_timer xsave avx lahf_lm epb pti tpr_shadow vnmi flexpriority ept vpid xsaveopt dtherm arat pln pts
+vmx flags	: vnmi preemption_timer invvpid ept_x_only flexpriority tsc_offset vtpr mtf vapic ept vpid unrestricted_guest
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit mmio_unknown
+bogomips	: 6185.90
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+
+
+================================================================================
+Execution Times===========================================================================
+================================================================================
+
+
+Started Job 1 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 0.
+
+Ended Job 1 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 0 Execution Time: 0.000011 sec.
+
+Started Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 1.
+
+Started Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 2.
+
+Started Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 3.
+
+Started Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 4.
+
+Started Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 5.
+
+Started Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 6.
+
+Started Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 7.
+
+Started Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 8.
+
+Started Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 9.
+
+Ended Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 1 Execution Time: 0.012328 sec.
+
+Ended Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 2 Execution Time: 0.020660 sec.
+
+Ended Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 3 Execution Time: 0.004588 sec.
+
+Ended Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 4 Execution Time: 0.004678 sec.
+
+Ended Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 5 Execution Time: 0.007654 sec.
+
+Ended Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 6 Execution Time: 0.004985 sec.
+
+Ended Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 7 Execution Time: 0.004604 sec.
+
+Ended Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 8 Execution Time: 0.004396 sec.
+
+Ended Job 2 at: 2023-07-01 14:39:25 Processor: slinga-1 Rank: 9 Execution Time: 0.004418 sec.
+
+================================================================================
+
+Ended Simulation of Damped Oscillation Implementation Using MPI at 2023-07-01 14:39:25
