@@ -361,33 +361,199 @@ elastic_pendulum_execution(double r, double length, double mass, double gravity,
 
 
 ////////////////heat equation 1D parallel
+
+/**
+* @brief This is a function that simulates the heat transfer in 1D object as wire, and each core writes the result to a separate file.
+*
+* In this simulation, we simulate heat propagation in 1D object as wire and the change in its tempreture over time using fourier transform.
+* Then we parallelize the function using MPI, as we divide the object into equal parts and each core calculates the temperature of its part.
+*
+* @param time_step The rate of change of the time.
+* @param time_limit The time that we want to measure the temperature of the object after.
+* @param space_step The rate of change of the space.
+* @param precision The number of vectors we use in the calculations.
+* @return 0 if there is no error happened interrupted the calculations, each core writes the output to text file named simulate_heat_transfer_1D_MPI_"core num"_ + current time,
+* the row represent the time, and the column represent the temperature at this point at that time.
+*
+* @line
+*
+* Example:
+*  @code{.c}
+* #include "physics.h"
+*
+* int main(void) {
+*     heat_equation_1D_P1_MPI(0.01, 0.5, 0.05, 50);
+*     return 0;
+* }
+* @endcode
+*/
 extern int
 heat_equation_1D_P1_MPI(double time_step, double time_limit,
                         double space_step,
                         int precision);
 
+
+/**
+ * @brief This is a function that simulates the heat transfer in 1D object as wire, and writes the result to a file.
+ *
+ * In this simulation, we simulate heat propagation in 1D object as wire and the change in its tempreture over time using fourier transform.
+ * Then, we parallelize the function using OPENMP, as we provide specific number of threads and make the iterations of the loop are divided into equal-sized chunks, and each chunk is assigned to a thread.
+ * Then, we write the result to a file.
+ *
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step The rate of change of the space.
+ * @param precision The number of vectors we use in the calculations.
+ * @return 0 if there is no error happened interrupted the calculations, writes the output to text file named simulate_heat_transfer_1D_OPENMP_ + current time,
+ * the row represent the time, and the column represent the temperature at this point at that time.
+ *
+ * @line
+ *
+ * Example:
+ *  @code{.c}
+ * #include "physics.h"
+ *
+ * int main(void) {
+ *     heat_equation_1D_P1_OPENMP(0.01, 0.5, 0.05, 50);
+ *     return 0;
+ * }
+ * @endcode
+ */
 extern int
 heat_equation_1D_P1_OPENMP(double time_step, double time_limit,
                            double space_step,
                            int precision);
 
 ////////////////heat equation 2D parallel
+
+/**
+ * @brief This is a function that simulates the heat transfer in 2D object, and each core writes the result to a separate file.
+ *
+ * In this simulation, we simulate heat propagation in 2D object as square or rectangle and the change in its tempreture over time using fourier transform.
+ * Then we parallelize the function using MPI, as we divide the object into equal parts and each core calculates the temperature of its part.
+ * 
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step_x The rate of change of the space in x-axis.
+ * @param space_step_y The rate of change of the space in y-axis.
+ * @param precision The number of vectors we use in the calculations.
+ * @return 0 if there is no error happened interrupted the calculations, and write the output to text file named simulate_heat_transfer_2D_MPI_"core num"_ + current time,
+ * the output file contains paragraphs each one represent the time slot, each row represent the temperature at this point of the 2D object on x-axis (length), 
+ * and the column represent the temperature at this point at that time on y-axis (width).
+ * The number of rows in each paragraph (time slot) equals length* space_step_x, and the number of columns equals width* space_step_y.
+ * 
+ * @line
+ *
+ * Example:
+ *  @code{.c}
+ * #include "physics.h"
+ *
+ * int main(void) {
+ *     heat_equation_2D_P1_MPI(0.1, 5, 0.1, 0.1, 50);
+ *     return 0;
+ * }
+ * @endcode
+ * 
+ */
+
 extern int
 heat_equation_2D_P1_MPI(double time_step, double time_limit,
                         double spaceX_step, double spaceY_step,
                         int precision);
 
+/**
+ * @brief This is a function that simulates the heat transfer in 2D object, and each core writes the result to a separate file.
+ *
+ * In this simulation, we simulate heat propagation in 2D object as square or rectangle and the change in its tempreture over time using fourier transform.
+ * Then, we parallelize the function using OPENMP, as we provide specific number of threads and make the iterations of the loop are divided into equal-sized chunks, and each chunk is assigned to a thread.
+ * Then, we write the result to a file.
+ * 
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step_x The rate of change of the space in x-axis.
+ * @param space_step_y The rate of change of the space in y-axis.
+ * @param precision The number of vectors we use in the calculations.
+ * @return 0 if there is no error happened interrupted the calculations, and write the output to text file named simulate_heat_transfer_2D_OPENMP_ + current time,
+ * the output file contains paragraphs each one represent the time slot, each row represent the temperature at this point of the 2D object on x-axis (length), 
+ * and the column represent the temperature at this point at that time on y-axis (width).
+ * The number of rows in each paragraph (time slot) equals length* space_step_x, and the number of columns equals width* space_step_y.
+ * 
+ * @line
+ *
+ * Example:
+ *  @code{.c}
+ * #include "physics.h"
+ *
+ * int main(void) {
+ *     heat_equation_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, 50);
+ *     return 0;
+ * }
+ * @endcode
+ */
 extern int
 heat_equation_2D_P1_OPENMP(double time_step, double time_limit,
                            double spaceX_step, double spaceY_step,
                            int precision);
 
 ////////////////heat equation 1D serial
+/**
+ * @brief This is a function that simulates the heat transfer in 1D object as wire, and write the result to a file.
+ *
+ * In this simulation, we simulate heat propagation in 1D object as wire and the change in its tempreture over time using fourier transform.
+ *
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step The rate of change of the space.
+ * @param precision The number of vectors we use in the calculations.
+ * @return 0 if there is no error happened interrupted the calculations, and write the output to text file named simulate_heat_transfer_1D_serial_ + current time,
+ * the row represent the time, and the column represent the temperature at this point at that time.
+ * @line
+ *
+ * Example:
+ *  @code{.c}
+ * #include "physics.h"
+ *
+ * int main(void) {
+ *     heat_equation_1D_serial(0.01, 0.5, 0.05,50);
+ *     return 0;
+ * }
+ * @endcode
+ */
+
 extern int
 heat_equation_1D_serial(double time_step, double time_limit, double space_step, int precision);
 
 
 ////////////////heat equation 2D serial
+
+/**
+ * @brief This is a function that simulates the heat transfer in 2D object, and write the result to a file.
+ *
+ * In this simulation, we simulate heat propagation in 2D object as square or rectangle and the change in its tempreture over time using fourier transform.
+ *
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step_x The rate of change of the space in x-axis.
+ * @param space_step_y The rate of change of the space in y-axis.
+ * @param precision The number of vectors we use in the calculations.
+ * @return 0 if there is no error happened interrupted the calculations, and write the output to text file named simulate_heat_transfer_2D_serial_ + current time,
+ * the output file contains paragraphs each one represent the time slot, each row represent the temperature at this point of the 2D object on x-axis (length), 
+ * and the column represent the temperature at this point at that time on y-axis (width).
+ * The number of rows in each paragraph (time slot) equals length* space_step_x, and the number of columns equals width* space_step_y.
+ *
+ * @line
+ *
+ * Example:
+ *  @code{.c}
+ * #include "physics.h"
+ *
+ * int main(void) {
+ *     heat_equation_2D_serial(0.1, 5, 0.1, 0.1,50);
+ *     return 0;
+ * }
+ * @endcode
+ */
+
 extern int
 heat_equation_2D_serial(double time_step, double time_limit,
                         double spaceX_step, double spaceY_step,
@@ -395,10 +561,61 @@ heat_equation_2D_serial(double time_step, double time_limit,
 
 
 ////////////////heat equation 1D parallel execution time without i/o
+
+/**
+* @brief This is a function that simulates the heat transfer in 1D object as wire, and return the execution time without I/O.
+*
+* In this simulation, we simulate heat propagation in 1D object as wire and the change in its tempreture over time using fourier transform.
+* Then we parallelize the function using MPI, as we divide the object into equal parts and each core calculates the temperature of its part.
+* Then, we return the execution time without I/O.
+*
+* @param time_step The rate of change of the time.
+* @param time_limit The time that we want to measure the temperature of the object after.
+* @param space_step The rate of change of the space.
+* @param precision The number of vectors we use in the calculations.
+* @return execution time without I/O.
+*
+* @line
+*
+* Example:
+*  @code{.c}
+* #include "physics.h"
+*
+* int main(void) {
+*     heat_equation_execution_time_1D_P1_MPI(0.01, 0.5, 0.05, 50);
+*     return 0;
+* }
+* @endcode
+*/
 extern double
 heat_equation_execution_time_1D_P1_MPI(double time_step, double time_limit,
                                        double space_step,
                                        int precision);
+
+/**
+ * @brief This is a function that simulates the heat transfer in 1D object as wire, and return the execution time without I/O.
+ *
+ * In this simulation, we simulate heat propagation in 1D object as wire and the change in its tempreture over time using fourier transform.
+ * Then, we parallelize the function using OPENMP, as we provide specific number of threads and make the iterations of the loop are divided into equal-sized chunks, and each chunk is assigned to a thread.
+ * Then, return the execution time without I/O.
+ *
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step The rate of change of the space.
+ * @param precision The number of vectors we use in the calculations.
+ * @return execution time without I/O.
+ * @line
+ *
+ * Example:
+ *  @code{.c}
+ * #include "physics.h"
+ *
+ * int main(void) {
+ *     heat_equation_execution_time_1D_P1_OPENMP(0.01, 0.5, 0.05, 50);
+ *     return 0;
+ * }
+ * @endcode
+*/
 
 extern double
 heat_equation_execution_time_1D_P1_OPENMP(double time_step, double time_limit,
@@ -407,10 +624,65 @@ heat_equation_execution_time_1D_P1_OPENMP(double time_step, double time_limit,
 
 
 ////////////////heat equation 2D parallel execution time without i/o
+
+/**
+ * @brief This is a function that simulates the heat transfer in 2D object, and return the execution time without I/O.
+ *
+ * In this simulation, we simulate heat propagation in 2D object as square or rectangle and the change in its tempreture over time using fourier transform.
+ * Then we parallelize the function using MPI, as we divide the object into equal parts and each core calculates the temperature of its part.
+ * Then, we return the execution time without I/O.
+ *
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step_x The rate of change of the space in x-axis.
+ * @param space_step_y The rate of change of the space in y-axis.
+ * @param precision The number of vectors we use in the calculations.
+ * @return execution time without I/O.
+ *
+ * @line
+ *
+ * Example:
+ *  @code{.c}
+ * #include "physics.h"
+ *
+ * int main(void) {
+ *     heat_equation_execution_time_2D_P1_MPI(0.1, 5, 0.1, 0.1,50);
+ *     return 0;
+ * }
+ * @endcode
+ */
 extern double
 heat_equation_execution_time_2D_P1_MPI(double time_step, double time_limit,
                                        double spaceX_step, double spaceY_step,
                                        int precision);
+
+
+/**
+ * @brief This is a function that simulates the heat transfer in 2D object, and return the execution time without I/O.
+ *
+ * In this simulation, we simulate heat propagation in 2D object as square or rectangle and the change in its tempreture over time using fourier transform.
+ * Then, we parallelize the function using OPENMP, as we provide specific number of threads and make the iterations of the loop are divided into equal-sized chunks, and each chunk is assigned to a thread.
+ * Then, return the execution time without I/O.
+ * 
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step_x The rate of change of the space in x-axis.
+ * @param space_step_y The rate of change of the space in y-axis.
+ * @param precision The number of vectors we use in the calculations.
+ * @return the execution time without I/O.
+ * @line
+ *
+ * Example:
+ *  @code{.c}
+ * #include "physics.h"
+ *
+ * int main(void) {
+ *     heat_equation_execution_time_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, 50);
+ *     return 0;
+ * }
+ * @endcode
+ * 
+ */
 
 extern double heat_equation_execution_time_2D_P1_OPENMP(double time_step, double time_limit,
                         double spaceX_step, double spaceY_step,
@@ -418,10 +690,61 @@ extern double heat_equation_execution_time_2D_P1_OPENMP(double time_step, double
 
 
 ////////////////heat equation 1D serial execution time without i/o
+
+/**
+ * @brief This is a function that simulates the heat transfer in 1D object as wire, and return the execution time without I/O.
+ *
+ * In this simulation, we simulate heat propagation in 1D object as wire and the change in its tempreture over time using fourier transform.
+ *
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step The rate of change of the space.
+ * @param precision The number of vectors we use in the calculations.
+ * @return execution time without I/O if there is no error happened interrupted the calculations.
+ *
+ * @line
+ *
+ * Example:
+ *  @code{.c}
+ * #include "physics.h"
+ *
+ * int main(void) {
+ *     heat_equation_execution_time_1D_serial(0.01, 0.5, 0.05,50);
+ *     return 0;
+ * }
+ * @endcode
+*/
+
 extern double
 heat_equation_execution_time_1D_serial(double time_step, double time_limit, double space_step, int precision);
 
 ////////////////heat equation 2D serial execution time without i/o
+
+/**
+ * @brief This is a function that simulates the heat transfer in 2D object, and return the execution time without I/O.
+ *
+ * In this simulation, we simulate heat propagation in 2D object as square or rectangle and the change in its tempreture over time using fourier transform.
+ *
+ * @param time_step The rate of change of the time.
+ * @param time_limit The time that we want to measure the temperature of the object after.
+ * @param space_step_x The rate of change of the space in x-axis.
+ * @param space_step_y The rate of change of the space in y-axis.
+ * @param precision The number of vectors we use in the calculations.
+ * @return execution time without I/O if there is no error happened interrupted the calculations.
+ * 
+ * @line
+ *
+ * Example:
+ *  @code{.c}
+ * #include "physics.h"
+ *
+ * int main(void) {
+ *     heat_equation_execution_time_2D_serial(0.1, 5, 0.1, 0.1,50);
+ *     return 0;
+ * }
+ * @endcode
+ */
+
 extern double
 heat_equation_execution_time_2D_serial(double time_step, double time_limit,
                                        double spaceX_step, double spaceY_step,
