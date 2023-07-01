@@ -330,9 +330,9 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         printf("Number of time points per process: %lld\n", numTimePointPerProcess);
         printf("Number of time points for remaining process: %lld\n", numTimePointRemProcess);
         printf("Memory ===========================================================================\n");
-        printmem();
+        printmemstream();
         printf("\n================================================================================\nCPUs ===========================================================================\n\n");
-        cpu_inf();
+        cpu_inf_stream();
         printf("\n=================================================================================\n\n");
 
         printf("Started Job 1 at: %f Processor: %s Rank: %d.\n", start_time, processor_name, my_rank);
