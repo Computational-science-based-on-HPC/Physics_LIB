@@ -44,7 +44,7 @@ echo $LD_LIBRARY_PATH
 Make sure it been listed.
 ## Compilation and Run ##
  ``` 
-mpicc -o myprogram main.c -L/usr/local/lib/ -lphysics -fopenmp
+mpicc -o myprogram main.c -lphysics -fopenmp
 mpiexec -n 4 ./myprogram
 ```
 - - - - 
