@@ -136,7 +136,7 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
         numSpacePoint = _cal_num_space(length, space_step);
 
         numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
-        numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
+        numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for remaining process
     }
 
     MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
