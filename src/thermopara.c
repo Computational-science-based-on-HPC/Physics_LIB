@@ -4,6 +4,7 @@
 #include <time.h>
 #include "../include/thermopara.h"
 #include "../include/thermoutils.h"
+#include <unistd.h>
 #define ll long long
 #define THREADS 16
 // #define M_PI 3.14159265358979323846264338327
@@ -285,47 +286,56 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
     MPI_Barrier(MPI_COMM_WORLD);
 
     ll numTimePoint, numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
-    char _log_file_name[2076];
-    time_t t = time(NULL);
+//    char _log_file_name[2076];
+    time_t tim = time(NULL);
     struct tm tm = *localtime(&t);
-    sprintf(_log_file_name, "simulate_heat_transfer_2D_MPI_%d_%d-%02d-%02d %02d:%02d:%02d.log", my_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    logFile = fopen(_log_file_name, "w");
+
+    char _log_file_name[255];
+    sprintf(_log_file_name, "Logs/Thermo Simulation mpi 2D/DOP2_%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    file = fopen(_log_file_name, "w"); // Open the file in write mode
+    if (file != NULL)
+    {
+        freopen(_log_file_name, "w", stdout);
+    }
+//    sprintf(_log_file_name, "simulate_heat_transfer_2D_MPI_%d_%d-%02d-%02d %02d:%02d:%02d.log", my_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+//    logFile = fopen(_log_file_name, "w");
 
     if (my_rank == 0)
     {
-        t = time(NULL);
+        tim = time(NULL);
         tm = *localtime(&t);
-        fprintf(logFile, "Started Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        fprintf(logFile, "Number of processes: %d\n", processesNo);
-        fprintf(logFile, "Time step: %f\n", time_step);
-        fprintf(logFile, "Time limit: %f\n", time_limit);
-        fprintf(logFile, "Space step x: %f\n", space_step_x);
-        fprintf(logFile, "Space step y: %f\n", space_step_y);
-        fprintf(logFile, "Precision: %d\n", precision);
-        fprintf(logFile, "Length: %f\n", length);
-        fprintf(logFile, "Width: %f\n", width);
+
+        printf("Started Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        printf("Number of processes: %d\n", processesNo);
+        printf("Time step: %f\n", time_step);
+        printf("Time limit: %f\n", time_limit);
+        printf("Space step x: %f\n", space_step_x);
+        printf("Space step y: %f\n", space_step_y);
+        printf("Precision: %d\n", precision);
+        printf("Length: %f\n", length);
+        printf("Width: %f\n", width);
 
         start_time = MPI_Wtime();
         numTimePoint = _cal_num_time(time_step, time_limit);
         numSpacePointX = _cal_num_space(length, space_step_x);
         numSpacePointY = _cal_num_space(width, space_step_y);
 
-        fprintf(logFile, "Number of time points: %lld\n", numTimePoint);
-        fprintf(logFile, "Number of space points x: %lld\n", numSpacePointX);
-        fprintf(logFile, "Number of space points y: %lld\n", numSpacePointY);
+        printf("Number of time points: %lld\n", numTimePoint);
+        printf("Number of space points x: %lld\n", numSpacePointX);
+        printf("Number of space points y: %lld\n", numSpacePointY);
 
         numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
         numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for remaining process
 
-        fprintf(logFile, "Number of time points per process: %lld\n", numTimePointPerProcess);
-        fprintf(logFile, "Number of time points for remaining process: %lld\n", numTimePointRemProcess);
-        fprintf(logFile, "Memory ===========================================================================\n");
-        printmem(logFile);
-        fprintf(logFile, "\n================================================================================\nCPUs ===========================================================================\n\n");
-        cpu_inf(logFile);
-        fprintf(logFile, "\n=================================================================================\n\n");
+        printf("Number of time points per process: %lld\n", numTimePointPerProcess);
+        printf("Number of time points for remaining process: %lld\n", numTimePointRemProcess);
+        printf("Memory ===========================================================================\n");
+        printmem();
+        printf("\n================================================================================\nCPUs ===========================================================================\n\n");
+        cpu_inf();
+        printf("\n=================================================================================\n\n");
 
-        fprintf(logFile, "Started Job 1 at: %f Processor: %s Rank: %d.\n", start_time, processor_name, my_rank);
+        printf("Started Job 1 at: %f Processor: %s Rank: %d.\n", start_time, processor_name, my_rank);
     }
 
     MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
@@ -362,7 +372,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
             }
         }
         end_time = MPI_Wtime();
-        t = time(NULL);
+        tim = time(NULL);
         tm = *localtime(&t);
         printf("\nEnded Job 1 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank, end_time - start_time);
     }
@@ -384,7 +394,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
 
         MPI_Recv(&startIndex, 1, MPI_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
 
-        printf("The value of startIndex is: %lld\n", startIndex);
+//        printf("The value of startIndex is: %lld\n", startIndex);
 
         i = startIndex;
         ll endIndex = startIndex + size;
@@ -395,7 +405,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         sprintf(_file_name, "simulate_heat_transfer_2D_MPI_%d_%d-%02d-%02d %02d:%02d:%02d.txt", my_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         fptr1 = fopen(_file_name, "w");
 
-        fprintf(logFile, "Started Job 2 at: %02d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank);
+        printf("Started Job 2 at: %02d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank);
         double start_time_processes = MPI_Wtime();
 
         for (; i < endIndex; ++i)
@@ -412,7 +422,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         }
 
         double end_time_processes = MPI_Wtime();
-        fprintf(logFile, "Finished Job 2 at: %02d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank, end_time_processes - start_time_processes);
+        printf("Finished Job 2 at: %02d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank, end_time_processes - start_time_processes);
     }
 
     fclose(fptr1);
@@ -422,11 +432,11 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
     {
         end_time = MPI_Wtime();
         printf("The time taken in MPI_2d With I/O is: %f\n", end_time - start_time);
-        t = time(NULL);
+        tim = time(NULL);
         tm = *localtime(&t);
-        fprintf(logFile, "Finished Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        fprintf(logFile, "The time taken in MPI_2d With I/O is: %f\n", end_time - start_time);
-        fclose(logFile);
+        printf("Finished Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        printf("The time taken in MPI_2d With I/O is: %f\n", end_time - start_time);
+//        fclose(logFile);
     }
     // MPI_Finalize();
     MPI_Finalized(&finalized);
