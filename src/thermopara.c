@@ -647,7 +647,7 @@ double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_lim
     }
 
 
-    printf("Started Simulation of heat Equation 1D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    printf("Started Simulation of heat Equation 1D using OPENMP at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     printf("Time step: %f\n", time_step);
     printf("Time limit: %f\n", time_limit);
     printf("Space step x: %f\n", space_step);
@@ -677,7 +677,7 @@ double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_lim
 //    clock_t end_time = clock();
     double end_time2 = omp_get_wtime();
 //    double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-    printf("The value of execution_time 2D_OPENMP_without_Files is: %f\n", end_time - start_time);
+//    printf("The value of execution_time 2D_OPENMP_without_Files is: %f\n", end_time - start_time);
 
 
     tim = time(NULL);
@@ -837,7 +837,7 @@ _execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
     }
 
 
-    printf("Started Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    printf("Started Simulation of heat Equation 2D using OPENMP at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     printf("Time step: %f\n", time_step);
     printf("Time limit: %f\n", time_limit);
     printf("Space step x: %f\n", space_step_x);
@@ -878,7 +878,7 @@ _execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
 
     double end_time = omp_get_wtime();
 //    double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-    printf("The value of execution_time 2D_OPENMP_without_Files is: %f\n", end_time - start_time);
+//    printf("The value of execution_time 2D_OPENMP_without_Files is: %f\n", end_time - start_time);
 
 
     tim = time(NULL);

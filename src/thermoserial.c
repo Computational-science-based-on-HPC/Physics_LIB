@@ -151,9 +151,42 @@ double _execution_time_heat_transfer_2D_serial(double time_step, double time_lim
     clock_t start_time=clock();
 
     double length =2.0, width =2.0;
+
+    time_t tim = time(NULL);
+    struct tm tm = *localtime(&tim);
+    char _log_file_name[255];
+    sprintf(_log_file_name, "Logs/Thermo Simulation execution Serial 2D/Thermo2D_%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    file = fopen(_log_file_name, "w"); // Open the file in write mode
+    if (file != NULL)
+    {
+        freopen(_log_file_name, "w", stdout);
+    }
+
+
+    printf("Started Simulation of heat Equation 2D Serial at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    printf("Time step: %f\n", time_step);
+    printf("Time limit: %f\n", time_limit);
+    printf("Space step x: %f\n", space_step_x);
+    printf("Space step y: %f\n", space_step_y);
+    printf("Precision: %d\n", precision);
+    printf("Length: %f\n", length);
+    printf("Width: %f\n", width);
+
     ll numTimePoint= _cal_num_time(time_step, time_limit);
     ll numSpacePointX= _cal_num_space(length, space_step_x);
     ll numSpacePointY= _cal_num_space(width, space_step_y);
+
+    printf("Number of time points: %lld\n", numTimePoint);
+    printf("Number of space points x: %lld\n", numSpacePointX);
+    printf("Number of space points y: %lld\n", numSpacePointY);
+    printf("Memory ===========================================================================\n");
+    printmemstream();
+    printf("\n================================================================================\nCPUs ===========================================================================\n\n");
+    cpu_inf_stream();
+    printf("\n=================================================================================\n\n");
+
+    printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+
 
     for (ll t = 0; t < numTimePoint; ++t) {
         for (ll y = 0; y <= numSpacePointY; ++y) {
@@ -165,8 +198,15 @@ double _execution_time_heat_transfer_2D_serial(double time_step, double time_lim
 
     clock_t end_time=clock();
     double execution_time=(double) (end_time - start_time)/CLOCKS_PER_SEC;
-    printf("The value of execution_time 2D_serial is: %f\n",execution_time);
+//    printf("The value of execution_time 2D_serial is: %f\n",execution_time);
+
+    tim = time(NULL);
+    tm = *localtime(&tim);
+    printf("\nEnded Calculation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, execution_time);
+    tim = time(NULL);
+    tm = *localtime(&tim);
+    puts("\n================================================================================\n");
+    printf("Ended Simulation of Thermo energy 2D at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+
     return execution_time;
-
-
 }
