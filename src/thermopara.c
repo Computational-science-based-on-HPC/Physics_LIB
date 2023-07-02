@@ -746,7 +746,6 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
 
     int checkRem;
     double start_time, end_time;
-    double start_time, end_time;
     char start_time_string[20], end_time_string[20];
     
     MPI_Status status;
@@ -758,6 +757,10 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
 
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
+
+    char processor_name[MPI_MAX_PROCESSOR_NAME];
+    int name_len;
+    MPI_Get_processor_name(processor_name, &name_len);
 
     if (my_rank == 0)
     {
@@ -877,12 +880,6 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
 
         i = startIndex;
         ll endIndex = startIndex + size;
-
-        char _file_name[2076];
-        time_t t = time(NULL);
-        struct tm tm = *localtime(&t);
-        sprintf(_file_name, "simulate_heat_transfer_2D_MPI_%d_%d-%02d-%02d_%02d-%02d-%02d.txt", my_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        fptr1 = fopen(_file_name, "w");
 
         for (; i < endIndex; ++i)
         {
