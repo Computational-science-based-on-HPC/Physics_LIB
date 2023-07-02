@@ -305,7 +305,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         tim = time(NULL);
         tm = *localtime(&tim);
 
-        printf("Started Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        printf("Started Simulation of heat Equation 2D using MPI at %02d-%02d-%02d_%02d-%02d-%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         printf("Number of processes: %d\n", processesNo);
         printf("Time step: %f\n", time_step);
         printf("Time limit: %f\n", time_limit);
@@ -337,7 +337,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         cpu_inf_stream();
         puts("\n=================================================================================\n\n");
 
-        printf("Started Job 1 at: %02d-%02d-%02d %02d:%02d:%02d in Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank);
+        printf("Started Job 1 at: %02d-%02d-%02d_%02d-%02d-%02d in Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank);
     }
 
     MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
@@ -376,7 +376,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         end_time = MPI_Wtime();
         tim = time(NULL);
         tm = *localtime(&tim);
-        printf("\nEnded Job 1 at: %d-%02d-%02d %02d:%02d:%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank, end_time - start_time);
+        printf("\nEnded Job 1 at: %d-%02d-%02d_%02d-%02d-%02d Processor: %s Rank: %d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank, end_time - start_time);
     }
     if (my_rank > 0)
     {
@@ -468,10 +468,10 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         // fclose(logFile);
         tim = time(NULL);
         tm = *localtime(&tim);
-        fprintf(logFile,"Finished the execution of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        
+        fprintf(logFile,"Finished the execution of heat Equation 2D using MPI at %02d-%02d-%02d_%02d-%02d-%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        fclose(logFile);
     }
-    fclose(logFile);
+    
     
     // MPI_Finalize();
     // MPI_Finalized(&finalized);
