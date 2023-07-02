@@ -263,7 +263,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
                                    int precision)
 {
     // MPI_Init(NULL, NULL);
-    int initialized, finalized;
+    int initialized;
     double length = 2.0, width = 2.0;
     MPI_Initialized(&initialized);
     if (!initialized)
@@ -475,12 +475,6 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         fclose(logFile);
     }
     
-    
-    // MPI_Finalize();
-    // MPI_Finalized(&finalized);
-    // if (!finalized)
-    //     MPI_Finalize();
-
     return 0;
 }
 
@@ -733,7 +727,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
 {
 
     FILE *logFile;
-    int initialized, finalized;
+    int initialized;
     double length = 2.0, width = 2.0;
     MPI_Initialized(&initialized);
     if (!initialized)
@@ -901,7 +895,6 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         tm.tm_hour, tm.tm_min, tm.tm_sec);
 
         MPI_Send(end_time_string, 20, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
-        fclose(fptr1);
     }
     MPI_Barrier(MPI_COMM_WORLD);
     double execution_time;
@@ -929,11 +922,6 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         fprintf(logFile,"Finished the execution of heat Equation 2D using MPI at %02d-%02d-%02d_%02d-%02d-%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         fclose(logFile);
     }
-    // MPI_Finalize();
-    // MPI_Finalized(&finalized);
-    // if (!finalized)
-    //     MPI_Finalize();
-
     return execution_time;
 }
 
