@@ -35,7 +35,7 @@ long double _get_value_1D_mpi(double time_step, double space_step, ll x, unsigne
     return sum;
 }
 
-double _get_value_1D_openmp(double time_step, double space_step, ll x, unsigned ll t, long long precision)
+long double _get_value_1D_openmp(double time_step, double space_step, ll x, unsigned ll t, long long precision)
 {
     long double sum = 0.0, exponential, spaceXTerm, coeff;
     long double x_real = x * space_step;
@@ -81,7 +81,7 @@ long double _get_value_2D_mpi(double time_step,
     return sum;
 }
 
-double _get_value_2D_openmp(double time_step,
+long double _get_value_2D_openmp(double time_step,
                             double length, double space_step_x, double width, double space_step_y,
                             ll x, ll y, unsigned ll t,
                             long long precision)
