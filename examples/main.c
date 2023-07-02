@@ -8,15 +8,16 @@
 int main(void)
 
 {
-//    int t = 2;
+    int t = 100;
 //    for (int i = 0; i < 30; i++)
 //    {
-//        damped_os_parallel_execution_time_v1(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
-//                                             -0.1,
-//                                             t, 0.01, 0.1, 3);
+        damped_os_parallel_execution_time_v1(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
+                                             -0.1,
+                                             t, 0.01, 0.1, 3);
 //        t *= 2;
 //    }
-//    t = 2;
+
+//    t = 
 //    for (int i = 0; i < 30; i++)
 //    {
 //        damped_os_parallel_execution_time_v2(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,

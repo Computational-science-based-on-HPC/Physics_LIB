@@ -34,7 +34,7 @@ thermopara.o:  $(SRC_DIR)/thermopara.c  $(INCLUDE_DIR)/thermopara.h
 	$(MCC) $(CFLAGS)  $(SRC_DIR)/thermopara.c -o  $(OBJ_DIR)/thermopara.o $(OMPFLAG)
 
 thermoserial.o:  $(SRC_DIR)/thermoserial.c  $(INCLUDE_DIR)/thermoserial.h
-	$(CC) $(CFLAGS)  $(SRC_DIR)/thermoserial.c -o  $(OBJ_DIR)/thermoserial.o
+	$(CC) $(CFLAGS) $(SRC_DIR)/thermoserial.c -o  $(OBJ_DIR)/thermoserial.o $(OMPFLAG) 
 
 install: $(TARGET)
 	cp $(TARGET) /usr/local/lib

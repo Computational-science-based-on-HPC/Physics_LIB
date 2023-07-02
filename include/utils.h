@@ -100,5 +100,6 @@ int printmemstream();
  * @return int 
  */
 int cpu_inf_stream();
+int _mkdir(char *_dir_name);
 
 #endif // PHYSICS_UTILS_H

@@ -68,9 +68,9 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     double coefficient_calc;
     double CALCULATIONS[3];
     char *dir[2076];
-    int _it_number_proc;
-    int _it_number;
-    int _it_number_all;
+    unsigned long long _it_number_proc;
+    unsigned long long _it_number;
+    unsigned long long _it_number_all;
     double t;
     short int _is_zero = 0;
     double buff[1000];
@@ -82,8 +82,8 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
         RESULTS[0] = max_amplitude;
         RESULTS[1] = Vo;
         RESULTS[2] = Ao + gravity;
-        _it_number_all = _round(time_limit / step_size);
-        int _sent_it_number = 0;
+        _it_number_all = (unsigned long long)((double)((time_limit / step_size) + 0.5));
+        unsigned long long _sent_it_number = 0;
         if (world_size > 1)
         {
             _it_number_proc = (_it_number_all / (world_size - 1)) + 1;
@@ -92,7 +92,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
                 if (i > _it_number_all % (world_size - 1))
                     _it_number_proc = (_it_number_all / (world_size - 1));
                 _sent_it_number += _it_number_proc;
-                MPI_Send(&_it_number_proc, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&_it_number_proc, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
             }
         }
         _it_number = _it_number_all - _sent_it_number;
@@ -100,7 +100,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
 
     if (world_rank > 0 && world_size > 1)
     {
-        MPI_Recv(&_it_number, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+        MPI_Recv(&_it_number, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
     }
 
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -115,7 +115,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
 
         time_t tim = time(NULL);
         struct tm tm = *localtime(&tim);
-        sprintf(_file_name, "%d_damped_os_parallel_v1_displacement_%d-%02d-%02d %02d:%02d:%02d.txt", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        sprintf(_file_name, "Simulation/Damped oscillation mpi 1/%d_damped_os_parallel_v1_displacement_%d-%02d-%02d_%02d-%02d-%02d.sim", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         p_dis = fopen(_file_name, "w");
 
         for (int it = 0; it < _it_number; ++it)
@@ -232,9 +232,9 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     double RESULTS[3];
     double coefficient_calc;
     double CALCULATIONS[3];
-    int _it_number_proc;
-    int _it_number;
-    int _it_number_all;
+    unsigned long long _it_number_proc;
+    unsigned long long _it_number;
+    unsigned long long _it_number_all;
     double t;
     time_t tim = time(NULL);
     time_t proc_tim = time(NULL);
@@ -286,8 +286,8 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
         RESULTS[1] = Vo;
         RESULTS[2] = Ao + gravity;
 
-        _it_number_all = _round(time_limit / step_size);
-        int _sent_it_number = 0;
+        _it_number_all = (unsigned long long)((double)(time_limit / step_size) + 0.5);
+        unsigned long long _sent_it_number = 0;
         if (world_size > 1)
         {
             _it_number_proc = (_it_number_all / (world_size - 1)) + 1;
@@ -296,7 +296,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
                 if (i > _it_number_all % (world_size - 1))
                     _it_number_proc = (_it_number_all / (world_size - 1));
                 _sent_it_number += _it_number_proc;
-                MPI_Send(&_it_number_proc, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&_it_number_proc, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
             }
         }
 
@@ -309,7 +309,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
 
     if (world_rank > 0 && world_size > 1)
     {
-        MPI_Recv(&_it_number, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+        MPI_Recv(&_it_number, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
     }
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -335,7 +335,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
     {
         omp_set_num_threads(NUM_THREADS);
         start_time = MPI_Wtime();
-        for (int it = 0; it < _it_number; ++it)
+        for (unsigned long long it = 0; it < _it_number; ++it)
         {
             t = step_size * (((double)it) + (world_rank * _it_number));
 #pragma omp parallel sections
@@ -447,9 +447,9 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     double RESULTS[3];
     double coefficient_calc;
     double CALCULATIONS[3];
-    int _it_number_proc;
-    int _it_number;
-    int _it_number_all;
+    unsigned long long _it_number_proc;
+    unsigned long long _it_number;
+    unsigned long long _it_number_all;
     double t;
     short int _is_zero = 0;
     double buff[1000];
@@ -462,8 +462,8 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
         RESULTS[0] = max_amplitude;
         RESULTS[1] = Vo;
         RESULTS[2] = Ao + gravity;
-        _it_number_all = _round(time_limit / step_size);
-        int _sent_it_number = 0;
+        _it_number_all = (unsigned long long)(((double)(time_limit / step_size)) + 0.5);
+        unsigned long long _sent_it_number = 0;
 
         if (world_size > 1)
         {
@@ -475,7 +475,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
                     _it_number_proc = (_it_number_all / (world_size - 1));
                 }
                 _sent_it_number += _it_number_proc;
-                MPI_Send(&_it_number_proc, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&_it_number_proc, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
             }
         }
         _it_number = _it_number_all - _sent_it_number;
@@ -486,7 +486,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
 
     if (world_rank > 0 && world_size > 1)
     {
-        MPI_Recv(&_it_number, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+        MPI_Recv(&_it_number, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
     }
     if (world_rank > 0 || (world_rank == 0 && _it_number > 0))
     {
@@ -495,10 +495,10 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
         char _file_name[2076];
         time_t tim = time(NULL);
         struct tm tm = *localtime(&tim);
-        sprintf(_file_name, "%damped_os_parallel_v2_displacement%d-%02d-%02d %02d:%02d:%02d.txt", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        sprintf(_file_name, "Simulation/Damped oscillation mpi 2/%damped_os_parallel_v2_displacement%d-%02d-%02d_%02d-%02d-%02d.sim", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         p_dis = fopen(_file_name, "w");
 
-        for (int it = 0; it < _it_number; ++it)
+        for (unsigned long long it = 0; it < _it_number; ++it)
         {
 
             if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
@@ -594,9 +594,9 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     double RESULTS[3];
     double coefficient_calc;
     double CALCULATIONS[3];
-    int _it_number_proc;
-    int _it_number;
-    int _it_number_all;
+    unsigned long long _it_number_proc;
+    unsigned long long _it_number;
+    unsigned long long _it_number_all;
     double t;
     int ret = 0;
     char processor_name[MPI_MAX_PROCESSOR_NAME];
@@ -652,7 +652,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
         RESULTS[2] = Ao + gravity;
 
         _it_number_all = _round(time_limit / step_size);
-        int _sent_it_number = 0;
+        unsigned long long _sent_it_number = 0;
         if (world_size > 1)
         {
             _it_number_proc = (_it_number_all / (world_size - 1)) + 1;
@@ -663,7 +663,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
                     _it_number_proc = (_it_number_all / (world_size - 1));
                 }
                 _sent_it_number += _it_number_proc;
-                MPI_Send(&_it_number_proc, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&_it_number_proc, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
             }
         }
         _it_number = _it_number_all - _sent_it_number;
@@ -674,7 +674,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     }
     if (world_rank > 0 && world_size > 1)
     {
-        MPI_Recv(&_it_number, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
+        MPI_Recv(&_it_number, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
     }
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -699,7 +699,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
     if (world_rank > 0 || (world_rank == 0 && _it_number > 0))
     {
         start_time = MPI_Wtime();
-        for (int it = 0; it < _it_number; ++it)
+        for (unsigned long long it = 0; it < _it_number; ++it)
         {
             t = step_size * (((double)it) + (world_rank * _it_number));
             CALCULATIONS[0] = cos(W * t + FI);
@@ -806,12 +806,12 @@ _execution_time_damped_os_parallel_omp(double max_amplitude, double length, doub
     RESULTS[1] = Vo + gravity * 0;
     RESULTS[2] = Ao + gravity * exp((-damping_coefficent / (2 * mass)) * 0);
     double CALCULATIONS[3];
-    int num_steps = (int)(time_limit / step_size) + 10;
+    unsigned long long num_steps = (unsigned long long)((double)((time_limit / step_size)+0.5) + 10);
     printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     double start_time = omp_get_wtime();
 
 #pragma omp parallel for num_threads(number_of_threads) private(CALCULATIONS, RESULTS)
-    for (int i = 0; i <= num_steps; i++)
+    for (unsigned long long i = 0; i <= num_steps; i++)
     {
         double t = i * step_size;
         CALCULATIONS[0] = cos(W * t + FI);

@@ -13,9 +13,6 @@
 #include <string.h>
 #include <sys/sysinfo.h>
 #define _GNU_SOURCE
-#include <stdio.h>
-#include <stdlib.h>
-
 int cpu_inf_stream()
 {
     FILE *cpuinfo = fopen("/proc/cpuinfo", "rb");
@@ -103,5 +100,16 @@ int printmemstream()
     printmemsizestream("bufferram", info.bufferram);
     printmemsizestream("freeswap", info.freeswap);
     printf("current running processes: %d\n\n", info.procs);
+    return 0;
+}
+int _mkdir(char *_dir_name)
+{
+    if (mkdir(_dir_name, 0777) == -1)
+    {
+        puts("Directory already exists");
+        return -1;
+    }
+    else
+        puts("Directory created");
     return 0;
 }

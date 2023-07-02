@@ -31,6 +31,8 @@ int damped_os_serial(double max_amplitude, double length, double mass, double gr
                      double FI,
                      double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
+    _mkdir("Simulation");
+    _mkdir("Damped oscillation serial");
     return _simulate_damped_os_serial(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
                                       time_limit, step_size, damping_coefficent, number_of_files);
 }
@@ -55,6 +57,8 @@ int damped_os_parallel_v1(double max_amplitude, double length, double mass, doub
                           double FI,
                           double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
+    _mkdir("Simulation");
+    _mkdir("Damped oscillation mpi 1");
     return _simulate_damped_os_parallel_mpi_omp(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
                                                 time_limit, step_size, damping_coefficent, number_of_files);
 }
@@ -79,6 +83,8 @@ int damped_os_parallel_v2(double max_amplitude, double length, double mass, doub
                           double FI,
                           double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
+    _mkdir("Simulation");
+    _mkdir("Damped oscillation mpi 2");
     return _simulate_damped_os_parallel_mpi(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
                                             time_limit, step_size, damping_coefficent, number_of_files);
 }
@@ -105,6 +111,8 @@ int elastic_pendulum(double r, double length, double mass, double gravity, doubl
                      double Vo,
                      double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
+    _mkdir("Simulation");
+    _mkdir("Elastic pendulum");
     return _simulate_elastic_pendulum(r, length, mass, gravity, k, Ao, Xo,
                                       Yo,
                                       Vo,
@@ -134,6 +142,8 @@ damped_os_parallel_execution_time_v1(double max_amplitude, double length, double
                                      double time_limit, double step_size, double damping_coefficent,
                                      int number_of_files)
 {
+    _mkdir("Logs");
+    _mkdir("Damped oscillation mpi 1");
     return _execution_time_damped_os_parallel_mpi_omp(max_amplitude, length, mass, gravity, k, Ao,
                                                       Vo, FI,
                                                       time_limit, step_size, damping_coefficent, number_of_files);
@@ -162,9 +172,11 @@ damped_os_parallel_execution_time_v2(double max_amplitude, double length, double
                                      double time_limit, double step_size, double damping_coefficent,
                                      int number_of_files)
 {
+    _mkdir("Logs");
+    _mkdir("Damped oscillation mpi 2");
     return _execution_time_damped_os_parallel_mpi(max_amplitude, length, mass, gravity, k, Ao,
-                                                      Vo, FI,
-                                                      time_limit, step_size, damping_coefficent, number_of_files);
+                                                  Vo, FI,
+                                                  time_limit, step_size, damping_coefficent, number_of_files);
 }
 /**
  * This function used to call _execution_time_damped_os_parallel_omp
@@ -191,6 +203,9 @@ damped_os_parallel_execution_time_v3(double max_amplitude, double length, double
                                      double time_limit, double step_size, double damping_coefficent,
                                      int number_of_files, int num_of_threads)
 {
+    _mkdir("Logs");
+    _mkdir("Damped oscillation omp");
+
     return _execution_time_damped_os_parallel_omp(max_amplitude, length, mass, gravity, k,
                                                   Ao,
                                                   Vo, FI,
@@ -221,6 +236,9 @@ damped_os_serial_execution(double max_amplitude, double length, double mass, dou
                            double time_limit, double step_size, double damping_coefficent,
                            int number_of_files)
 {
+    _mkdir("Logs");
+    _mkdir("Damped oscillation serial");
+
     return _execution_time_damped_os_serial(max_amplitude, length, mass, gravity, k,
                                             Ao,
                                             Vo, FI,
@@ -251,6 +269,8 @@ elastic_pendulum_execution(double r, double length, double mass, double gravity,
                            double Vo,
                            double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
+    _mkdir("Logs");
+    _mkdir("Elastic pendulum");
     return _execution_time_elastic_pendulum(r, length, mass, gravity, k, Ao, Xo,
                                             Yo,
                                             Vo,
@@ -302,14 +322,14 @@ int heat_equation_2D_P1_OPENMP(double time_step, double time_limit,
 }
 
 ////////////////heat equation 1D serial
-int heat_equation_1D_serial(double time_step, double time_limit, 
-                                double space_step, 
-                                long long precision)
+int heat_equation_1D_serial(double time_step, double time_limit,
+                            double space_step,
+                            long long precision)
 {
-puts("physics");
-    return _simulate_heat_transfer_1D_serial(time_step, time_limit, 
-                                            space_step, 
-                                            precision);
+    puts("physics");
+    return _simulate_heat_transfer_1D_serial(time_step, time_limit,
+                                             space_step,
+                                             precision);
 }
 
 ////////////////heat equation 2D serial
@@ -365,13 +385,13 @@ double heat_equation_execution_time_2D_P1_OPENMP(double time_step, double time_l
 }
 
 ////////////////heat equation 1D serial execution time without i/o
-double heat_equation_execution_time_1D_serial(double time_step, double time_limit, 
-                                            double space_step, 
-                                            long long precision)
+double heat_equation_execution_time_1D_serial(double time_step, double time_limit,
+                                              double space_step,
+                                              long long precision)
 {
-    return _execution_time_heat_transfer_1D_serial(time_step, time_limit, 
-                                                    space_step, 
-                                                    precision);
+    return _execution_time_heat_transfer_1D_serial(time_step, time_limit,
+                                                   space_step,
+                                                   precision);
 }
 
 ////////////////heat equation 2D serial execution time without i/o

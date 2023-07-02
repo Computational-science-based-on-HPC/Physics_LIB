@@ -14,7 +14,8 @@
         "omp.h": "c",
         "math.h": "c",
         "unistd.h": "c",
-        "fcntl.h": "c"
+        "fcntl.h": "c",
+        "stat.h": "c"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc"
 }

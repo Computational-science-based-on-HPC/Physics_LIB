@@ -55,19 +55,19 @@ int _simulate_damped_os_serial(double max_amplitude, double length, double mass,
     double CALCULATIONS[3];
     FILE *p_file;
     char _file_name[2076];
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    sprintf(_file_name, "damped_os_serial_displacement_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    time_t tim = time(NULL);
+    struct tm tm = *localtime(&tim);
+    sprintf(_file_name, "Simulation/Damped oscillation serial/damped_os_serial_displacement_%d-%02d-%02d_%02d-%02d-%02d.sim", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     p_file = fopen(_file_name, "w");
     fprintf(p_file, "%lf\n", RESULTS[0]);
-
-    for (double t = 0; t <= time_limit + 0.05; t += step_size)
+    unsigned long long _it_number = (unsigned long long)((double)((time_limit / step_size) + 0.5));
+    double t = 0;
+    for (unsigned long long i = 0; i < _it_number; i++)
     {
         if (isnan(RESULTS[0]) || isnan(RESULTS[1]) || isnan(RESULTS[2]))
         {
 
             fclose(p_file);
-
             puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
             return -1;
         }
@@ -78,7 +78,7 @@ int _simulate_damped_os_serial(double max_amplitude, double length, double mass,
             puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
             return -2;
         }
-
+        t += step_size;
         CALCULATIONS[0] = cos(W * t + FI);
         CALCULATIONS[1] = sin(W * t + FI);
         CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
@@ -138,14 +138,15 @@ int _simulate_elastic_pendulum(double r, double length, double mass, double grav
     char _file_name[2076];
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
-    sprintf(_file_name, "elastic_pendulum_x_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    sprintf(_file_name, "Simulation/Elastic pendulum/elastic_pendulum_x_%d-%02d-%02d_%02d-%02d-%02d.sim", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     p_dis_x = fopen(_file_name, "w");
-    sprintf(_file_name, "elastic_pendulum_y_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    sprintf(_file_name, "Simulation/Elastic pendulum/elastic_pendulum_y_%d-%02d-%02d_%02d-%02d-%02d.sim", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     p_dis_y = fopen(_file_name, "w");
     fprintf(p_dis_x, "%.6f\n", x1);
     fprintf(p_dis_y, "%.6f\n", y);
 
-    for (int i = 0; i < time_limit; ++i)
+    unsigned long long _it_number = (unsigned long long)((double)((time_limit / step_size) + 0.5));
+    for (unsigned long long i = 0; i < _it_number; ++i)
     {
         t += step_size;
         double k11 = _dx(v);
@@ -251,8 +252,11 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
     tm = *localtime(&tim);
     printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     clock_t start_time = clock();
-    for (double t = 0; t <= time_limit + 0.05; t += step_size)
+    unsigned long long _it_number = (unsigned long long)((double)((time_limit / step_size) + 0.5));
+    double t = 0;
+    for (unsigned long long i = 0; i < _it_number; i++)
     {
+        t += step_size;
         CALCULATIONS[0] = cos(W * t + FI);
         CALCULATIONS[1] = sin(W * t + FI);
         CALCULATIONS[2] = exp((-damping_coefficent / (2 * mass)) * t);
@@ -334,10 +338,11 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
     double y = Yo;  // init position of mass in y
     double v = Vo;  // init velocity
     double a = 0;   // init velocity
+    unsigned long long _it_number = (unsigned long long)((double)((time_limit / step_size) + 0.5));
     tm = *localtime(&tim);
     printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     clock_t start_time = clock();
-    for (int i = 0; i < time_limit; ++i)
+    for (unsigned long long i = 0; i < _it_number; ++i)
     {
         t += step_size;
         double k11 = _dx(v);

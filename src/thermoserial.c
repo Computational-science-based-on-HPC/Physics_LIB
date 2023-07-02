@@ -4,13 +4,13 @@
 #include <math.h>
 #include <time.h>
 #include "../include/thermoutils.h"
-
+#include "../include/utils.h"
 #define ll long long
 // #define M_PI 3.14159265358979323846264338327
 
 double _get_value_1D(double time_step,
                      double space_step,
-                     long long x,unsigned long long t,
+                     long long x, unsigned long long t,
                      long long precision)
 {
     puts("inside getvalue");
@@ -132,7 +132,7 @@ double _execution_time_heat_transfer_1D_serial(double time_step, double time_lim
                                                double space_step,
                                                long long precision)
 {
-   // clock_t start_time = clock();
+    // clock_t start_time = clock();
     double length = 10.0;
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
@@ -174,7 +174,6 @@ double _execution_time_heat_transfer_1D_serial(double time_step, double time_lim
             _get_value_1D(time_step, space_step, x, t, precision);
         }
     }
-
 
     //    clock_t end_time = clock();
     double end_time2 = omp_get_wtime();
