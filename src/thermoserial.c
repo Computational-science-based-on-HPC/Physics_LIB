@@ -8,38 +8,37 @@
 #define ll long long
 // #define M_PI 3.14159265358979323846264338327
 
-double _get_value_1D(double time_step,
+long double _get_value_1D(double time_step,
                      double space_step,
-                     long long x,unsigned long long t,
-                     long long precision)
+                     ll x,unsigned ll t,
+                    ll precision)
 {
-    puts("inside getvalue");
-    double sum = 0.0, exponential, spaceXTerm, coeff;
-    double x_real = x * space_step;
-    double t_real = t * time_step;
 
-    for (long long k = 0; k < precision; k++)
+    long double sum = 0.0, exponential, spaceXTerm, coeff;
+    long double x_real = x * space_step;
+    long double t_real = t * time_step;
+
+    for (ll k = 0; k < precision; k++)
     {
         exponential = exp(-3 * pow(2 * (k + 1), 2) * (M_PI * M_PI * t_real) / 4);
-        spaceXTerm = sin((double)(2 * k + 1) * M_PI * x_real / 2);
+        spaceXTerm = sin((long double)(2 * k + 1) * M_PI * x_real / 2);
         coeff = 1 / (2 * k + 1);
         sum += coeff * exponential * spaceXTerm;
     }
 
     sum *= 200 / M_PI;
-    puts("fish cal getvalue");
     return sum;
 }
 
-double _get_value_2D(double time_step,
+long double _get_value_2D(double time_step,
                      double length, double space_step_x, double width, double space_step_y,
-                     int x, int y, int t,
-                     long long precision)
+                     ll x, ll y, unsigned ll t,
+                     ll precision)
 {
-    double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
-    double x_real = x * space_step_x;
-    double y_real = y * space_step_y;
-    double t_real = t * time_step;
+    long double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
+    long double x_real = x * space_step_x;
+    long double y_real = y * space_step_y;
+    long double t_real = t * time_step;
     for (ll m = 1; m < precision; ++m)
     {
         for (ll n = 1; n < precision; ++n)
@@ -58,9 +57,8 @@ double _get_value_2D(double time_step,
 
 int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
                                       double space_step,
-                                      long long precision)
+                                      ll precision)
 {
-    puts("inside fn");
     clock_t start_time = clock();
     double length = 10.0;
     FILE *fptr;
@@ -70,19 +68,17 @@ int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
     sprintf(_file_name, "simulate_heat_transfer_1D_serial_%d-%02d-%02d_%02d-%02d-%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     fptr = fopen(_file_name, "w");
 
-    unsigned long long numTimePoint = _cal_num_time(time_step, time_limit);
+    unsigned ll numTimePoint = _cal_num_time(time_step, time_limit);
 
-    long long numSpacePoint = _cal_num_space(length, space_step);
-    puts("cal space");
-    for (unsigned long long t = 0; t < numTimePoint; t++)
+    ll numSpacePoint = _cal_num_space(length, space_step);
+    for (unsigned ll t = 0; t < numTimePoint; t++)
     {
-        for (long long x = 0; x <= numSpacePoint; x++)
+        for (ll x = 0; x <= numSpacePoint; x++)
         {
-            fprintf(fptr, "%f ", _get_value_1D(time_step, space_step, x, t, precision));
+            fprintf(fptr, "%Lf ", _get_value_1D(time_step, space_step, x, t, precision));
         }
         fprintf(fptr, "\n");
     }
-    puts("after getvalue");
     fclose(fptr);
     clock_t end_time = clock();
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
@@ -93,7 +89,7 @@ int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
 int _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
                                       double space_step_x,
                                       double space_step_y,
-                                      long long precision)
+                                      ll precision)
 {
     clock_t start_time = clock();
     double length = 2.0, width = 2.0;
@@ -114,7 +110,7 @@ int _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
         {
             for (ll x = 0; x <= numSpacePointX; ++x)
             {
-                fprintf(fptr, "%f ", _get_value_2D(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
+                fprintf(fptr, "%Lf ", _get_value_2D(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
             }
             fprintf(fptr, "\n");
         }
@@ -130,7 +126,7 @@ int _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
 
 double _execution_time_heat_transfer_1D_serial(double time_step, double time_limit,
                                                double space_step,
-                                               long long precision)
+                                               ll precision)
 {
    // clock_t start_time = clock();
     double length = 10.0;
@@ -164,7 +160,7 @@ double _execution_time_heat_transfer_1D_serial(double time_step, double time_lim
     cpu_inf_stream();
     printf("\n=================================================================================\n\n");
 
-    printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    printf("\nStarted Calculation at: %d-%02d-%02d_%02d-%02d-%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     double start_time2 = omp_get_wtime();
 
     for (unsigned ll t = 0; t < numTimePoint; t++)
@@ -195,7 +191,7 @@ double _execution_time_heat_transfer_1D_serial(double time_step, double time_lim
 double _execution_time_heat_transfer_2D_serial(double time_step, double time_limit,
                                                double space_step_x,
                                                double space_step_y,
-                                               long long precision)
+                                               ll precision)
 {
 
     clock_t start_time = clock();
@@ -213,7 +209,7 @@ double _execution_time_heat_transfer_2D_serial(double time_step, double time_lim
         freopen(_log_file_name, "w", stdout);
     }
 
-    printf("Started Simulation of heat Equation 2D Serial at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    printf("Started Simulation of heat Equation 2D Serial at %02d-%02d-%02d_%02d-%02d-%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     printf("Time step: %f\n", time_step);
     printf("Time limit: %f\n", time_limit);
     printf("Space step x: %f\n", space_step_x);

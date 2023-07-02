@@ -306,7 +306,7 @@ int heat_equation_1D_serial(double time_step, double time_limit,
                                 double space_step, 
                                 long long precision)
 {
-puts("physics");
+
     return _simulate_heat_transfer_1D_serial(time_step, time_limit, 
                                             space_step, 
                                             precision);

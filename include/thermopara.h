@@ -42,10 +42,10 @@
 * @return sum we calculated.
 */
 
-extern double
+extern long double
 _get_value_1D_mpi(double time_step, 
                  double space_step,
-                 double x, double t,
+                 long long x, unsigned long long t,
                  long long precision);
 
 /**
@@ -64,10 +64,10 @@ _get_value_1D_mpi(double time_step,
 * @param precision The number of vectors we use in the calculations.
 * @return sum we calculated.
 */
- extern double
+ extern long double
  _get_value_1D_openmp(double time_step,
                          double space_step,
-                         double x, double t,
+                         long long x, unsigned long long t,
                          long long precision);
 
 
@@ -88,12 +88,12 @@ _get_value_1D_mpi(double time_step,
 * @param precision The number of vectors we use in the calculations.
 * @return sum we calculated.
 */
- extern double
+ extern long double
  _get_value_2D_mpi(double time_step,
                         double length, double space_step_x,
                         double width, double space_step_y,
-                         int x, int y, int t,
-                         long long precision);
+                        long long x, long long y, unsigned long long t,
+                        long long precision);
 
 /**
 * @brief This is a function calculates the value of specific point in the space at specific time in 2D.
@@ -116,12 +116,12 @@ _get_value_1D_mpi(double time_step,
 * @return sum we calculated.
 */
 
- extern double
+ extern long double
  _get_value_2D_openmp(double time_step,
                         double length, double space_step_x,
                         double width, double space_step_y,
-                         int x, int y, int t,
-                         long long precision);
+                        long long x, long long y, unsigned long long t,
+                        long long precision);
 
 
 /**

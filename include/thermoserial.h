@@ -42,7 +42,7 @@
 * @return sum we calculated.
 */
 
- extern double
+ extern long double
  _get_value_1D(double time_step,
                          double space_step,
                          long long x, unsigned long long t,
@@ -65,10 +65,10 @@
 * @param precision The number of vectors we use in the calculations.
 * @return sum we calculated.
 */
- extern double
+ extern long double
  _get_value_2D(double time_step,
                double length, double space_step_x, double width, double space_step_y,
-               int x, int y, int t,
+               long long x, long long y, unsigned long long t,
                long long precision);
 
 /**
