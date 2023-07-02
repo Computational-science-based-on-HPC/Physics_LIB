@@ -17,7 +17,7 @@ double _get_value_1D(double time_step,
     double x_real = x * space_step;
     double t_real = t * time_step;
 
-    for (ll k = 0; k < precision; k++)
+    for (long long k = 0; k < precision; k++)
     {
         exponential = exp(-3 * pow(2 * (k + 1), 2) * (M_PI * M_PI * t_real) / 4);
         spaceXTerm = sin((double)(2 * k + 1) * M_PI * x_real / 2);
@@ -69,11 +69,11 @@ int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
 
     unsigned long long numTimePoint = _cal_num_time(time_step, time_limit);
 
-    ll numSpacePoint = _cal_num_space(length, space_step);
+    long long numSpacePoint = _cal_num_space(length, space_step);
 
     for (unsigned long long t = 0; t < numTimePoint; t++)
     {
-        for (ll x = 0; x <= numSpacePoint; x++)
+        for (long long x = 0; x <= numSpacePoint; x++)
         {
             fprintf(fptr, "%f ", _get_value_1D(time_step, space_step, x, t, precision));
         }
