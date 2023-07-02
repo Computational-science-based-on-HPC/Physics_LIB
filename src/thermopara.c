@@ -285,7 +285,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
     int name_len;
     MPI_Get_processor_name(processor_name, &name_len);
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    // MPI_Barrier(MPI_COMM_WORLD);
 
     ll numTimePoint, numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
     //    char _log_file_name[2076];
@@ -446,7 +446,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         fclose(fptr1);
     }
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    // MPI_Barrier(MPI_COMM_WORLD);
     if (my_rank == 0)
     {
         for (int i = 1; i < processesNo; i++) {
