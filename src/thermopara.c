@@ -285,7 +285,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
     int name_len;
     MPI_Get_processor_name(processor_name, &name_len);
 
-    // MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
 
     ll numTimePoint, numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
     //    char _log_file_name[2076];
@@ -316,6 +316,8 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         printf("Width: %f\n", width);
 
         start_time = MPI_Wtime();
+        tim = time(NULL);
+        tm = *localtime(&tim);
         numTimePoint = _cal_num_time(time_step, time_limit);
         numSpacePointX = _cal_num_space(length, space_step_x);
         numSpacePointY = _cal_num_space(width, space_step_y);
@@ -329,13 +331,13 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
 
         printf("Number of time points per process: %lld\n", numTimePointPerProcess);
         printf("Number of time points for remaining process: %lld\n", numTimePointRemProcess);
-        printf("Memory ===========================================================================\n");
+        puts("Memory ===========================================================================\n");
         printmemstream();
-        printf("\n================================================================================\nCPUs ===========================================================================\n\n");
+        puts("\n================================================================================\nCPUs ===========================================================================\n\n");
         cpu_inf_stream();
-        printf("\n=================================================================================\n\n");
+        puts("\n=================================================================================\n\n");
 
-        printf("Started Job 1 at: %f Processor: %s Rank: %d.\n", start_time, processor_name, my_rank);
+        printf("Started Job 1 at: %02d-%02d-%02d %02d:%02d:%02d in Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank);
     }
 
     MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
@@ -446,7 +448,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         fclose(fptr1);
     }
 
-    // MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
     if (my_rank == 0)
     {
         for (int i = 1; i < processesNo; i++) {
@@ -467,8 +469,9 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         tim = time(NULL);
         tm = *localtime(&tim);
         fprintf(logFile,"Finished the execution of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        fclose(logFile);
+        
     }
+    fclose(logFile);
     
     // MPI_Finalize();
     // MPI_Finalized(&finalized);
