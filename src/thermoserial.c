@@ -13,6 +13,7 @@ double _get_value_1D(double time_step,
                      long long x, long long t,
                      long long precision)
 {
+    puts("inside getvalue");
     double sum = 0.0, exponential, spaceXTerm, coeff;
     double x_real = x * space_step;
     double t_real = t * time_step;
@@ -26,6 +27,7 @@ double _get_value_1D(double time_step,
     }
 
     sum *= 200 / M_PI;
+    puts("fish cal getvalue");
     return sum;
 }
 
@@ -58,6 +60,7 @@ int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
                                       double space_step,
                                       long long precision)
 {
+    puts("inside fn");
     clock_t start_time = clock();
     double length = 10.0;
     FILE *fptr;
@@ -70,7 +73,7 @@ int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
     long long numTimePoint = _cal_num_time(time_step, time_limit);
 
     long long numSpacePoint = _cal_num_space(length, space_step);
-
+    puts("cal space");
     for (long long t = 0; t < numTimePoint; t++)
     {
         for (long long x = 0; x <= numSpacePoint; x++)
@@ -79,7 +82,7 @@ int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
         }
         fprintf(fptr, "\n");
     }
-
+    puts("after getvalue");
     fclose(fptr);
     clock_t end_time = clock();
     double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
