@@ -709,7 +709,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
     MPI_Barrier(MPI_COMM_WORLD);
 
-    unsigned ll ll numTimePoint;
+    unsigned ll numTimePoint;
     ll numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
 
     time_t tim = time(NULL);
