@@ -45,7 +45,7 @@
  extern double
  _get_value_1D(double time_step,
                          double space_step,
-                         double x, double t,
+                         long long x, unsigned long long t,
                          long long precision);
 
 /**

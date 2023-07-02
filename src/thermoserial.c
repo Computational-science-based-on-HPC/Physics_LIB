@@ -10,7 +10,7 @@
 
 double _get_value_1D(double time_step,
                      double space_step,
-                     double x, double t,
+                     long long x, unsigned long long t,
                      long long precision)
 {
     double sum = 0.0, exponential, spaceXTerm, coeff;
@@ -64,7 +64,7 @@ int _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
     char _file_name[2076];
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
-    sprintf(_file_name, "simulate_heat_transfer_1D_serial_%d-%02d-%02d %02d:%02d:%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    sprintf(_file_name, "simulate_heat_transfer_1D_serial_%d-%02d-%02d_%02d-%02d-%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     fptr = fopen(_file_name, "w");
 
     unsigned long long numTimePoint = 50;//_cal_num_time(time_step, time_limit);
