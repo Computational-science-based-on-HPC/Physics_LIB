@@ -296,7 +296,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
     if (my_rank == 0)
     {
         char _log_file_name[255];
-        sprintf(_log_file_name, "Logs/Thermo Simulation mpi 2D/Thermo2D-%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        sprintf(_log_file_name, "Logs/'Thermo Simulation mpi 2D'/Thermo2D-%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         logFile = fopen(_log_file_name, "w"); // Open the file in write mode
         if (logFile != NULL)
         {
