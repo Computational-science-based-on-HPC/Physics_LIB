@@ -146,14 +146,14 @@ double _execution_time_heat_transfer_1D_serial(double time_step, double time_lim
     printf("Time step: %f\n", time_step);
     printf("Time limit: %f\n", time_limit);
     printf("Space step x: %f\n", space_step);
-    printf("Precision: %d\n", precision);
+    printf("Precision: %lld\n", precision);
     printf("Length: %f\n", length);
 
     unsigned ll numTimePoint = _cal_num_time(time_step, time_limit);
 
     ll numSpacePoint = _cal_num_space(length, space_step);
 
-    printf("Number of time points: %lld\n", numTimePoint);
+    printf("Number of time points: %llu\n", numTimePoint);
     printf("Number of space points x: %lld\n", numSpacePoint);
     printf("Memory ===========================================================================\n");
     printmemstream();
@@ -215,7 +215,7 @@ double _execution_time_heat_transfer_2D_serial(double time_step, double time_lim
     printf("Time limit: %f\n", time_limit);
     printf("Space step x: %f\n", space_step_x);
     printf("Space step y: %f\n", space_step_y);
-    printf("Precision: %d\n", precision);
+    printf("Precision: %lld\n", precision);
     printf("Length: %f\n", length);
     printf("Width: %f\n", width);
 
@@ -223,7 +223,7 @@ double _execution_time_heat_transfer_2D_serial(double time_step, double time_lim
     ll numSpacePointX = _cal_num_space(length, space_step_x);
     ll numSpacePointY = _cal_num_space(width, space_step_y);
 
-    printf("Number of time points: %lld\n", numTimePoint);
+    printf("Number of time points: %llu\n", numTimePoint);
     printf("Number of space points x: %lld\n", numSpacePointX);
     printf("Number of space points y: %lld\n", numSpacePointY);
     printf("Memory ===========================================================================\n");
