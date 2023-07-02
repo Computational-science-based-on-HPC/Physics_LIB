@@ -390,7 +390,7 @@ elastic_pendulum_execution(double r, double length, double mass, double gravity,
 extern int
 heat_equation_1D_P1_MPI(double time_step, double time_limit,
                         double space_step,
-                        int precision);
+                        long long precision);
 
 
 /**
@@ -422,7 +422,7 @@ heat_equation_1D_P1_MPI(double time_step, double time_limit,
 extern int
 heat_equation_1D_P1_OPENMP(double time_step, double time_limit,
                            double space_step,
-                           int precision);
+                           long long precision);
 
 ////////////////heat equation 2D parallel
 
@@ -459,7 +459,7 @@ heat_equation_1D_P1_OPENMP(double time_step, double time_limit,
 extern int
 heat_equation_2D_P1_MPI(double time_step, double time_limit,
                         double spaceX_step, double spaceY_step,
-                        int precision);
+                        long long precision);
 
 /**
  * @brief This is a function that simulates the heat transfer in 2D object, and each core writes the result to a separate file.
@@ -493,7 +493,7 @@ heat_equation_2D_P1_MPI(double time_step, double time_limit,
 extern int
 heat_equation_2D_P1_OPENMP(double time_step, double time_limit,
                            double spaceX_step, double spaceY_step,
-                           int precision);
+                           long long precision);
 
 ////////////////heat equation 1D serial
 /**
@@ -521,7 +521,7 @@ heat_equation_2D_P1_OPENMP(double time_step, double time_limit,
  */
 
 extern int
-heat_equation_1D_serial(double time_step, double time_limit, double space_step, int precision);
+heat_equation_1D_serial(double time_step, double time_limit, double space_step, long long precision);
 
 
 ////////////////heat equation 2D serial
@@ -557,7 +557,7 @@ heat_equation_1D_serial(double time_step, double time_limit, double space_step, 
 extern int
 heat_equation_2D_serial(double time_step, double time_limit,
                         double spaceX_step, double spaceY_step,
-                        int precision);
+                        long long precision);
 
 
 ////////////////heat equation 1D parallel execution time without i/o
@@ -590,7 +590,7 @@ heat_equation_2D_serial(double time_step, double time_limit,
 extern double
 heat_equation_execution_time_1D_P1_MPI(double time_step, double time_limit,
                                        double space_step,
-                                       int precision);
+                                       long long precision);
 
 /**
  * @brief This is a function that simulates the heat transfer in 1D object as wire, and return the execution time without I/O.
@@ -620,7 +620,7 @@ heat_equation_execution_time_1D_P1_MPI(double time_step, double time_limit,
 extern double
 heat_equation_execution_time_1D_P1_OPENMP(double time_step, double time_limit,
                                           double space_step,
-                                          int precision);
+                                          long long precision);
 
 
 ////////////////heat equation 2D parallel execution time without i/o
@@ -654,7 +654,7 @@ heat_equation_execution_time_1D_P1_OPENMP(double time_step, double time_limit,
 extern double
 heat_equation_execution_time_2D_P1_MPI(double time_step, double time_limit,
                                        double spaceX_step, double spaceY_step,
-                                       int precision);
+                                       long long precision);
 
 
 /**
@@ -686,7 +686,7 @@ heat_equation_execution_time_2D_P1_MPI(double time_step, double time_limit,
 
 extern double heat_equation_execution_time_2D_P1_OPENMP(double time_step, double time_limit,
                         double spaceX_step, double spaceY_step,
-                        int precision);
+                        long long precision);
 
 
 ////////////////heat equation 1D serial execution time without i/o
@@ -716,7 +716,7 @@ extern double heat_equation_execution_time_2D_P1_OPENMP(double time_step, double
 */
 
 extern double
-heat_equation_execution_time_1D_serial(double time_step, double time_limit, double space_step, int precision);
+heat_equation_execution_time_1D_serial(double time_step, double time_limit, double space_step, long long precision);
 
 ////////////////heat equation 2D serial execution time without i/o
 
@@ -748,7 +748,7 @@ heat_equation_execution_time_1D_serial(double time_step, double time_limit, doub
 extern double
 heat_equation_execution_time_2D_serial(double time_step, double time_limit,
                                        double spaceX_step, double spaceY_step,
-                                       int precision);
+                                       long long precision);
 
 /**
  * @brief finalize the MPI and de-allocate the resources.

@@ -46,7 +46,7 @@ extern double
 _get_value_1D_mpi(double time_step, 
                  double space_step,
                  double x, double t,
-                 int precision);
+                 long long precision);
 
 /**
 * @brief This is a function calculates the value of specific point in the space at specific time in 1D.
@@ -68,7 +68,7 @@ _get_value_1D_mpi(double time_step,
  _get_value_1D_openmp(double time_step,
                          double space_step,
                          double x, double t,
-                         int precision);
+                         long long precision);
 
 
 /**
@@ -93,7 +93,7 @@ _get_value_1D_mpi(double time_step,
                         double length, double space_step_x,
                         double width, double space_step_y,
                          int x, int y, int t,
-                         int precision);
+                         long long precision);
 
 /**
 * @brief This is a function calculates the value of specific point in the space at specific time in 2D.
@@ -121,7 +121,7 @@ _get_value_1D_mpi(double time_step,
                         double length, double space_step_x,
                         double width, double space_step_y,
                          int x, int y, int t,
-                         int precision);
+                         long long precision);
 
 
 /**
@@ -140,7 +140,7 @@ _get_value_1D_mpi(double time_step,
 extern int
 _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, 
                         double space_step,
-                        int precision);
+                        long long precision);
 
 /**
 * @brief This is a function that simulates the heat transfer in 1D object as wire, and writes the result to a file.
@@ -160,7 +160,7 @@ _simulate_heat_transfer_1D_MPI(double time_step, double time_limit,
 extern int
 _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, 
                         double space_step,
-                        int precision);
+                        long long precision);
 
 /**
  * @brief This is a function that simulates the heat transfer in 2D object, and each core writes the result to a separate file.
@@ -183,7 +183,7 @@ _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit,
  _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
                                 double space_step_x,
                                 double space_step_y,
-                                int precision);
+                                long long precision);
 
 /**
  * @brief This is a function that simulates the heat transfer in 2D object, and each core writes the result to a separate file.
@@ -207,7 +207,7 @@ _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit,
  _simulate_heat_transfer_2D_OPENMP(double time_step, double time_limit,
                                    double space_step_x,
                                    double space_step_y,
-                                   int precision);
+                                   long long precision);
 
 /**
 * @brief This is a function that simulates the heat transfer in 1D object as wire, and return the execution time without I/O.
@@ -226,7 +226,7 @@ _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit,
 extern double
 _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
                                double space_step,
-                               int precision);
+                               long long precision);
 
 
 /**
@@ -245,7 +245,7 @@ _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
 extern double
 _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
                                   double space_step,
-                                  int precision);
+                                  long long precision);
 
 
 /**
@@ -269,7 +269,7 @@ extern double
 _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
                                double space_step_x,
                                double space_step_y,
-                               int precision);
+                               long long precision);
 
 /**
  * @brief This is a function that simulates the heat transfer in 2D object, and return the execution time without I/O.
@@ -290,7 +290,7 @@ extern double
 _execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
                                    double space_step_x,
                                    double space_step_y,
-                                   int precision);
+                                   long long precision);
 
 
 #endif //PHYSICS_THERMOPARA_H

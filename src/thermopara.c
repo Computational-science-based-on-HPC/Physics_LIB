@@ -17,13 +17,13 @@
 #include "omp.h"
 // #endif
 
-double _get_value_1D_mpi(double time_step, double space_step, double x, double t, int precision)
+double _get_value_1D_mpi(double time_step, double space_step, double x, double t, long long precision)
 {
     double sum = 0.0, exponential, spaceXTerm, coeff;
     double x_real = x * space_step;
     double t_real = t * time_step;
 
-    for (int k = 0; k < precision; k++)
+    for (ll k = 0; k < precision; k++)
     {
         exponential = exp(-3 * pow(2 * (k + 1), 2) * (M_PI * M_PI * t_real) / 4);
         spaceXTerm = sin((double)(2 * k + 1) * M_PI * x_real / 2);
@@ -35,14 +35,14 @@ double _get_value_1D_mpi(double time_step, double space_step, double x, double t
     return sum;
 }
 
-double _get_value_1D_openmp(double time_step, double space_step, double x, double t, int precision)
+double _get_value_1D_openmp(double time_step, double space_step, double x, double t, long long precision)
 {
     double sum = 0.0, exponential, spaceXTerm, coeff;
     double x_real = x * space_step;
     double t_real = t * time_step;
 
 #pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, t_real, precision) private(exponential, spaceXTerm, coeff)
-    for (int k = 0; k < precision; k++)
+    for (ll k = 0; k < precision; k++)
     {
         exponential = exp(-3 * pow(2 * (k + 1), 2) * (M_PI * M_PI * t_real) / 4);
         spaceXTerm = sin((double)(2 * k + 1) * M_PI * x_real / 2);
@@ -57,7 +57,7 @@ double _get_value_1D_openmp(double time_step, double space_step, double x, doubl
 double _get_value_2D_mpi(double time_step,
                          double length, double space_step_x, double width, double space_step_y,
                          int x, int y, int t,
-                         int precision)
+                         long long precision)
 {
     double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
     double x_real = x * space_step_x;
@@ -84,7 +84,7 @@ double _get_value_2D_mpi(double time_step,
 double _get_value_2D_openmp(double time_step,
                             double length, double space_step_x, double width, double space_step_y,
                             int x, int y, int t,
-                            int precision)
+                            long long precision)
 {
     double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
     double x_real = x * space_step_x;
@@ -109,7 +109,7 @@ double _get_value_2D_openmp(double time_step,
     return sum;
 }
 
-int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double space_step, int precision)
+int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double space_step, long long precision)
 {
     // MPI_Init(NULL, NULL);
     int initialized, finalized;
@@ -123,7 +123,8 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
 
     int my_rank;     // rank of process
     int processesNo; // number of process
-    ll numTimePointPerProcess, numTimePointRemProcess, numTimePoint, numSpacePoint;
+    unsigned ll numTimePoint;
+    ll numSpacePoint, numTimePointPerProcess, numTimePointRemProcess;
     double start_time, end_time;
 
     int checkRem;
@@ -148,11 +149,11 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
     MPI_Bcast(&space_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&time_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&time_limit, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&precision, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&precision, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
 
     if (my_rank == 0)
     {
-        ll startIndex = 0;
+        unsigned ll startIndex = 0;
         int i;
         for (i = 1; i < processesNo; i++)
         {
@@ -161,22 +162,21 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
             {
                 flag = 1;
                 MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
                 startIndex += numTimePointPerProcess + 1;
                 numTimePointRemProcess -= 1;
             }
             else
             {
                 MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
                 startIndex += numTimePointPerProcess;
             }
         }
     }
     else
     {
-        ll startIndex;
-        ll i;
+        unsigned ll startIndex, i;
 
         MPI_Recv(&checkRem, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
         ll size;
@@ -189,12 +189,12 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
             size = numTimePointPerProcess;
         }
 
-        MPI_Recv(&startIndex, 1, MPI_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
+        MPI_Recv(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
 
         // printf("The value of startIndex is: %lld\n", startIndex);
 
         i = startIndex;
-        ll endIndex = startIndex + size;
+        unsigned ll endIndex = startIndex + size;
 
         char _file_name[2076];
         time_t t = time(NULL);
@@ -227,7 +227,7 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
     return 0;
 }
 
-int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, double space_step, int precision)
+int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, double space_step, long long precision)
 {
     clock_t start_time = clock();
     double length = 10.0;
@@ -238,12 +238,12 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     sprintf(_file_name, "simulate_heat_transfer_1D_OPENMP_%d-%02d-%02d_%02d-%02d-%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     fptr = fopen(_file_name, "w");
 
-    ll numTimePoint = _cal_num_time(time_step, time_limit);
+    unsigned ll numTimePoint = _cal_num_time(time_step, time_limit);
     ll numSpacePoint = _cal_num_space(length, space_step);
 
-    for (int t = 0; t < numTimePoint; t++)
+    for (unsigned ll t = 0; t < numTimePoint; t++)
     {
-        for (int x = 0; x <= numSpacePoint; x++)
+        for (ll x = 0; x <= numSpacePoint; x++)
         {
             fprintf(fptr, "%f ", _get_value_1D_openmp(time_step, space_step, x, t, precision));
         }
@@ -260,7 +260,7 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
 int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
                                    double space_step_x,
                                    double space_step_y,
-                                   int precision)
+                                   long long precision)
 {
     // MPI_Init(NULL, NULL);
     int initialized;
@@ -290,7 +290,8 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
 
     MPI_Barrier(MPI_COMM_WORLD);
 
-    ll numTimePoint, numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
+    unsigned ll numTimePoint;
+    ll numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
     //    char _log_file_name[2076];
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
@@ -314,7 +315,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         printf("Time limit: %f\n", time_limit);
         printf("Space step x: %f\n", space_step_x);
         printf("Space step y: %f\n", space_step_y);
-        printf("Precision: %d\n", precision);
+        printf("Precision: %lld\n", precision);
         printf("Length: %f\n", length);
         printf("Width: %f\n", width);
 
@@ -325,7 +326,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         numSpacePointX = _cal_num_space(length, space_step_x);
         numSpacePointY = _cal_num_space(width, space_step_y);
 
-        printf("Number of time points: %lld\n", numTimePoint);
+        printf("Number of time points: %llu\n", numTimePoint);
         printf("Number of space points x: %lld\n", numSpacePointX);
         printf("Number of space points y: %lld\n", numSpacePointY);
 
@@ -352,11 +353,11 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
     MPI_Bcast(&space_step_y, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&time_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&time_limit, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&precision, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&precision, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
 
     if (my_rank == 0)
     {
-        ll startIndex = 0;
+        unsigned ll startIndex = 0;
         int i;
         for (i = 1; i < processesNo; i++)
         {
@@ -365,14 +366,14 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
             {
                 flag = 1;
                 MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
                 startIndex += numTimePointPerProcess + 1;
                 numTimePointRemProcess -= 1;
             }
             else
             {
                 MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
                 startIndex += numTimePointPerProcess;
             }
         }
@@ -385,8 +386,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
     {
         start_time = MPI_Wtime();
 
-        ll startIndex;
-        ll i;
+        unsigned ll startIndex, i;
 
         MPI_Recv(&checkRem, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
         ll size;
@@ -399,7 +399,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
             size = numTimePointPerProcess;
         }
 
-        MPI_Recv(&startIndex, 1, MPI_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
+        MPI_Recv(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
 
         tim = time(NULL);
         tm = *localtime(&tim);
@@ -412,7 +412,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         MPI_Send(start_time_string, 20, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
 
         i = startIndex;
-        ll endIndex = startIndex + size;
+        unsigned ll endIndex = startIndex + size;
 
         char _file_name[2076];
         time_t t = time(NULL);
@@ -462,13 +462,6 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
             fprintf(logFile,"Rank %d start time: %s, end time: %s\n", i, rank_start_time, rank_end_time);
         }
 
-        // end_time = MPI_Wtime();
-        // printf("The time taken in MPI_2d With I/O is: %f\n", end_time - start_time);
-        // tim = time(NULL);
-        // tm = *localtime(&tim);
-        // printf("Finished Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        // printf("The time taken in MPI_2d With I/O is: %f\n", end_time - start_time);
-        // fclose(logFile);
         tim = time(NULL);
         tm = *localtime(&tim);
         fprintf(logFile,"Finished the execution of heat Equation 2D using MPI at %02d-%02d-%02d_%02d-%02d-%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
@@ -481,7 +474,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
 int _simulate_heat_transfer_2D_OPENMP(double time_step, double time_limit,
                                       double space_step_x,
                                       double space_step_y,
-                                      int precision)
+                                      long long precision)
 {
 
     clock_t start_time = clock();
@@ -493,41 +486,14 @@ int _simulate_heat_transfer_2D_OPENMP(double time_step, double time_limit,
     sprintf(_file_name, "simulate_heat_transfer_2D_OPENMP_%d-%02d-%02d_%02d-%02d-%02d.txt", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     fptr = fopen(_file_name, "w");
 
-    //    char _log_file_name[255];
-    //    sprintf(_log_file_name, "Logs/Thermo Simulation openmp 2D/Thermo2D_%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    //    file = fopen(_log_file_name, "w"); // Open the file in write mode
-    //    if (file != NULL)
-    //    {
-    //        freopen(_log_file_name, "w", stdout);
-    //    }
-    //
-    //    printf("Started Simulation of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    //    printf("Number of processes: %d\n", processesNo);
-    //    printf("Time step: %f\n", time_step);
-    //    printf("Time limit: %f\n", time_limit);
-    //    printf("Space step x: %f\n", space_step_x);
-    //    printf("Space step y: %f\n", space_step_y);
-    //    printf("Precision: %d\n", precision);
-    //    printf("Length: %f\n", length);
-    //    printf("Width: %f\n", width);
-    //
-    ll numTimePoint;
-    ll numSpacePointX;
-    ll numSpacePointY;
+    unsigned ll numTimePoint;
+    ll numSpacePointX, numSpacePointY;
 
     numTimePoint = _cal_num_time(time_step, time_limit);
     numSpacePointX = _cal_num_space(length, space_step_x);
     numSpacePointY = _cal_num_space(width, space_step_y);
-    //    printf("Number of time points: %lld\n", numTimePoint);
-    //    printf("Number of space points x: %lld\n", numSpacePointX);
-    //    printf("Number of space points y: %lld\n", numSpacePointY);
-    //    printf("Memory ===========================================================================\n");
-    //    printmemstream();
-    //    printf("\n================================================================================\nCPUs ===========================================================================\n\n");
-    //    cpu_inf_stream();
-    //    printf("\n=================================================================================\n\n");
 
-    for (ll t = 0; t < numTimePoint; ++t)
+    for (unsigned ll t = 0; t < numTimePoint; ++t)
     {
         for (ll y = 0; y <= numSpacePointY; ++y)
         {
@@ -549,7 +515,7 @@ int _simulate_heat_transfer_2D_OPENMP(double time_step, double time_limit,
 
 double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
                                             double space_step,
-                                            int precision)
+                                            long long precision)
 {
     // MPI_Init(NULL, NULL);
     int initialized, finalized;
@@ -562,7 +528,8 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
 
     int my_rank;     // rank of process
     int processesNo; // number of process
-    ll numTimePointPerProcess, numTimePointRemProcess, numTimePoint, numSpacePoint;
+    unsigned ll numTimePoint;
+    ll numTimePointPerProcess, numTimePointRemProcess, numSpacePoint;
     double start_time, end_time;
 
     int checkRem;
@@ -587,11 +554,11 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
     MPI_Bcast(&space_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&time_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&time_limit, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&precision, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&precision, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
 
     if (my_rank == 0)
     {
-        ll startIndex = 0;
+        unsigned ll startIndex = 0;
         int i;
         for (i = 1; i < processesNo; i++)
         {
@@ -600,25 +567,24 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
             {
                 flag = 1;
                 MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
                 startIndex += numTimePointPerProcess + 1;
                 numTimePointRemProcess -= 1;
             }
             else
             {
                 MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
                 startIndex += numTimePointPerProcess;
             }
         }
     }
     else
     {
-        ll startIndex;
-        ll i;
+        unsigned ll startIndex, i;
+        ll size;
 
         MPI_Recv(&checkRem, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
-        ll size;
         if (checkRem > 0)
         {
             size = numTimePointPerProcess + 1;
@@ -628,12 +594,12 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
             size = numTimePointPerProcess;
         }
 
-        MPI_Recv(&startIndex, 1, MPI_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
+        MPI_Recv(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
 
         printf("The value of startIndex is: %lld\n", startIndex);
 
         i = startIndex;
-        ll endIndex = startIndex + size;
+        unsigned ll endIndex = startIndex + size;
 
         for (; i < endIndex; ++i)
         {
@@ -661,10 +627,9 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
 
 double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_limit,
                                                double space_step,
-                                               int precision)
+                                               long long precision)
 {
 
-    //    clock_t start_time = clock();
     FILE *file;
     double length = 10.0;
     time_t tim = time(NULL);
@@ -681,13 +646,13 @@ double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_lim
     printf("Time step: %f\n", time_step);
     printf("Time limit: %f\n", time_limit);
     printf("Space step x: %f\n", space_step);
-    printf("Precision: %d\n", precision);
+    printf("Precision: %lld\n", precision);
     printf("Length: %f\n", length);
 
-    ll numTimePoint = _cal_num_time(time_step, time_limit);
+    unsigned ll numTimePoint = _cal_num_time(time_step, time_limit);
     ll numSpacePoint = _cal_num_space(length, space_step);
 
-    printf("Number of time points: %lld\n", numTimePoint);
+    printf("Number of time points: %llu\n", numTimePoint);
     printf("Number of space points x: %lld\n", numSpacePoint);
     printf("Memory ===========================================================================\n");
     printmemstream();
@@ -697,17 +662,14 @@ double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_lim
 
     printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     double start_time2 = omp_get_wtime();
-    for (int t = 0; t < numTimePoint; t++)
+    for (unsigned ll t = 0; t < numTimePoint; t++)
     {
-        for (int x = 0; x <= numSpacePoint; x++)
+        for (ll x = 0; x <= numSpacePoint; x++)
         {
             _get_value_1D_openmp(time_step, space_step, x, t, precision);
         }
     }
-    //    clock_t end_time = clock();
     double end_time2 = omp_get_wtime();
-    //    double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-    //    printf("The value of execution_time 2D_OPENMP_without_Files is: %f\n", end_time - start_time);
 
     tim = time(NULL);
     tm = *localtime(&tim);
@@ -723,7 +685,7 @@ double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_lim
 double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
                                             double space_step_x,
                                             double space_step_y,
-                                            int precision)
+                                            long long precision)
 {
 
     FILE *logFile;
@@ -747,7 +709,8 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
     MPI_Barrier(MPI_COMM_WORLD);
 
-    ll numTimePoint, numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
+    unsigned ll ll numTimePoint;
+    ll numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
 
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
@@ -774,7 +737,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         printf("Time limit: %f\n", time_limit);
         printf("Space step x: %f\n", space_step_x);
         printf("Space step y: %f\n", space_step_y);
-        printf("Precision: %d\n", precision);
+        printf("Precision: %lld\n", precision);
         printf("Length: %f\n", length);
         printf("Width: %f\n", width);
 
@@ -786,7 +749,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         numSpacePointX = _cal_num_space(length, space_step_x);
         numSpacePointY = _cal_num_space(width, space_step_y);
 
-        printf("Number of time points: %lld\n", numTimePoint);
+        printf("Number of time points: %llu\n", numTimePoint);
         printf("Number of space points x: %lld\n", numSpacePointX);
         printf("Number of space points y: %lld\n", numSpacePointY);
 
@@ -813,11 +776,11 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     MPI_Bcast(&space_step_y, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&time_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&time_limit, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&precision, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&precision, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
 
     if (my_rank == 0)
     {
-        ll startIndex = 0;
+        unsigned ll startIndex = 0;
         int i;
         for (i = 1; i < processesNo; i++)
         {
@@ -826,14 +789,14 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
             {
                 flag = 1;
                 MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
                 startIndex += numTimePointPerProcess + 1;
                 numTimePointRemProcess -= 1;
             }
             else
             {
                 MPI_Send(&flag, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&startIndex, 1, MPI_LONG_LONG, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, i, 0, MPI_COMM_WORLD);
                 startIndex += numTimePointPerProcess;
             }
         }
@@ -844,9 +807,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     }
     if (my_rank > 0)
     {
-        ll startIndex;
-        ll i;
-
+        unsigned ll startIndex, i;
         start_time = MPI_Wtime();
 
         MPI_Recv(&checkRem, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
@@ -860,7 +821,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
             size = numTimePointPerProcess;
         }
 
-        MPI_Recv(&startIndex, 1, MPI_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
+        MPI_Recv(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
 
         tim = time(NULL);
         tm = *localtime(&tim);
@@ -873,7 +834,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         MPI_Send(start_time_string, 20, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
 
         i = startIndex;
-        ll endIndex = startIndex + size;
+        unsigned ll endIndex = startIndex + size;
 
         for (; i < endIndex; ++i)
         {
@@ -898,13 +859,6 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     }
     MPI_Barrier(MPI_COMM_WORLD);
     double execution_time;
-    // if (my_rank == 0)
-    // {
-    //     end_time = MPI_Wtime();
-    //     execution_time = end_time - start_time;
-    //     printf("The time taken in MPI_2d Without I/O is: %f\n", execution_time);
-    // }
-
     if (my_rank == 0)
     {
         for (int i = 1; i < processesNo; i++) {
@@ -929,7 +883,7 @@ double
 _execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
                                         double space_step_x,
                                         double space_step_y,
-                                        int precision)
+                                        long long precision)
 {
 
     //    clock_t start_time = clock();
@@ -951,18 +905,17 @@ _execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
     printf("Time limit: %f\n", time_limit);
     printf("Space step x: %f\n", space_step_x);
     printf("Space step y: %f\n", space_step_y);
-    printf("Precision: %d\n", precision);
+    printf("Precision: %lld\n", precision);
     printf("Length: %f\n", length);
     printf("Width: %f\n", width);
 
-    ll numTimePoint;
-    ll numSpacePointX;
-    ll numSpacePointY;
+    unsigned ll numTimePoint;
+    ll numSpacePointX, numSpacePointY;
 
     numTimePoint = _cal_num_time(time_step, time_limit);
     numSpacePointX = _cal_num_space(length, space_step_x);
     numSpacePointY = _cal_num_space(width, space_step_y);
-    printf("Number of time points: %lld\n", numTimePoint);
+    printf("Number of time points: %llu\n", numTimePoint);
     printf("Number of space points x: %lld\n", numSpacePointX);
     printf("Number of space points y: %lld\n", numSpacePointY);
     printf("Memory ===========================================================================\n");
@@ -974,7 +927,7 @@ _execution_time_heat_transfer_2D_OPENMP(double time_step, double time_limit,
     printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     double start_time = omp_get_wtime();
 
-    for (ll t = 0; t < numTimePoint; ++t)
+    for (unsigned ll t = 0; t < numTimePoint; ++t)
     {
         for (ll y = 0; y <= numSpacePointY; ++y)
         {

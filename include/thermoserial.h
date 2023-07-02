@@ -46,7 +46,7 @@
  _get_value_1D(double time_step,
                          double space_step,
                          double x, double t,
-                         int precision);
+                         long long precision);
 
 /**
 * @brief This is a function calculates the value of specific point in the space at specific time in 2D.
@@ -69,7 +69,7 @@
  _get_value_2D(double time_step,
                double length, double space_step_x, double width, double space_step_y,
                int x, int y, int t,
-               int precision);
+               long long precision);
 
 /**
 * @brief This is a function that simulates the heat transfer in 1D object as wire, and write the result to a file.
@@ -87,7 +87,7 @@
  extern int
  _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
                          double space_step,
-                         int precision);
+                         long long precision);
 
 
 
@@ -110,7 +110,7 @@
  _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
                         double space_step_x,
                         double space_step_y,
-                        int precision);
+                        long long precision);
 
 /**
 * @brief This is a function that simulates the heat transfer in 1D object as wire, and return the execution time without I/O.
@@ -127,7 +127,7 @@
 extern double
 _execution_time_heat_transfer_1D_serial(double time_step, double time_limit,
                                         double space_step,
-                                        int precision);
+                                        long long precision);
 
 /**
  * @brief This is a function that simulates the heat transfer in 2D object, and return the execution time without I/O.
@@ -146,7 +146,7 @@ extern double
 _execution_time_heat_transfer_2D_serial(double time_step, double time_limit,
                                   double space_step_x,
                                   double space_step_y,
-                                  int precision);
+                                  long long precision);
 
 
 #endif //PHYSICS_THERMOSERIAL_H
