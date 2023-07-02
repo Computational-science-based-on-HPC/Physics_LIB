@@ -17,7 +17,7 @@
 * @param time_limit The time that we want to measure the temperature of the object after.
 * @return number of steps we will move as a long long integer.
 */
-extern  ll
+extern unsigned ll
 _cal_num_time(double time_step, double time_limit);
 
 /**
