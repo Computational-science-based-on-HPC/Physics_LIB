@@ -1,4 +1,4 @@
-#include "physics.h"
+#include "../include/physics.h"
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -8,13 +8,13 @@
 int main(void)
 
 {
-    int t = 100;
+    // int t = 100;
 //    for (int i = 0; i < 30; i++)
 //    {
-        damped_os_parallel_execution_time_v1(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
-                                             -0.1,
-                                             t, 0.01, 0.1, 3);
-//        t *= 2;
+//         damped_os_parallel_execution_time_v1(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
+//                                              -0.1,
+//                                              t, 0.01, 0.1, 3);
+// //        t *= 2;
 //    }
 
 //    t = 
@@ -48,18 +48,18 @@ int main(void)
 //     heat_equation_2D_serial(0.1, 5, 0.1, 0.1,50);
 
 //        heat_equation_execution_time_1D_P1_MPI(0.01, 0.5, 0.05, 50);
-    long long precision = 2;
-    for(int i=1; i<= 30; i++){
-         heat_equation_execution_time_1D_P1_OPENMP(0.01, 0.5, 0.05, precision);
-         precision*=2;
-     }
+    // long long precision = 2;
+    // for(int i=1; i<= 30; i++){
+    //      heat_equation_execution_time_1D_P1_OPENMP(0.01, 0.5, 0.05, precision);
+    //      precision*=2;
+    //  }
 
-//    heat_equation_execution_time_2D_P1_MPI(0.1, 5, 0.1, 0.1, 50);
-    precision = 2;
-    for(int i=1; i<= 30; i++){
-        heat_equation_execution_time_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, precision);
-        precision*=2;
-    }
+   heat_equation_execution_time_2D_P1_MPI(0.1, 5, 0.1, 0.1, 50);
+    // lon/precision = 2;
+    // for(int i=1; i<= 30; i++){
+    //     heat_equation_execution_time_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, precision);
+    //     precision*=2;
+    // }
 //        heat_equation_execution_time_1D_serial(0.01, 0.5, 0.05,50);
 //     heat_equation_execution_time_2D_serial(0.1, 5, 0.1, 0.1,50);
 

@@ -702,7 +702,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
 
     int checkRem;
     double start_time, end_time;
-    char start_time_string[20], end_time_string[20];
+    char start_time_string[30], end_time_string[30];
     
     MPI_Status status;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
@@ -831,7 +831,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
         tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-        MPI_Send(start_time_string, 20, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
+        MPI_Send(start_time_string, 30, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
 
         i = startIndex;
         unsigned ll endIndex = startIndex + size;
@@ -855,25 +855,25 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
         tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-        MPI_Send(end_time_string, 20, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
+        MPI_Send(end_time_string, 30, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
     }
     MPI_Barrier(MPI_COMM_WORLD);
     double execution_time;
     if (my_rank == 0)
     {
         for (int i = 1; i < processesNo; i++) {
-            char rank_start_time[20], rank_end_time[20];
-            MPI_Recv(rank_start_time, 20, MPI_CHAR, i, 0, MPI_COMM_WORLD, &status);
-            MPI_Recv(rank_end_time, 20, MPI_CHAR, i, 0, MPI_COMM_WORLD, &status);
+            char rank_start_time[30], rank_end_time[30];
+            MPI_Recv(rank_start_time, 30, MPI_CHAR, i, 0, MPI_COMM_WORLD, &status);
+            MPI_Recv(rank_end_time, 30, MPI_CHAR, i, 0, MPI_COMM_WORLD, &status);
 
-            fprintf(logFile,"Rank %d start time: %s, end time: %s\n", i, rank_start_time, rank_end_time);
+            printf("Rank %d start time: %s, end time: %s\n", i, rank_start_time, rank_end_time);
         }
         end_time = MPI_Wtime();
         execution_time = end_time - start_time;
 
         tim = time(NULL);
         tm = *localtime(&tim);
-        fprintf(logFile,"Finished the execution of heat Equation 2D using MPI at %02d-%02d-%02d_%02d-%02d-%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        printf("Finished the execution of heat Equation 2D using MPI at %02d-%02d-%02d_%02d-%02d-%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         fclose(logFile);
     }
     return execution_time;
