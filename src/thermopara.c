@@ -112,7 +112,7 @@ long double _get_value_2D_openmp(double time_step,
 int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double space_step, long long precision)
 {
     // MPI_Init(NULL, NULL);
-    int initialized, finalized;
+    int initialized;
     double length = 10.0;
     MPI_Initialized(&initialized);
     if (!initialized)
@@ -191,8 +191,6 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
 
         MPI_Recv(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
 
-        // printf("The value of startIndex is: %lld\n", startIndex);
-
         i = startIndex;
         unsigned ll endIndex = startIndex + size;
 
@@ -220,10 +218,6 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
         end_time = MPI_Wtime();
         printf("The time taken in MPI_1d With I/O is: %f\n", end_time - start_time);
     }
-    // MPI_Finalize();
-    MPI_Finalized(&finalized);
-    if (!finalized)
-        MPI_Finalize();
     return 0;
 }
 
