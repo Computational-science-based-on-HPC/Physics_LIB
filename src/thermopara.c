@@ -17,16 +17,16 @@
 #include "omp.h"
 // #endif
 
-double _get_value_1D_mpi(double time_step, double space_step, double x, double t, long long precision)
+long double _get_value_1D_mpi(double time_step, double space_step, ll x, unsigned ll t, long long precision)
 {
-    double sum = 0.0, exponential, spaceXTerm, coeff;
-    double x_real = x * space_step;
-    double t_real = t * time_step;
+    long double sum = 0.0, exponential, spaceXTerm, coeff;
+    long double x_real = x * space_step;
+    long double t_real = t * time_step;
 
     for (ll k = 0; k < precision; k++)
     {
         exponential = exp(-3 * pow(2 * (k + 1), 2) * (M_PI * M_PI * t_real) / 4);
-        spaceXTerm = sin((double)(2 * k + 1) * M_PI * x_real / 2);
+        spaceXTerm = sin((long double)(2 * k + 1) * M_PI * x_real / 2);
         coeff = 1 / (2 * k + 1);
         sum += coeff * exponential * spaceXTerm;
     }
@@ -35,17 +35,17 @@ double _get_value_1D_mpi(double time_step, double space_step, double x, double t
     return sum;
 }
 
-double _get_value_1D_openmp(double time_step, double space_step, double x, double t, long long precision)
+long double _get_value_1D_openmp(double time_step, double space_step, ll x, unsigned ll t, long long precision)
 {
-    double sum = 0.0, exponential, spaceXTerm, coeff;
-    double x_real = x * space_step;
-    double t_real = t * time_step;
+    long double sum = 0.0, exponential, spaceXTerm, coeff;
+    long double x_real = x * space_step;
+    long double t_real = t * time_step;
 
 #pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, t_real, precision) private(exponential, spaceXTerm, coeff)
     for (ll k = 0; k < precision; k++)
     {
         exponential = exp(-3 * pow(2 * (k + 1), 2) * (M_PI * M_PI * t_real) / 4);
-        spaceXTerm = sin((double)(2 * k + 1) * M_PI * x_real / 2);
+        spaceXTerm = sin((long double)(2 * k + 1) * M_PI * x_real / 2);
         coeff = 1 / (2 * k + 1);
         sum += coeff * exponential * spaceXTerm;
     }
@@ -54,23 +54,23 @@ double _get_value_1D_openmp(double time_step, double space_step, double x, doubl
     return sum;
 }
 
-double _get_value_2D_mpi(double time_step,
+long double _get_value_2D_mpi(double time_step,
                          double length, double space_step_x, double width, double space_step_y,
-                         int x, int y, int t,
+                         ll x, ll y, unsigned ll t,
                          long long precision)
 {
-    double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
-    double x_real = x * space_step_x;
-    double y_real = y * space_step_y;
-    double t_real = t * time_step;
+    long double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
+    long double x_real = x * space_step_x;
+    long double y_real = y * space_step_y;
+    long double t_real = t * time_step;
 
     for (ll m = 1; m < precision; ++m)
     {
         for (ll n = 1; n < precision; ++n)
         {
             exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
-            spaceXTerm = sin((double)m * M_PI * x_real / length);
-            spaceYTerm = sin((double)n * M_PI * y_real / width);
+            spaceXTerm = sin((long double)m * M_PI * x_real / length);
+            spaceYTerm = sin((long double)n * M_PI * y_real / width);
             // Find Amn constant and multiply it with the sum
             coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
             sum += coeff * exponential * spaceXTerm * spaceYTerm;
@@ -81,15 +81,15 @@ double _get_value_2D_mpi(double time_step,
     return sum;
 }
 
-double _get_value_2D_openmp(double time_step,
+long double _get_value_2D_openmp(double time_step,
                             double length, double space_step_x, double width, double space_step_y,
-                            int x, int y, int t,
+                            ll x, ll y, unsigned ll t,
                             long long precision)
 {
-    double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
-    double x_real = x * space_step_x;
-    double y_real = y * space_step_y;
-    double t_real = t * time_step;
+    long double sum = 0.0, exponential, spaceXTerm, spaceYTerm, coeff;
+    long double x_real = x * space_step_x;
+    long double y_real = y * space_step_y;
+    long double t_real = t * time_step;
 
 #pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, y_real, t_real, precision) private(exponential, spaceXTerm, spaceYTerm, coeff)
     for (ll m = 1; m < precision; ++m)
@@ -98,8 +98,8 @@ double _get_value_2D_openmp(double time_step,
         for (ll n = 1; n < precision; ++n)
         {
             exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
-            spaceXTerm = sin((double)m * M_PI * x_real / length);
-            spaceYTerm = sin((double)n * M_PI * y_real / width);
+            spaceXTerm = sin((long double)m * M_PI * x_real / length);
+            spaceYTerm = sin((long double)n * M_PI * y_real / width);
             // Find Amn constant and multiply it with the sum
             coeff = (1 + pow(-1, m + 1)) * (1 - cos(n * M_PI / 2)) / (m * n);
             sum += coeff * exponential * spaceXTerm * spaceYTerm;
@@ -123,8 +123,8 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
 
     int my_rank;     // rank of process
     int processesNo; // number of process
-    unsigned ll numTimePoint;
-    ll numSpacePoint, numTimePointPerProcess, numTimePointRemProcess;
+    unsigned ll numTimePoint, numTimePointPerProcess, numTimePointRemProcess;
+    ll numSpacePoint;
     double start_time, end_time;
 
     int checkRem;
@@ -143,7 +143,7 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
         numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for remaining process
     }
 
-    MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&numTimePointPerProcess, 1, MPI_UNSIGNED_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&numSpacePoint, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&length, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&space_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -207,7 +207,7 @@ int _simulate_heat_transfer_1D_MPI(double time_step, double time_limit, double s
         {
             for (ll x = 0; x <= numSpacePoint; ++x)
             {
-                fprintf(fptr1, "%f ", _get_value_1D_mpi(time_step, space_step, x, i, precision));
+                fprintf(fptr1, "%Lf ", _get_value_1D_mpi(time_step, space_step, x, i, precision));
             }
             fprintf(fptr1, "\n");
         }
@@ -245,7 +245,7 @@ int _simulate_heat_transfer_1D_OPENMP(double time_step, double time_limit, doubl
     {
         for (ll x = 0; x <= numSpacePoint; x++)
         {
-            fprintf(fptr, "%f ", _get_value_1D_openmp(time_step, space_step, x, t, precision));
+            fprintf(fptr, "%Lf ", _get_value_1D_openmp(time_step, space_step, x, t, precision));
         }
         fprintf(fptr, "\n");
     }
@@ -290,8 +290,8 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
 
     MPI_Barrier(MPI_COMM_WORLD);
 
-    unsigned ll numTimePoint;
-    ll numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
+    unsigned ll numTimePoint, numTimePointPerProcess, numTimePointRemProcess;
+    ll numSpacePointX, numSpacePointY;
     //    char _log_file_name[2076];
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
@@ -333,8 +333,8 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
         numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for remaining process
 
-        printf("Number of time points per process: %lld\n", numTimePointPerProcess);
-        printf("Number of time points for remaining process: %lld\n", numTimePointRemProcess);
+        printf("Number of time points per process: %llu\n", numTimePointPerProcess);
+        printf("Number of time points for remaining process: %llu\n", numTimePointRemProcess);
         puts("Memory ===========================================================================\n");
         printmemstream();
         puts("\n================================================================================\nCPUs ===========================================================================\n\n");
@@ -344,7 +344,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         printf("Started Job 1 at: %02d-%02d-%02d_%02d-%02d-%02d in Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank);
     }
 
-    MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&numTimePointPerProcess, 1, MPI_UNSIGNED_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&numSpacePointX, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&numSpacePointY, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&length, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -429,7 +429,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
             {
                 for (ll x = 0; x <= numSpacePointX; ++x)
                 {
-                    fprintf(fptr1, "%f ", _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision));
+                    fprintf(fptr1, "%Lf ", _get_value_2D_mpi(time_step, length, space_step_x, width, space_step_y, x, y, i, precision));
                 }
                 fprintf(fptr1, "\n");
             }
@@ -499,7 +499,7 @@ int _simulate_heat_transfer_2D_OPENMP(double time_step, double time_limit,
         {
             for (ll x = 0; x <= numSpacePointX; ++x)
             {
-                fprintf(fptr, "%f ", _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
+                fprintf(fptr, "%Lf ", _get_value_2D_openmp(time_step, length, space_step_x, width, space_step_y, x, y, t, precision));
             }
             fprintf(fptr, "\n");
         }
@@ -528,8 +528,8 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
 
     int my_rank;     // rank of process
     int processesNo; // number of process
-    unsigned ll numTimePoint;
-    ll numTimePointPerProcess, numTimePointRemProcess, numSpacePoint;
+    unsigned ll numTimePointPerProcess, numTimePointRemProcess, numTimePoint;
+    ll  numSpacePoint;
     double start_time, end_time;
 
     int checkRem;
@@ -548,7 +548,7 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
         numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for last process
     }
 
-    MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&numTimePointPerProcess, 1, MPI_UNSIGNED_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&numSpacePoint, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&length, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&space_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -660,7 +660,7 @@ double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_lim
     cpu_inf_stream();
     printf("\n=================================================================================\n\n");
 
-    printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    printf("\nStarted Calculation at: %d-%02d-%02d_%02d-%02d-%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     double start_time2 = omp_get_wtime();
     for (unsigned ll t = 0; t < numTimePoint; t++)
     {
@@ -673,11 +673,11 @@ double _execution_time_heat_transfer_1D_OPENMP(double time_step, double time_lim
 
     tim = time(NULL);
     tm = *localtime(&tim);
-    printf("\nEnded Calculation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, end_time2 - start_time2);
+    printf("\nEnded Calculation at: %d-%02d-%02d_%02d-%02d-%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, end_time2 - start_time2);
     tim = time(NULL);
     tm = *localtime(&tim);
     puts("\n================================================================================\n");
-    printf("Ended Simulation of Thermo energy 1D at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    printf("Ended Simulation of Thermo energy 1D at %d-%02d-%02d_%02d-%02d-%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
     return end_time2 - start_time2; // execution_time;
 }
@@ -709,8 +709,8 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
     MPI_Comm_size(MPI_COMM_WORLD, &processesNo);
     MPI_Barrier(MPI_COMM_WORLD);
 
-    unsigned ll numTimePoint;
-    ll numSpacePointX, numSpacePointY, numTimePointPerProcess, numTimePointRemProcess;
+    unsigned ll numTimePoint, numTimePointPerProcess, numTimePointRemProcess;
+    ll numSpacePointX, numSpacePointY;
 
     time_t tim = time(NULL);
     struct tm tm = *localtime(&tim);
@@ -756,8 +756,8 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         numTimePointPerProcess = numTimePoint / (processesNo - 1); // number of time points per process
         numTimePointRemProcess = numTimePoint % (processesNo - 1); // number of time points for remaining process
 
-        printf("Number of time points per process: %lld\n", numTimePointPerProcess);
-        printf("Number of time points for remaining process: %lld\n", numTimePointRemProcess);
+        printf("Number of time points per process: %llu\n", numTimePointPerProcess);
+        printf("Number of time points for remaining process: %llu\n", numTimePointRemProcess);
         puts("Memory ===========================================================================\n");
         printmemstream();
         puts("\n================================================================================\nCPUs ===========================================================================\n\n");
@@ -767,7 +767,7 @@ double _execution_time_heat_transfer_2D_MPI(double time_step, double time_limit,
         printf("Started Job 1 at: %02d-%02d-%02d_%02d-%02d-%02d in Processor: %s Rank: %d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, processor_name, my_rank);
     }
 
-    MPI_Bcast(&numTimePointPerProcess, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&numTimePointPerProcess, 1, MPI_UNSIGNED_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&numSpacePointX, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&numSpacePointY, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Bcast(&length, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);

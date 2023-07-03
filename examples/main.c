@@ -38,27 +38,30 @@ int main(void)
     //                            40000000, 0.01, 0.1,
     //                           3);
 
-    //    heat_equation_1D_P1_MPI(0.01, 0.5, 0.05, 50);
-//        heat_equation_1D_P1_OPENMP(0.01, 0.5, 0.05, 50);
-    // for(int i=1; i<= 30; i++){
-    //  long long precision = 50;
-    //  heat_equation_2D_P1_MPI(0.1, 5, 0.1, 0.1, precision);
-    //     precision*=2;
-    // }
+//       heat_equation_1D_P1_MPI(0.01, 0.5, 0.05, 50);
+//       heat_equation_1D_P1_OPENMP(0.01, 0.5, 0.05, 50);
 
-//        heat_equation_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, 50);
+//      heat_equation_2D_P1_MPI(0.1, 5, 0.1, 0.1, 50);
+//      heat_equation_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, 50);
 
-        heat_equation_1D_serial(0.01, 0.5, 0.05,50);
+//     heat_equation_1D_serial(0.01, 0.5, 0.05,50);
 //     heat_equation_2D_serial(0.1, 5, 0.1, 0.1,50);
 
-    //    heat_equation_execution_time_1D_P1_MPI(0.01, 0.5, 0.05, 50);
-//        heat_equation_execution_time_1D_P1_OPENMP(0.01, 0.5, 0.05, 50);
+//        heat_equation_execution_time_1D_P1_MPI(0.01, 0.5, 0.05, 50);
+    long long precision = 2;
+    for(int i=1; i<= 30; i++){
+         heat_equation_execution_time_1D_P1_OPENMP(0.01, 0.5, 0.05, precision);
+         precision*=2;
+     }
 
 //    heat_equation_execution_time_2D_P1_MPI(0.1, 5, 0.1, 0.1, 50);
-//    heat_equation_execution_time_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, 50);
-
+    precision = 2;
+    for(int i=1; i<= 30; i++){
+        heat_equation_execution_time_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, precision);
+        precision*=2;
+    }
 //        heat_equation_execution_time_1D_serial(0.01, 0.5, 0.05,50);
 //     heat_equation_execution_time_2D_serial(0.1, 5, 0.1, 0.1,50);
 
-    //  finalize();
+//      finalize();
 }
