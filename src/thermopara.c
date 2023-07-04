@@ -256,7 +256,6 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
                                    double space_step_y,
                                    long long precision)
 {
-    // MPI_Init(NULL, NULL);
     int initialized;
     double length = 2.0, width = 2.0;
     MPI_Initialized(&initialized);
@@ -284,18 +283,11 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
 
     unsigned ll numTimePoint, numTimePointPerProcess, numTimePointRemProcess;
     ll numSpacePointX, numSpacePointY;
-    //    char _log_file_name[2076];
-    time_t tim = time(NULL);
-    struct tm tm = *localtime(&tim);
 
 
     if (my_rank == 0)
     {
-
-
         start_time = MPI_Wtime();
-        tim = time(NULL);
-        tm = *localtime(&tim);
         numTimePoint = _cal_num_time(time_step, time_limit);
         numSpacePointX = _cal_num_space(length, space_step_x);
         numSpacePointY = _cal_num_space(width, space_step_y);
@@ -342,8 +334,6 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
     }
     if (my_rank > 0)
     {
-        start_time = MPI_Wtime();
-
         unsigned ll startIndex, i;
 
         MPI_Recv(&checkRem, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
@@ -358,9 +348,6 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         }
 
         MPI_Recv(&startIndex, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
-
-        start_time = MPI_Wtime();
-
 
         i = startIndex;
         unsigned ll endIndex = startIndex + size;
@@ -390,10 +377,9 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_rank == 0)
     {
-        tim = time(NULL);
-        tm = *localtime(&tim);
-        fprintf(logFile,"Finished the execution of heat Equation 2D using MPI at %02d-%02d-%02d_%02d-%02d-%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        fclose(logFile);
+        end_time = MPI_Wtime();
+        double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+        printf("The value of execution_time 2D_MPI_withFiles is: %f\n", execution_time);
     }
     
     return 0;
@@ -446,8 +432,7 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
                                             long long precision)
 {
     FILE *logFile;
-    // MPI_Init(NULL, NULL);
-    int initialized, finalized;
+    int initialized;
     double length = 10.0;
     MPI_Initialized(&initialized);
     if (!initialized)
@@ -478,7 +463,7 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
     if (my_rank == 0)
     {
         char _log_file_name[255];
-        sprintf(_log_file_name, "Logs/Thermo Simulation mpi 2D/Thermo2D_%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        sprintf(_log_file_name, "Logs/Thermo Simulation MPI 1D/Thermo1D_%d-%02d-%02d_%02d-%02d-%02d.log", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         logFile = fopen(_log_file_name, "w"); // Open the file in write mode
         if (logFile != NULL)
         {
@@ -626,10 +611,6 @@ double _execution_time_heat_transfer_1D_MPI(double time_step, double time_limit,
         printf("Finished the execution of heat Equation 2D using MPI at %02d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         fclose(logFile);
     }
-    // MPI_Finalize();
-//    MPI_Finalized(&finalized);
-//    if (!finalized)
-//        MPI_Finalize();
 
     return execution_time;
 }
