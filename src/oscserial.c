@@ -30,9 +30,9 @@
  * @param number_of_files currently nulled
  * @return
  */
-char* _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
-                               double Vo, double FI,
-                               double time_limit, double step_size, double damping_coefficent, int number_of_files)
+char *_simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
+                                 double Vo, double FI,
+                                 double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
@@ -69,14 +69,14 @@ char* _simulate_damped_os_serial(double max_amplitude, double length, double mas
 
             fclose(p_file);
             puts("Simulation Got a NaN Value.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a NaN Value Occurred");
-            return -1;
+            return "Got a NaN Value";
         }
         else if (isinf(RESULTS[0]) || isinf(RESULTS[1]) || isinf(RESULTS[2]))
         {
 
             fclose(p_file);
             puts("Simulation Got a INF.\n Breaking the Function...\nFiles Saved.\nSimulation Ended Cause a INF Value Occurred");
-            return -2;
+            return "Got a INF Value";
         }
         t += step_size;
         CALCULATIONS[0] = cos(W * t + FI);
@@ -88,7 +88,8 @@ char* _simulate_damped_os_serial(double max_amplitude, double length, double mas
         fprintf(p_file, "%lf\n", RESULTS[0]);
     }
     fclose(p_file);
-    return _file_name;
+    char *_ret = _file_name;
+    return _ret;
 }
 /**
  * @brief This function simulates the motion of (elastic pendulum/2D-spring/spring pendulum) system.
@@ -111,10 +112,10 @@ char* _simulate_damped_os_serial(double max_amplitude, double length, double mas
  * @param number_of_files
  * @return
  */
-char* _simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
-                               double Yo,
-                               double Vo,
-                               double time_limit, double step_size, double damping_coefficent, int number_of_files)
+char *_simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
+                                 double Yo,
+                                 double Vo,
+                                 double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     int validation = _valid_osc(Xo, Yo, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
@@ -183,7 +184,8 @@ char* _simulate_elastic_pendulum(double r, double length, double mass, double gr
     }
     fclose(p_dis_x);
     fclose(p_dis_y);
-    return _file_name;
+    char *_ret = _file_name;
+    return _ret;
 }
 /**
  *  @brief This function calculates execution time of simulating simple harmonic motion (Simple Spring Motion) using numerical solution of stepwise precision using equation (e^(-damping_coefficent / (2 * mass)) * t)*sin(wt+fi)),
@@ -204,7 +206,7 @@ char* _simulate_elastic_pendulum(double r, double length, double mass, double gr
  * @param number_of_files currently nulled
  * @return
  */
-double
+char *
 _execution_time_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                  double Vo, double FI,
                                  double time_limit, double step_size, double damping_coefficent, int number_of_files)
@@ -235,7 +237,7 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
     if (validation == 0)
     {
         puts("\n\nInvalid Arguments is Given");
-        return -1;
+        return "Invalid Arguments is Given";
     }
     if (validation == -1)
     {
@@ -271,7 +273,8 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
     printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, execution_time);
     puts("\n================================================================================\n");
     printf("Ended Simulation of Damped Oscillation Implementation at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    return execution_time;
+    char *_ret = _file_name;
+    return _ret;
 }
 /**
  * @brief This function calculates the execution time of simulating the motion of (elastic pendulum/2D-spring/spring pendulum) system.
@@ -294,7 +297,7 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
  * @param number_of_files
  * @return
  */
-double
+char *
 _execution_time_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                                  double Yo,
                                  double Vo,
@@ -326,7 +329,7 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
     if (validation == 0)
     {
         puts("\n\nInvalid Arguments is Given");
-        return -1;
+        return "Invalid Arguments is Given";
     }
     if (validation == -1)
     {
@@ -382,5 +385,6 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
     printf("\nEnded Job Caclulation at: %d-%02d-%02d %02d:%02d:%02d Execution Time: %f sec.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, execution_time);
     puts("\n================================================================================\n");
     printf("Ended Simulation of Elastic Pendulum Implementation at %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    return execution_time;
+    char *_ret = _file_name;
+    return _ret;
 }

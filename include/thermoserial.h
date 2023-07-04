@@ -84,7 +84,7 @@
 * the row represent the time, and the column represent the temperature at this point at that time.
 */
 
- extern int
+ extern char*
  _simulate_heat_transfer_1D_serial(double time_step, double time_limit,
                          double space_step,
                          long long precision);
@@ -106,7 +106,7 @@
  * and the column represent the temperature at this point at that time on y-axis (width).
  * The number of rows in each paragraph (time slot) equals length* space_step_x, and the number of columns equals width* space_step_y.
  */
- extern int
+ extern char*
  _simulate_heat_transfer_2D_serial(double time_step, double time_limit,
                         double space_step_x,
                         double space_step_y,

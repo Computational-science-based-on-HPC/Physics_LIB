@@ -61,7 +61,7 @@ _simulate_damped_os_serial(double max_amplitude, double length, double mass, dou
  * @param number_of_files
  * @return execution time of simulation
  */
-extern double
+extern char*
 _execution_time_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                            double Vo, double FI,
                            double time_limit, double step_size, double damping_coefficent, int number_of_files);
@@ -120,7 +120,7 @@ _simulate_elastic_pendulum(double r, double length, double mass, double gravity,
  * @param number_of_files
  * @return execution time if simulation
  */
-extern double
+extern char*
 _execution_time_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                            double Yo,
                            double Vo,

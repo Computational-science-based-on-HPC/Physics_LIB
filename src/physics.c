@@ -33,10 +33,8 @@ char *damped_os_serial(double max_amplitude, double length, double mass, double 
 {
     _mkdir("Simulation");
     _mkdir("Simulation/Damped oscillation serial");
-    const char* _ret =_simulate_damped_os_serial(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
-                                      time_limit, step_size, damping_coefficent, number_of_files); 
-    printf("%s\n",_ret);
-    return _ret;
+    return _simulate_damped_os_serial(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
+                                      time_limit, step_size, damping_coefficent, number_of_files);
 }
 /**
  *  This function used to call _simulate_damped_os_parallel_mpi_omp
@@ -55,12 +53,12 @@ char *damped_os_serial(double max_amplitude, double length, double mass, double 
  * @param number_of_files currently nulled
  * @return
  */
-int damped_os_parallel_v1(double max_amplitude, double length, double mass, double gravity, double k, double Ao, double Vo,
-                          double FI,
-                          double time_limit, double step_size, double damping_coefficent, int number_of_files)
+char *damped_os_parallel_v1(double max_amplitude, double length, double mass, double gravity, double k, double Ao, double Vo,
+                            double FI,
+                            double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     _mkdir("Simulation");
-    _mkdir("Damped oscillation mpi 1");
+    _mkdir("Simulation/Damped oscillation mpi 1");
     return _simulate_damped_os_parallel_mpi_omp(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
                                                 time_limit, step_size, damping_coefficent, number_of_files);
 }
@@ -81,12 +79,12 @@ int damped_os_parallel_v1(double max_amplitude, double length, double mass, doub
  * @param number_of_files currently nulled
  * @return
  */
-int damped_os_parallel_v2(double max_amplitude, double length, double mass, double gravity, double k, double Ao, double Vo,
-                          double FI,
-                          double time_limit, double step_size, double damping_coefficent, int number_of_files)
+char *damped_os_parallel_v2(double max_amplitude, double length, double mass, double gravity, double k, double Ao, double Vo,
+                            double FI,
+                            double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     _mkdir("Simulation");
-    _mkdir("Damped oscillation mpi 2");
+    _mkdir("Simulation/Damped oscillation mpi 2");
     return _simulate_damped_os_parallel_mpi(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
                                             time_limit, step_size, damping_coefficent, number_of_files);
 }
@@ -114,7 +112,7 @@ char *elastic_pendulum(double r, double length, double mass, double gravity, dou
                        double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     _mkdir("Simulation");
-    _mkdir("Elastic pendulum");
+    _mkdir("Simulation/Elastic pendulum");
     return _simulate_elastic_pendulum(r, length, mass, gravity, k, Ao, Xo,
                                       Yo,
                                       Vo,
@@ -145,7 +143,7 @@ damped_os_parallel_execution_time_v1(double max_amplitude, double length, double
                                      int number_of_files)
 {
     _mkdir("Logs");
-    _mkdir("Damped oscillation mpi 1");
+    _mkdir("Logs/Damped oscillation mpi 1");
     return _execution_time_damped_os_parallel_mpi_omp(max_amplitude, length, mass, gravity, k, Ao,
                                                       Vo, FI,
                                                       time_limit, step_size, damping_coefficent, number_of_files);
@@ -175,7 +173,7 @@ damped_os_parallel_execution_time_v2(double max_amplitude, double length, double
                                      int number_of_files)
 {
     _mkdir("Logs");
-    _mkdir("Damped oscillation mpi 2");
+    _mkdir("Logs/Damped oscillation mpi 2");
     return _execution_time_damped_os_parallel_mpi(max_amplitude, length, mass, gravity, k, Ao,
                                                   Vo, FI,
                                                   time_limit, step_size, damping_coefficent, number_of_files);
@@ -206,7 +204,7 @@ damped_os_parallel_execution_time_v3(double max_amplitude, double length, double
                                      int number_of_files, int num_of_threads)
 {
     _mkdir("Logs");
-    _mkdir("Damped oscillation omp");
+    _mkdir("Logs/Damped oscillation omp");
 
     return _execution_time_damped_os_parallel_omp(max_amplitude, length, mass, gravity, k,
                                                   Ao,
@@ -231,7 +229,7 @@ damped_os_parallel_execution_time_v3(double max_amplitude, double length, double
  * @param number_of_files currently nulled
  * @return
  */
-double
+char *
 damped_os_serial_execution(double max_amplitude, double length, double mass, double gravity, double k,
                            double Ao,
                            double Vo, double FI,
@@ -239,7 +237,7 @@ damped_os_serial_execution(double max_amplitude, double length, double mass, dou
                            int number_of_files)
 {
     _mkdir("Logs");
-    _mkdir("Damped oscillation serial");
+    _mkdir("Logs/amped oscillation serial");
 
     return _execution_time_damped_os_serial(max_amplitude, length, mass, gravity, k,
                                             Ao,
@@ -265,14 +263,14 @@ damped_os_serial_execution(double max_amplitude, double length, double mass, dou
  * @param number_of_files
  * @return
  */
-double
+char *
 elastic_pendulum_execution(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                            double Yo,
                            double Vo,
                            double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     _mkdir("Logs");
-    _mkdir("Elastic pendulum");
+    _mkdir("Logs/Elastic pendulum");
     return _execution_time_elastic_pendulum(r, length, mass, gravity, k, Ao, Xo,
                                             Yo,
                                             Vo,
@@ -284,7 +282,8 @@ int heat_equation_1D_P1_MPI(double time_step, double time_limit,
                             double space_step,
                             long long precision)
 {
-
+    _mkdir("Simulation");
+    _mkdir("Simulation/Thermo 1D MPI");
     return _simulate_heat_transfer_1D_MPI(time_step, time_limit,
                                           space_step,
                                           precision);
@@ -294,7 +293,8 @@ int heat_equation_1D_P1_OPENMP(double time_step, double time_limit,
                                double space_step,
                                long long precision)
 {
-
+    _mkdir("Simulation");
+    _mkdir("Simulation/Thermo 1D OpenMP");
     return _simulate_heat_transfer_1D_OPENMP(time_step, time_limit,
                                              space_step,
                                              precision);
@@ -305,7 +305,8 @@ int heat_equation_2D_P1_MPI(double time_step, double time_limit,
                             double spaceX_step, double spaceY_step,
                             long long precision)
 {
-
+    _mkdir("Simulation");
+    _mkdir("Simulation/Thermo 2D MPI");
     return _simulate_heat_transfer_2D_MPI(time_step, time_limit,
                                           spaceX_step,
                                           spaceY_step,
@@ -316,7 +317,8 @@ int heat_equation_2D_P1_OPENMP(double time_step, double time_limit,
                                double spaceX_step, double spaceY_step,
                                long long precision)
 {
-
+    _mkdir("Simulation");
+    _mkdir("Simulation/Thermo 2D OpenMP");
     return _simulate_heat_transfer_2D_OPENMP(time_step, time_limit,
                                              spaceX_step,
                                              spaceY_step,
@@ -324,10 +326,12 @@ int heat_equation_2D_P1_OPENMP(double time_step, double time_limit,
 }
 
 ////////////////heat equation 1D serial
-int heat_equation_1D_serial(double time_step, double time_limit,
+char* heat_equation_1D_serial(double time_step, double time_limit,
                             double space_step,
                             long long precision)
 {
+    _mkdir("Simulation");
+    _mkdir("Simulation/Thermo 1D Serial");
 
     return _simulate_heat_transfer_1D_serial(time_step, time_limit,
                                              space_step,
@@ -335,11 +339,12 @@ int heat_equation_1D_serial(double time_step, double time_limit,
 }
 
 ////////////////heat equation 2D serial
-int heat_equation_2D_serial(double time_step, double time_limit,
+char* heat_equation_2D_serial(double time_step, double time_limit,
                             double spaceX_step, double spaceY_step,
                             long long precision)
 {
-
+    _mkdir("Simulation");
+    _mkdir("Simulation/Thermo 2D Serial");
     return _simulate_heat_transfer_2D_serial(time_step, time_limit,
                                              spaceX_step,
                                              spaceY_step,
@@ -351,6 +356,8 @@ double heat_equation_execution_time_1D_P1_MPI(double time_step, double time_limi
                                               double space_step,
                                               long long precision)
 {
+    _mkdir("Logs");
+    _mkdir("Logs/Thermo Simulation MPI 1D");
     return _execution_time_heat_transfer_1D_MPI(time_step, time_limit,
                                                 space_step,
                                                 precision);
@@ -359,6 +366,8 @@ double heat_equation_execution_time_1D_P1_OPENMP(double time_step, double time_l
                                                  double space_step,
                                                  long long precision)
 {
+    _mkdir("Logs");
+    _mkdir("Logs/Thermo Simulation execution openmp 1D");
     return _execution_time_heat_transfer_1D_OPENMP(time_step, time_limit,
                                                    space_step,
                                                    precision);
@@ -369,6 +378,8 @@ double heat_equation_execution_time_2D_P1_MPI(double time_step, double time_limi
                                               double spaceX_step, double spaceY_step,
                                               long long precision)
 {
+    _mkdir("Logs");
+    _mkdir("Logs/Thermo Simulation mpi 2D");
     return _execution_time_heat_transfer_2D_MPI(time_step, time_limit,
                                                 spaceX_step,
                                                 spaceY_step,
@@ -379,7 +390,8 @@ double heat_equation_execution_time_2D_P1_OPENMP(double time_step, double time_l
                                                  double spaceX_step, double spaceY_step,
                                                  long long precision)
 {
-
+    _mkdir("Logs");
+    _mkdir("Logs/Thermo Simulation execution openmp 2D");
     return _execution_time_heat_transfer_2D_OPENMP(time_step, time_limit,
                                                    spaceX_step,
                                                    spaceY_step,
@@ -391,6 +403,8 @@ double heat_equation_execution_time_1D_serial(double time_step, double time_limi
                                               double space_step,
                                               long long precision)
 {
+    _mkdir("Logs");
+    _mkdir("Logs/DThermo Simulation execution Serial 1D");
     return _execution_time_heat_transfer_1D_serial(time_step, time_limit,
                                                    space_step,
                                                    precision);
@@ -401,7 +415,8 @@ double heat_equation_execution_time_2D_serial(double time_step, double time_limi
                                               double spaceX_step, double spaceY_step,
                                               long long precision)
 {
-
+    _mkdir("Logs");
+    _mkdir("Logs/Thermo Simulation execution Serial 2D");
     return _execution_time_heat_transfer_2D_serial(time_step, time_limit,
                                                    spaceX_step,
                                                    spaceY_step,

@@ -35,16 +35,16 @@
  * @param number_of_files
  * @return
  */
-int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
-                                         double Vo, double FI,
-                                         double time_limit, double step_size, double damping_coefficent, int number_of_files)
+char *_simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
+                                           double Vo, double FI,
+                                           double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
                                 number_of_files, 0);
     if (validation == 0)
     {
         puts("Invalid Arguments is Given");
-        return -1;
+        return "Invalid Arguments is Given";
     }
     if (validation == -1)
     {
@@ -57,7 +57,7 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     {
         MPI_Init(NULL, NULL);
     }
-
+    char *ret;
     int world_size;
     int world_rank;
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
@@ -106,15 +106,14 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
     MPI_Bcast(&W, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&coefficient_calc, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&dir, sizeof(dir), MPI_CHAR, 0, MPI_COMM_WORLD);
+    time_t tim = time(NULL);
+    struct tm tm = *localtime(&tim);
     if (world_rank > 0 || (world_rank == 0 && _it_number > 0))
     {
         omp_set_num_threads(3);
         int count = 0;
         FILE *p_dis;
         char _file_name[2076];
-
-        time_t tim = time(NULL);
-        struct tm tm = *localtime(&tim);
         sprintf(_file_name, "Simulation/Damped oscillation mpi 1/%d_damped_os_parallel_v1_displacement_%d-%02d-%02d_%02d-%02d-%02d.sim", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         p_dis = fopen(_file_name, "w");
 
@@ -188,7 +187,29 @@ int _simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, do
         fclose(p_dis);
     }
     MPI_Barrier(MPI_COMM_WORLD);
-    return 0;
+    if (world_rank == 0)
+    {
+        FILE *p_dis, *p_src;
+        char _file_name[2076], _target_name[2076];
+        sprintf(_target_name, "Simulation/Damped oscillation mpi 2/damped_os_parallel_v2_displacement%d-%02d-%02d_%02d-%02d-%02d.sim", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        p_dis = fopen(_target_name, "w");
+        for (int i = 1; i < world_size; i++)
+        {
+            sprintf(_file_name, "Simulation/Damped oscillation mpi 2/%d_damped_os_parallel_v2_displacement%d-%02d-%02d_%02d-%02d-%02d.sim", i, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+            p_src = fopen(_file_name, "r");
+            while (fgets(buff, 2076, p_src) != NULL)
+            {
+                fprintf(p_dis, "%f", buff);
+            }
+            fclose(p_src);
+            remove(_file_name);
+        }
+        fclose(p_dis);
+        ret = _target_name;
+        printf("Simulation Ended Successfully.\nFiles Saved.\n%s\n", ret);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
+    return ret;
 }
 /**
  *  This function calculate the execution time of simulating simple harmonic motion (Simple Spring Motion) using numerical solution of stepwise precision using equation (e^(-damping_coefficent / (2 * mass)) * t)*sin(wt+fi)),
@@ -410,9 +431,9 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
  * @param number_of_files currently nulled
  * @return
  */
-int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
-                                     double Vo, double FI,
-                                     double time_limit, double step_size, double damping_coefficent, int number_of_files)
+char *_simulate_damped_os_parallel_mpi(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
+                                       double Vo, double FI,
+                                       double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
 
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
@@ -442,7 +463,7 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
 
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-
+    char *ret;
     double W;
     double RESULTS[3];
     double coefficient_calc;
@@ -488,19 +509,18 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
     {
         MPI_Recv(&_it_number, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, &status);
     }
+    time_t tim = time(NULL);
+    struct tm tm = *localtime(&tim);
     if (world_rank > 0 || (world_rank == 0 && _it_number > 0))
     {
         int count = 0;
         FILE *p_dis;
         char _file_name[2076];
-        time_t tim = time(NULL);
-        struct tm tm = *localtime(&tim);
-        sprintf(_file_name, "Simulation/Damped oscillation mpi 2/%damped_os_parallel_v2_displacement%d-%02d-%02d_%02d-%02d-%02d.sim", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        sprintf(_file_name, "Simulation/Damped oscillation mpi 2/%d_damped_os_parallel_v2_displacement%d-%02d-%02d_%02d-%02d-%02d.sim", world_rank, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         p_dis = fopen(_file_name, "w");
 
         for (unsigned long long it = 0; it < _it_number; ++it)
         {
-
             if (RESULTS[0] == 0.000000 && RESULTS[1] == 0.000000 && RESULTS[2] == 0.000000)
             {
                 _is_zero++;
@@ -523,7 +543,6 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
             }
             if (count == 9999)
             {
-                printf("count:%d rank:%d\n", count, world_rank);
                 for (int i = 0; i < count; i++)
                 {
                     fprintf(p_dis, "%.6f\n", buff[i]);
@@ -539,19 +558,40 @@ int _simulate_damped_os_parallel_mpi(double max_amplitude, double length, double
             RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
             buff[count++] = RESULTS[0];
         }
+        // printf("count:%d rank:%d\n", count, world_rank);
         if (count > 0)
         {
-
             for (int i = 0; i < count; i++)
             {
                 fprintf(p_dis, "%.6f\n", buff[i]);
             }
         }
-        MPI_Barrier(MPI_COMM_WORLD);
         fclose(p_dis);
     }
     MPI_Barrier(MPI_COMM_WORLD);
-    return 0;
+    if (world_rank == 0)
+    {
+        FILE *p_dis, *p_src;
+        char _file_name[2076], _target_name[2076];
+        sprintf(_target_name, "Simulation/Damped oscillation mpi 2/damped_os_parallel_v2_displacement%d-%02d-%02d_%02d-%02d-%02d.sim", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        p_dis = fopen(_target_name, "w");
+        for (int i = 1; i < world_size; i++)
+        {
+            sprintf(_file_name, "Simulation/Damped oscillation mpi 2/%d_damped_os_parallel_v2_displacement%d-%02d-%02d_%02d-%02d-%02d.sim", i, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+            p_src = fopen(_file_name, "r");
+            while (fgets(buff, 2076, p_src) != NULL)
+            {
+                fprintf(p_dis, "%s", buff);
+            }
+            fclose(p_src);
+            remove(_file_name);
+        }
+        fclose(p_dis);
+        ret = _target_name;
+        printf("Simulation Ended Successfully.\nFiles Saved.\n%s\n", ret);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
+    return ret;
 }
 /**
  *  This function calculate execution time simulating simple harmonic motion (Simple Spring Motion) using numerical solution of stepwise precision using equation (e^(-damping_coefficent / (2 * mass)) * t)*sin(wt+fi)),
@@ -806,7 +846,7 @@ _execution_time_damped_os_parallel_omp(double max_amplitude, double length, doub
     RESULTS[1] = Vo + gravity * 0;
     RESULTS[2] = Ao + gravity * exp((-damping_coefficent / (2 * mass)) * 0);
     double CALCULATIONS[3];
-    unsigned long long num_steps = (unsigned long long)((double)((time_limit / step_size)+0.5) + 10);
+    unsigned long long num_steps = (unsigned long long)((double)((time_limit / step_size) + 0.5) + 10);
     printf("\nStarted Calculation at: %d-%02d-%02d %02d:%02d:%02d.\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     double start_time = omp_get_wtime();
 
