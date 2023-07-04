@@ -27,14 +27,16 @@
  * @param number_of_files currently nulled
  * @return
  */
-int damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao, double Vo,
-                     double FI,
-                     double time_limit, double step_size, double damping_coefficent, int number_of_files)
+char *damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao, double Vo,
+                       double FI,
+                       double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     _mkdir("Simulation");
-    _mkdir("Damped oscillation serial");
-    return _simulate_damped_os_serial(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
-                                      time_limit, step_size, damping_coefficent, number_of_files);
+    _mkdir("Simulation/Damped oscillation serial");
+    const char* _ret =_simulate_damped_os_serial(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
+                                      time_limit, step_size, damping_coefficent, number_of_files); 
+    printf("%s\n",_ret);
+    return _ret;
 }
 /**
  *  This function used to call _simulate_damped_os_parallel_mpi_omp
@@ -106,10 +108,10 @@ int damped_os_parallel_v2(double max_amplitude, double length, double mass, doub
  * @param number_of_files
  * @return
  */
-int elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
-                     double Yo,
-                     double Vo,
-                     double time_limit, double step_size, double damping_coefficent, int number_of_files)
+char *elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
+                       double Yo,
+                       double Vo,
+                       double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     _mkdir("Simulation");
     _mkdir("Elastic pendulum");
@@ -327,9 +329,9 @@ int heat_equation_1D_serial(double time_step, double time_limit,
                             long long precision)
 {
 
-    return _simulate_heat_transfer_1D_serial(time_step, time_limit, 
-                                            space_step, 
-                                            precision);
+    return _simulate_heat_transfer_1D_serial(time_step, time_limit,
+                                             space_step,
+                                             precision);
 }
 
 ////////////////heat equation 2D serial

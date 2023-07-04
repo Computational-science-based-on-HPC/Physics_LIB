@@ -33,7 +33,7 @@
  * @param number_of_files
  * @return integer value 0 if the program executes without any errors -1 if there is an error occurred during calculations
  */
-extern int
+extern char*
 _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                            double Vo, double FI,
                            double time_limit, double step_size, double damping_coefficent, int number_of_files);
@@ -90,7 +90,7 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
  * @param number_of_files
  * @return integer value 0 if the program executes without any errors -1 if there is an error occurred during calculations
  */
-extern int
+extern char*
 _simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                            double Yo,
                            double Vo,

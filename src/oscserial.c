@@ -30,7 +30,7 @@
  * @param number_of_files currently nulled
  * @return
  */
-int _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
+char* _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                double Vo, double FI,
                                double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
@@ -39,7 +39,7 @@ int _simulate_damped_os_serial(double max_amplitude, double length, double mass,
     if (validation == 0)
     {
         puts("Invalid Arguments is Given");
-        return -1;
+        return "Invalid Arguments is Given";
     }
     if (validation == -1)
     {
@@ -88,7 +88,7 @@ int _simulate_damped_os_serial(double max_amplitude, double length, double mass,
         fprintf(p_file, "%lf\n", RESULTS[0]);
     }
     fclose(p_file);
-    return 0;
+    return _file_name;
 }
 /**
  * @brief This function simulates the motion of (elastic pendulum/2D-spring/spring pendulum) system.
@@ -111,7 +111,7 @@ int _simulate_damped_os_serial(double max_amplitude, double length, double mass,
  * @param number_of_files
  * @return
  */
-int _simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
+char* _simulate_elastic_pendulum(double r, double length, double mass, double gravity, double k, double Ao, double Xo,
                                double Yo,
                                double Vo,
                                double time_limit, double step_size, double damping_coefficent, int number_of_files)
@@ -121,7 +121,7 @@ int _simulate_elastic_pendulum(double r, double length, double mass, double grav
     if (validation == 0)
     {
         puts("Invalid Arguments is Given");
-        return -1;
+        return "Invalid Arguments is Given";
     }
     if (validation == -1)
     {
@@ -183,7 +183,7 @@ int _simulate_elastic_pendulum(double r, double length, double mass, double grav
     }
     fclose(p_dis_x);
     fclose(p_dis_y);
-    return 0;
+    return _file_name;
 }
 /**
  *  @brief This function calculates execution time of simulating simple harmonic motion (Simple Spring Motion) using numerical solution of stepwise precision using equation (e^(-damping_coefficent / (2 * mass)) * t)*sin(wt+fi)),

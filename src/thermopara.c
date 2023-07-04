@@ -265,7 +265,7 @@ int _simulate_heat_transfer_2D_MPI(double time_step, double time_limit,
         MPI_Init(NULL, NULL);
     }
     FILE *fptr1;
-
+    FILE *logFile;
     int my_rank;     // rank of process
     int processesNo; // number of process
 
