@@ -91,10 +91,10 @@ long double _get_value_2D_openmp(double time_step,
     long double y_real = y * space_step_y;
     long double t_real = t * time_step;
 
-#pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, y_real, t_real, precision) private(exponential, spaceXTerm, spaceYTerm, coeff)
+#pragma omp parallel for num_threads(THREADS) schedule(static) shared(sum, x_real, y_real, t_real, precision) 
     for (ll m = 1; m < precision; ++m)
     {
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for schedule(static) private(exponential, spaceXTerm, spaceYTerm, coeff)
         for (ll n = 1; n < precision; ++n)
         {
             exponential = exp(-(M_PI * M_PI) * (m * m + n * n) * t_real / 36);
