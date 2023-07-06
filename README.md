@@ -1,5 +1,6 @@
-Physics LIB<a name="TOP"></a>
+Physics LIB<a name="TOP"></a><br>[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Computational-science-based-on-HPC/Physics_LIB/blob/master/LICENSE)
 =============================
+
 This Repository Contains **Physics LIB**, a physics library that simulates various physics calculations as _parallelelized_ and _seriallized_ implementations to obtain optimal performance and results.
 - - - - 
 # Features #
