@@ -66,7 +66,6 @@ make clean
 # Contribution # 
 Contributions to the PhysicsLIB project are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
 Please ensure that your contributions adhere to the Contributor Covenant and that you follow the project's style guide.
-- - - - 
 # License #
 This project is licensed under the [MIT License](https://github.com/Computational-science-based-on-HPC/Physics_LIB/blob/master/LICENSE).
 ## Links ## 
