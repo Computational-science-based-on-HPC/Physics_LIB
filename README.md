@@ -1,11 +1,8 @@
 Physics LIB<a name="TOP"></a>
-===================
-
+=============================
+This Repository Contains **Physics LIB**, a physics library that simulates various physics calculations as _parallelelized_ and _seriallized_ implementations to obtain optimal performance and results.
 - - - - 
-## Description ##
-**Physics LIB** is a physics library that simulates various physics calculations as _parallelelized_ and _seriallized_ implementations to obtain optimal performance and results.
-- - - - 
-## Simulations ##
+# Features #
 ### 1- Damped spring motion ###
   - _Damped Spring Motion_ is a __simple harmonic motion__ that simulates the motion of a mass attached to a spring and oscillates in a y-axis direction with given parameters that the user specifies like mass and stiffness of spring.
   - This simulation is implemented in both parallel and serial implementations.
@@ -20,6 +17,11 @@ Physics LIB<a name="TOP"></a>
   - Heat Equation is an equation where it simulates the change of heat in the body isolated from the outer world and isn't affected by any other heat or cooling source.
   - In this simulation, we simulate heat propagation in a 2D body as _cpu_ as square or rectangle and the change in its temperature over time using Fourier transform.
   - This simulation is implemented as a serial and parallel program.
+- - - - 
+# Technologies and Tools Used #
+  - Programming Language: C
+  - Parallel Computing: MPI, OpenMP
+  - Build: Make
 - - - - 
 # Dynamic Library #
 ## Installation ## 
@@ -61,6 +63,12 @@ make clean
  mpiexec -n 4 ./main
 ```
 - - - - 
+# Contribution # 
+Contributions to the PhysicsLIB project are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
+Please ensure that your contributions adhere to the Contributor Covenant and that you follow the project's style guide.
+- - - - 
+# License #
+This project is licensed under the [MIT License](https://github.com/Computational-science-based-on-HPC/Physics_LIB/blob/master/LICENSE).
 ## Links ## 
 - [Documentation](https://Computational-science-based-on-HPC.github.io/index.html)
 - [GitHub](https://github.com/Computational-science-based-on-HPC/Physics_LIB)
