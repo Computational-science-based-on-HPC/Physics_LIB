@@ -16,7 +16,8 @@
         "unistd.h": "c",
         "fcntl.h": "c",
         "stat.h": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "stdlib.h": "c"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc"
 }

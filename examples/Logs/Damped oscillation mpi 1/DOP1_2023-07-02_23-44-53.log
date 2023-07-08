@@ -1,4 +1,4 @@
-Started Simulation of Damped Oscillation Implementation Using MPI and OpenMP at 2023-07-02 23:44:53 with Parametes:
+Started Simulation of Damped Oscillation Implementation Using MPI and OpenMP at 2023-07-02 23:44:53 with Parameters:
 Amplitude: 10.000000 
 Spring Length: 14.000000 
 Mass: 1.000000 
@@ -393,6 +393,9 @@ Ended Job 2 at: 2023-07-02 23:44:53 Processor: slinga-System-Product-Name Rank: 
 ================================================================================
 
 Ended Simulation of Damped Oscillation Implementation Using MPI at 2023-07-02 23:44:53
+
+
+
 physics
 inside fn
 cal space
