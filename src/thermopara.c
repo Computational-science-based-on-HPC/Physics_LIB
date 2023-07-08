@@ -25,7 +25,7 @@ long double _get_value_1D_mpi(double time_step, double space_step, ll x, unsigne
 
     for (ll k = 0; k < precision; k++)
     {
-        exponential = exp(-3 * pow(2 * (k + 1), 2) * (M_PI * M_PI * t_real) / 4);
+        exponential = exp(-3 * pow(2 * k + 1, 2) * (M_PI * M_PI * t_real) / 4);
         spaceXTerm = sin((long double)(2 * k + 1) * M_PI * x_real / 2);
         coeff = 1 / (2 * k + 1);
         sum += coeff * exponential * spaceXTerm;
