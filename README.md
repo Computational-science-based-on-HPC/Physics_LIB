@@ -80,10 +80,6 @@ The following graph represents the execution time of the _Damped Oscillation Sim
 
 ![Damped Oscillation Graph](https://raw.githubusercontent.com/Computational-science-based-on-HPC/Physics_LIB/master/graphs/DampedOSC%20Graph.png)
 - - - -
-# Contribution # 
-Contributions to the PhysicsLIB project are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
-Please ensure that your contributions adhere to the Contributor Covenant and that you follow the project's style guide.
-
 # Contributing
 We welcome contributions from the community to improve our project. Please read our [Contributing Guidelines](https://github.com/Computational-science-based-on-HPC/Physics_LIB/blob/master/CONTRIBUTING.md) to understand how you can contribute and make the process smoother for everyone involved.
 
