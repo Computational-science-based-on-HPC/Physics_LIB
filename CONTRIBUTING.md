@@ -29,6 +29,6 @@ By contributing to this project, you agree that your contributions will be licen
 
 Please note that we have a Code of Conduct in place to ensure a respectful and inclusive environment for everyone involved in the project. We expect all contributors to adhere to this code when participating in discussions, submitting issues, or engaging in any other form of contribution.
 
-For more details, please refer to our [Code of Conduct](link-to-code-of-conduct) document.
+For more details, please refer to our [Code of Conduct](https://github.com/Computational-science-based-on-HPC/Physics_LIB/blob/master/CODE_OF_CONDUCT.md) document.
 
 Thank you for your contributions and for helping make our project better!
