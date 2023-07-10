@@ -68,17 +68,17 @@ make clean
 The following graph represents the execution time of the _Heat Equation 1D_ algorithm via different implementations (MPI, OpenMP, Serial) and the change of it when changing the **Precision** _(number of iterations)_.
 
 
-![Heat Equation 1D](https://github.com/Computational-science-based-on-HPC/Physics_LIB/blob/master/graphs/heat1d%20Graph.png)
+![Heat Equation 1D](https://raw.githubusercontent.com/Computational-science-based-on-HPC/Physics_LIB/master/graphs/heat1d%20Graph.png)
 ## Heat Equation 2D ##
 The following graph represents the execution time of the _Heat Equation 2D_ algorithm via different implementations (MPI, OpenMP, Serial) and the change of it when changing the **Precision** _(number of iterations)_.
 
 
-![Heat Equation 2D graph](https://github.com/Computational-science-based-on-HPC/Physics_LIB/blob/master/graphs/Heat%202d%20Graph.png)
+![Heat Equation 2D graph](https://raw.githubusercontent.com/Computational-science-based-on-HPC/Physics_LIB/master/graphs/Heat%202d%20Graph.png)
 ## Damped Oscillation ##
 The following graph represents the execution time of the _Damped Oscillation Simulation_ algorithm via different implementations (MPI, OpenMP, Serial) and the change of it when changing the **Time Limit** _(number of iterations)_, and discusses the execution time of the simulation when false sharing occurred.
 
 
-![Damped Oscillation Graph](https://github.com/Computational-science-based-on-HPC/Physics_LIB/blob/master/graphs/DampedOSC%20Graph.png)
+![Damped Oscillation Graph](https://raw.githubusercontent.com/Computational-science-based-on-HPC/Physics_LIB/master/graphs/DampedOSC%20Graph.png)
 - - - -
 # Contribution # 
 Contributions to the PhysicsLIB project are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
