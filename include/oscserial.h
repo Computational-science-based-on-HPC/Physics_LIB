@@ -36,7 +36,7 @@
 extern char*
 _simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                            double Vo, double FI,
-                           double time_limit, double step_size, double damping_coefficent, int number_of_files);
+                           double time_limit, double step_size, double damping_coefficent, int number_of_files,double rest_length);
 /**
  *  @brief This function calculates execution time of simulating simple harmonic motion (Simple Spring Motion).
  *

@@ -32,10 +32,10 @@
  */
 char *_simulate_damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao,
                                  double Vo, double FI,
-                                 double time_limit, double step_size, double damping_coefficent, int number_of_files)
+                                 double time_limit, double step_size, double damping_coefficent, int number_of_files, double rest_length)
 {
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
-                                number_of_files, 0);
+                                number_of_files, 0, rest_length);
     if (validation == 0)
     {
         puts("Invalid Arguments is Given");
@@ -46,9 +46,11 @@ char *_simulate_damped_os_serial(double max_amplitude, double length, double mas
         max_amplitude = length;
         puts("Max Amplitude Is More Than The Spring Length, Max Amplitude is Set Equal to Spring Length");
     }
+    double _shift = ((mass * gravity) - (k * rest_length)) / k;
     double Wo = sqrt(k / mass);
     double W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
     double RESULTS[3];
+    printf("shift: %lf\n", _shift);
     RESULTS[0] = max_amplitude;
     RESULTS[1] = Vo + gravity * 0;
     RESULTS[2] = Ao + gravity * exp((-damping_coefficent / (2 * mass)) * 0);
@@ -59,7 +61,7 @@ char *_simulate_damped_os_serial(double max_amplitude, double length, double mas
     struct tm tm = *localtime(&tim);
     sprintf(_file_name, "Simulation/Damped oscillation serial/damped_os_serial_displacement_%d-%02d-%02d_%02d-%02d-%02d.sim", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     p_file = fopen(_file_name, "w");
-    fprintf(p_file, "%lf\n", RESULTS[0]);
+    fprintf(p_file, "%lf\n", _shift+RESULTS[0]);
     unsigned long long _it_number = (unsigned long long)((double)((time_limit / step_size) + 0.5));
     double t = 0;
     for (unsigned long long i = 0; i < _it_number; i++)
@@ -85,7 +87,7 @@ char *_simulate_damped_os_serial(double max_amplitude, double length, double mas
         RESULTS[0] = max_amplitude * CALCULATIONS[2] * CALCULATIONS[0];
         RESULTS[1] = W * max_amplitude * CALCULATIONS[2] * CALCULATIONS[1] + (gravity * t * CALCULATIONS[2]);
         RESULTS[2] = (-1 * W * W * CALCULATIONS[2] * CALCULATIONS[0]) + (gravity * CALCULATIONS[2]);
-        fprintf(p_file, "%lf\n", RESULTS[0]);
+        fprintf(p_file, "%lf\n", _shift + RESULTS[0]);
     }
     fclose(p_file);
     char *_ret = _file_name;
@@ -118,7 +120,7 @@ char *_simulate_elastic_pendulum(double r, double length, double mass, double gr
                                  double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     int validation = _valid_osc(Xo, Yo, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
-                                number_of_files, 0);
+                                number_of_files, 0,0);
     if (validation == 0)
     {
         puts("Invalid Arguments is Given");
@@ -233,7 +235,7 @@ _execution_time_damped_os_serial(double max_amplitude, double length, double mas
     printf("\n================================================================================\nExecution Times===========================================================================\n");
     puts("================================================================================\n\n");
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
-                                number_of_files, 0);
+                                number_of_files, 0,0);
     if (validation == 0)
     {
         puts("\n\nInvalid Arguments is Given");
@@ -325,7 +327,7 @@ _execution_time_elastic_pendulum(double r, double length, double mass, double gr
     printf("\n================================================================================\nExecution Times===========================================================================\n");
     puts("================================================================================\n\n");
     int validation = _valid_osc(Xo, Yo, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
-                                number_of_files, 0);
+                                number_of_files, 0,0);
     if (validation == 0)
     {
         puts("\n\nInvalid Arguments is Given");
