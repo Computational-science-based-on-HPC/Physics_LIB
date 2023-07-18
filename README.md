@@ -79,6 +79,9 @@ The following graph represents the execution time of the _Damped Oscillation Sim
 
 
 ![Damped Oscillation Graph](https://raw.githubusercontent.com/Computational-science-based-on-HPC/Physics_LIB/master/graphs/DampedOSC%20Graph.png)
+
+### Example ###
+![Damped Oscillation Sim 1](https://raw.githubusercontent.com/Computational-science-based-on-HPC/Physics_LIB/master/graphs/DampedOSC_1.gif)
 - - - -
 # Contributing
 We welcome contributions from the community to improve our project. Please read our [Contributing Guidelines](https://github.com/Computational-science-based-on-HPC/Physics_LIB/blob/master/CONTRIBUTING.md) to understand how you can contribute and make the process smoother for everyone involved.
