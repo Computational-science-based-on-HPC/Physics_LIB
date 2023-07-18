@@ -28,10 +28,10 @@ int cpu_inf_stream()
 }
 int _valid_osc(double x, double y, double length, double mass, double gravity, double k, double time_limit,
                double step_size,
-               double damping_coefficent, int number_of_files, double Fo)
+               double damping_coefficent, int number_of_files, double Fo, double rest_length)
 {
     double max_length = sqrt((x * x) + (y * y));
-    if (mass < 0 || k < 0 || time_limit <= 0 || step_size < 0 || length <= 0 || gravity <= 0 || damping_coefficent < 0)
+    if (mass < 0 || k < 0 || time_limit <= 0 || step_size < 0 || length <= 0 || gravity <= 0 || damping_coefficent < 0 || rest_length > length || Fo < 0)
     {
         return 0;
     }

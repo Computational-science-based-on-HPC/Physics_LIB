@@ -3,14 +3,14 @@ Amplitude: 10.000000
 Spring Length: 14.000000 
 Mass: 1.000000 
 Gravity: 1.800000 
-Stifeness: 1.000000 
+Stiffness: 1.000000
 Initial Acceleration: -1.000000 
 Initial Velocity: 0.000000 
 FI Const: -0.100000 
 Time Limit: 100.000000 
 Step_Size(dt): 0.010000 
 Damping coefficient: 0.100000
-Numper of Processes: 4
+Number of Processes: 4
 
 ================================================================================
 Memory ===========================================================================

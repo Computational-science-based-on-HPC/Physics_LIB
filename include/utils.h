@@ -27,7 +27,7 @@
  */
 int _valid_osc(double x, double y, double length, double mass, double gravity, double k, double time_limit,
                double step_size,
-               double damping_coefficent, int number_of_files, double Fo);
+               double damping_coefficent, int number_of_files, double Fo, double rest_length);
 /**
  * @brief get the minimum between x,y
  *

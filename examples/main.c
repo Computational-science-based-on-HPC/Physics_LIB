@@ -9,28 +9,32 @@ int main(void)
 
 {
     // int t = 100;
-//    for (int i = 0; i < 30; i++)
-//    {
-//         damped_os_parallel_execution_time_v1(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
-//                                              -0.1,
-//                                              t, 0.01, 0.1, 3);
-// //        t *= 2;
-//    }
+    //    for (int i = 0; i < 30; i++)
+    //    {
+    //         damped_os_parallel_execution_time_v1(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
+    //                                              -0.1,
+    //                                              t, 0.01, 0.1, 3);
+    // //        t *= 2;
+    //    }
 
-//    t = 
-//    for (int i = 0; i < 30; i++)
-//    {
-//        damped_os_parallel_execution_time_v2(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
-//                                             -0.1,
-//                                             t, 0.01, 0.1, 3);
-//        t *= 2;
-//    }
+    //    t =
+    //    for (int i = 0; i < 30; i++)
+    //    {
+    //        damped_os_parallel_execution_time_v2(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
+    //                                             -0.1,
+    //                                             t, 0.01, 0.1, 3);
+    //        t *= 2;
+    //    }
     //    damped_os_parallel_execution_time_v3(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
     //                                         -0.1,
     //                                         40, 0.01, 0.1, 3,10);
-    // damped_os_serial_execution(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
-    //                            -0.1,
-    //                            40000000, 0.01, 0.1, 3);
+
+    damped_os_serial(5.0, 14.0, 1.0, 5.8, 1.0, -1.0, 0.0,
+                     -0.1,
+                     60, 0.01, 1, 3, 4);
+    // damped_os_serial(10.0, 14.0, 1.0, 1.8, 1.0, -1.0, 0.0,
+    //                  -0.1,
+    //                  60, 0.1, 0.1, 3, 4);
 
     // damped_os_serial_execution(10.0, 14.0, 1.0, 1.8,  1.0,
     //                            -1.0,
@@ -38,30 +42,30 @@ int main(void)
     //                            40000000, 0.01, 0.1,
     //                           3);
 
-//       heat_equation_1D_P1_MPI(0.01, 0.5, 0.05, 50);
-//       heat_equation_1D_P1_OPENMP(0.01, 0.5, 0.05, 50);
+    //       heat_equation_1D_P1_MPI(0.01, 0.5, 0.05, 50);
+    //       heat_equation_1D_P1_OPENMP(0.01, 0.5, 0.05, 50);
 
-//      heat_equation_2D_P1_MPI(0.1, 5, 0.1, 0.1, 50);
-//      heat_equation_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, 50);
+    //      heat_equation_2D_P1_MPI(0.1, 5, 0.1, 0.1, 50);
+    //      heat_equation_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, 50);
 
-//     heat_equation_1D_serial(0.01, 0.5, 0.05,50);
-//     heat_equation_2D_serial(0.1, 5, 0.1, 0.1,50);
+    //     heat_equation_1D_serial(0.01, 0.5, 0.05,50);
+    //     heat_equation_2D_serial(0.1, 5, 0.1, 0.1,50);
 
-//        heat_equation_execution_time_1D_P1_MPI(0.01, 0.5, 0.05, 50);
-    long long precision = 2;
+    //        heat_equation_execution_time_1D_P1_MPI(0.01, 0.5, 0.05, 50);
+    // long long precision = 2;
     // for(int i=1; i<= 30; i++){
     //      heat_equation_execution_time_1D_P1_OPENMP(0.01, 0.5, 0.05, precision);
     //      precision*=2;
     //  }
 
-//    heat_equation_execution_time_2D_P1_MPI(0.1, 5, 0.1, 0.1, 50);
+    //    heat_equation_execution_time_2D_P1_MPI(0.1, 5, 0.1, 0.1, 50);
     // lon/precision = 2;
-    for(int i=1; i<= 24; i++){
-        heat_equation_execution_time_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, precision);
-        precision*=2;
-    }
-//        heat_equation_execution_time_1D_serial(0.01, 0.5, 0.05,50);
-//     heat_equation_execution_time_2D_serial(0.1, 5, 0.1, 0.1,50);
+    // for(int i=1; i<= 24; i++){
+    //     heat_equation_execution_time_2D_P1_OPENMP(0.1, 5, 0.1, 0.1, precision);
+    //     precision*=2;
+    // }
+    //        heat_equation_execution_time_1D_serial(0.01, 0.5, 0.05,50);
+    //     heat_equation_execution_time_2D_serial(0.1, 5, 0.1, 0.1,50);
 
     //  finalize();
 }

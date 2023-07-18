@@ -29,12 +29,12 @@
  */
 char *damped_os_serial(double max_amplitude, double length, double mass, double gravity, double k, double Ao, double Vo,
                        double FI,
-                       double time_limit, double step_size, double damping_coefficent, int number_of_files)
+                       double time_limit, double step_size, double damping_coefficent, int number_of_files,double rest_length)
 {
     _mkdir("Simulation");
     _mkdir("Simulation/Damped oscillation serial");
     return _simulate_damped_os_serial(max_amplitude, length, mass, gravity, k, Ao, Vo, FI,
-                                      time_limit, step_size, damping_coefficent, number_of_files);
+                                      time_limit, step_size, damping_coefficent, number_of_files,rest_length);
 }
 /**
  *  This function used to call _simulate_damped_os_parallel_mpi_omp

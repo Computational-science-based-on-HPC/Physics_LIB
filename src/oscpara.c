@@ -40,7 +40,7 @@ char *_simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, 
                                            double time_limit, double step_size, double damping_coefficent, int number_of_files)
 {
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
-                                number_of_files, 0);
+                                number_of_files, 0,0);
     if (validation == 0)
     {
         puts("Invalid Arguments is Given");
@@ -74,7 +74,7 @@ char *_simulate_damped_os_parallel_mpi_omp(double max_amplitude, double length, 
     double t;
     short int _is_zero = 0;
     double buff[1000];
-    if (world_rank == 1)
+    if (world_rank == 0)
     {
         double Wo = sqrt(k / mass);
         W = sqrt(Wo - pow(damping_coefficent / 2 * mass, 2));
@@ -285,7 +285,7 @@ int _execution_time_damped_os_parallel_mpi_omp(double max_amplitude, double leng
         cpu_inf_stream();
         printf("\n================================================================================\nExecution Times===========================================================================\n");
         puts("================================================================================\n\n");
-        int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent, number_of_files, 0);
+        int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent, number_of_files, 0,0);
         if (validation == 0)
         {
             puts("\n\nInvalid Arguments is Given");
@@ -437,7 +437,7 @@ char *_simulate_damped_os_parallel_mpi(double max_amplitude, double length, doub
 {
 
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
-                                number_of_files, 0);
+                                number_of_files, 0,0);
     if (validation == 0)
     {
         puts("Invalid Arguments is Given");
@@ -668,7 +668,7 @@ int _execution_time_damped_os_parallel_mpi(double max_amplitude, double length, 
         printf("\n================================================================================\nExecution Times===========================================================================\n");
         puts("================================================================================\n\n");
         int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
-                                    number_of_files, 0);
+                                    number_of_files, 0,0);
         if (validation == 0)
         {
             puts("\n\nInvalid Arguments is Given");
@@ -828,7 +828,7 @@ _execution_time_damped_os_parallel_omp(double max_amplitude, double length, doub
     puts("================================================================================\n\n");
 
     int validation = _valid_osc(max_amplitude, 0, length, mass, gravity, k, time_limit, step_size, damping_coefficent,
-                                number_of_files, 0);
+                                number_of_files, 0,0);
     if (validation == 0)
     {
         puts("\n\nInvalid Arguments is Given");
